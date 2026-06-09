@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Yash%20Awasthi&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Builder%20%7C%20Researcher%20%7C%20Security&descAlignY=55&descSize=18" width="100%"/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&pause=1000&color=58A6FF&center=true&vCenter=true&width=600&lines=17-Agent+Autonomous+Systems+%F0%9F%A4%96;Marketing+PhD+%40+IIM+%F0%9F%8E%93;Security+Researcher+%F0%9F%94%90;Full-Stack+Builder+%F0%9F%9A%80;GEEKS+by+ACE+%E2%80%94+Founding+Team)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&pause=1000&color=58A6FF&center=true&vCenter=true&width=600&lines=17-Agent+Autonomous+Systems+%F0%9F%A4%96;Security+Researcher+%F0%9F%94%90;Full-Stack+Builder+%F0%9F%9A%80;GEEKS+by+ACE+%E2%80%94+Founding+Team)](https://git.io/typing-svg)
 
 </div>
 
@@ -12,10 +12,9 @@
 
 ### 👋 About Me
 
-- 🔬 **PhD Researcher** @ IIM — studying AI influencer parasocial relationships & consumer segmentation
 - 🤖 Building **GEEKS by ACE** — 17-agent autonomous architecture with 11 external services
 - 🔐 Security researcher — authorized pentesting & vulnerability assessment
-- 🧠 Intersection of **marketing science**, **autonomous systems**, and **applied AI**
+- 🧠 Intersection of **autonomous systems**, **applied AI**, and **marketing science**
 - 📍 India
 
 <br clear="right"/>
@@ -79,9 +78,11 @@
 | Project | Description | Stack |
 |---------|-------------|-------|
 | [**workspace**](https://github.com/Yash-Awasthi/workspace) | 17-agent autonomous system for web & app dev | Node.js, AI, 11 services |
-| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | — | TypeScript |
-| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | — | Python |
-| [**Judica**](https://github.com/Yash-Awasthi/Judica) | — | TypeScript |
+| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberative platform — 4+ AI agents argue, critique & produce scored consensus | TypeScript, AI |
+| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus with sandboxed execution & crash recovery | TypeScript |
+| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills — clone and go | Python |
+| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum | Kotlin |
+| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Financial news scraper — extracts companies, links market impact, live dashboard | Python |
 
 ---
 
