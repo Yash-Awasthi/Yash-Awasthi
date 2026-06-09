@@ -90,11 +90,7 @@
 
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake-dark.svg?v=gold"/>
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg?v=gold"/>
-  <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg?v=gold"/>
-</picture>
+<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg?v=2" alt="contribution snake" width="100%"/>
 
 </div>
 
