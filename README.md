@@ -2,10 +2,6 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:1a1200,100:3d2900&height=220&section=header&text=Yash%20Awasthi&fontSize=54&fontColor=FFD700&animation=twinkling&fontAlignY=40&desc=Builder%20%E2%80%A2%20Researcher%20%E2%80%A2%20Security&descAlignY=60&descSize=20&descColor=B8860B" width="100%"/>
 
-<br/>
-
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Building+AI+%26+Full-Stack+Systems;TypeScript+%C2%B7+Python+%C2%B7+Node.js;Multi-Agent+Architectures;Security+Researcher)](https://git.io/typing-svg)
-
 </div>
 
 <br/>
@@ -74,7 +70,7 @@
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=FFD700&bg_color=000000&hide_border=true&include_all_commits=true&count_private=true&ring_color=FFD700"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=FFD700&bg_color=000000&hide_border=true&include_all_commits=true&count_private=true"/>
 &nbsp;
 <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=000000&hide_border=true&langs_count=8"/>
 
