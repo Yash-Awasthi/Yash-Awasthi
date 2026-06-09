@@ -1,65 +1,87 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Yash%20Awasthi&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Builder%20%7C%20Researcher%20%7C%20Security&descAlignY=55&descSize=18" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:1a1200,100:3d2900&height=220&section=header&text=Yash%20Awasthi&fontSize=54&fontColor=FFD700&animation=twinkling&fontAlignY=40&desc=Builder%20%E2%80%A2%20Researcher%20%E2%80%A2%20Security&descAlignY=60&descSize=20&descColor=B8860B" width="100%"/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&pause=1000&color=58A6FF&center=true&vCenter=true&width=600&lines=17-Agent+Autonomous+Systems+%F0%9F%A4%96;Security+Researcher+%F0%9F%94%90;Full-Stack+Builder+%F0%9F%9A%80;GEEKS+by+ACE+%E2%80%94+Founding+Team)](https://git.io/typing-svg)
+<br/>
+
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Building+17-Agent+Autonomous+Systems;Security+Researcher+%26+Ethical+Hacker;Full-Stack+Builder;Founding+Team+%E2%80%94+GEEKS+by+ACE)](https://git.io/typing-svg)
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 </div>
 
----
+<br/>
 
-<img align="right" alt="Coding" width="380" src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif"/>
+### ◈ About Me
 
-### 👋 About Me
+_[Share your CV and I'll fill this in properly]_
 
-- 🤖 Building **GEEKS by ACE** — 17-agent autonomous architecture with 11 external services
-- 🔐 Security researcher — authorized pentesting & vulnerability assessment
-- 🧠 Intersection of **autonomous systems**, **applied AI**, and **marketing science**
-- 📍 India
+<br/>
 
-<br clear="right"/>
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
----
-
-### 🛠 Tech Stack
+### ◈ Tech Stack
 
 <div align="center">
 
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-FFD700?style=for-the-badge&logo=javascript&logoColor=000000)
+![TypeScript](https://img.shields.io/badge/TypeScript-FFD700?style=for-the-badge&logo=typescript&logoColor=000000)
+![Python](https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=000000)
+![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
+![Next.js](https://img.shields.io/badge/Next.js-FFD700?style=for-the-badge&logo=nextdotjs&logoColor=000000)
+![React](https://img.shields.io/badge/React-FFD700?style=for-the-badge&logo=react&logoColor=000000)
+![Kotlin](https://img.shields.io/badge/Kotlin-FFD700?style=for-the-badge&logo=kotlin&logoColor=000000)
+![C](https://img.shields.io/badge/C-FFD700?style=for-the-badge&logo=c&logoColor=000000)
 
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+<br/>
+
+![Supabase](https://img.shields.io/badge/Supabase-FFD700?style=for-the-badge&logo=supabase&logoColor=000000)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-FFD700?style=for-the-badge&logo=cloudflare&logoColor=000000)
+![Vercel](https://img.shields.io/badge/Vercel-FFD700?style=for-the-badge&logo=vercel&logoColor=000000)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
+![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
 
 </div>
 
----
+<br/>
 
-### 📊 GitHub Stats
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+### ◈ Activity
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true&bg_color=0D1117"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&theme=tokyonight&hide_border=true&bg_color=0D1117"/>
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Yash-Awasthi&bg_color=000000&color=FFD700&line=DAA520&point=FFD700&area=true&area_color=1a1200&hide_border=false&border_color=2d2000&title_color=FFD700)](https://github.com/ashutosh00710/github-readme-activity-graph)
+
+</div>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+### ◈ GitHub Stats
+
+<div align="center">
+
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=DAA520&bg_color=000000&border_color=2d2000&include_all_commits=true&count_private=true"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=000000&border_color=2d2000"/>
 
 </div>
 
 <div align="center">
 
-[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&theme=tokyonight&hide_border=true&background=0D1117&stroke=58A6FF&ring=58A6FF&fire=FF6B6B&currStreakLabel=58A6FF)](https://git.io/streak-stats)
+[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=000000&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&sideLabels=FFFFFF&dates=888888&border=2d2000)](https://git.io/streak-stats)
 
 </div>
 
----
+<br/>
 
-### 🐍 Contribution Graph
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+### ◈ Contribution Graph
 
 <div align="center">
 
@@ -71,25 +93,37 @@
 
 </div>
 
----
+<br/>
 
-### 🚀 Featured Projects
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-| Project | Description | Stack |
-|---------|-------------|-------|
-| [**workspace**](https://github.com/Yash-Awasthi/workspace) | 17-agent autonomous system for web & app dev | Node.js, AI, 11 services |
-| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberative platform — 4+ AI agents argue, critique & produce scored consensus | TypeScript, AI |
-| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus with sandboxed execution & crash recovery | TypeScript |
-| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills — clone and go | Python |
-| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum | Kotlin |
-| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Financial news scraper — extracts companies, links market impact, live dashboard | Python |
-
----
+### ◈ Featured Projects
 
 <div align="center">
 
-![Visitor Count](https://komarev.com/ghpvc/?username=Yash-Awasthi&style=for-the-badge&color=58A6FF&label=PROFILE+VIEWS)
+| Project | Description | Stack |
+|:--------|:------------|:------|
+| [**workspace**](https://github.com/Yash-Awasthi/workspace) | 17-agent autonomous system — web & app dev at scale | Node.js · AI · 11 services |
+| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberative platform — 4+ AI agents argue, critique & produce scored consensus | TypeScript · AI |
+| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus with sandboxed execution & crash recovery | TypeScript |
+| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills — clone and go | Python |
+| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum | Kotlin |
+| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Financial news scraper — company extraction, market impact analysis, live dashboard | Python |
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=100&section=footer" width="100%"/>
+</div>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+<div align="center">
+
+![Visitor Count](https://komarev.com/ghpvc/?username=Yash-Awasthi&style=for-the-badge&color=B8860B&label=PROFILE+VIEWS&labelColor=000000)
+
+<br/><br/>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3d2900,50:1a1200,100:000000&height=120&section=footer" width="100%"/>
 
 </div>
