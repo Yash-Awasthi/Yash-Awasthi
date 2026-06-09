@@ -6,13 +6,11 @@
 
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Building+AI+%26+Full-Stack+Systems;TypeScript+%C2%B7+Python+%C2%B7+Node.js;Multi-Agent+Architectures;Security+Researcher)](https://git.io/typing-svg)
 
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
 </div>
 
 <br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ### ◈ About Me
 
@@ -76,15 +74,15 @@
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=DAA520&bg_color=0D0D0D&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=21600"/>
-&nbsp;&nbsp;
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=0D0D0D&hide_border=true&cache_seconds=21600"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=FFD700&bg_color=000000&hide_border=true&include_all_commits=true&count_private=true&ring_color=FFD700"/>
+&nbsp;
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=000000&hide_border=true&langs_count=8"/>
 
 </div>
 
 <div align="center">
 
-[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=0D0D0D&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&sideLabels=FFFFFF&dates=AAAAAA&hide_border=true)](https://git.io/streak-stats)
+[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=000000&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&currStreakNum=FFFFFF&sideLabels=DAA520&sideNums=FFFFFF&dates=888888&hide_border=true)](https://git.io/streak-stats)
 
 </div>
 
