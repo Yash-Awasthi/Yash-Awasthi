@@ -4,7 +4,7 @@
 
 <br/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Full-Stack+Developer;AI+%26+Multi-Agent+Systems;Security+Researcher;CodeChef+3%E2%98%85+%C2%B7+500%2B+Problems+Solved)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Building+AI+%26+Full-Stack+Systems;TypeScript+%C2%B7+Python+%C2%B7+Node.js;Multi-Agent+Architectures;Security+Researcher)](https://git.io/typing-svg)
 
 <br/>
 
@@ -16,12 +16,9 @@
 
 ### ◈ About Me
 
-- 🎓 B.Tech CSE @ **NIT Raipur** — CGPA 9.24 · Batch of 2028
+- 🎓 B.Tech CSE @ **NIT Raipur** · Batch of 2028
 - 🤖 Building full-stack & AI-driven systems — TypeScript, Python, Node.js, React
-- 🔬 Research intern @ Physics dept, NIT Raipur — real-time speech transmission across underwater-to-air interfaces
 - 🔐 Security researcher — authorized vulnerability assessment & ethical hacking
-- ⚡ Competitive programmer — CodeChef 3★ · 500+ problems · Global Rank #113 in Starters 213 Div3
-- 🎯 Class Representative, CSE Branch · Executive, Association of Computer Engineers
 - 📍 Raipur, India · Open to relocate
 
 <br/>
@@ -67,7 +64,7 @@
 
 <div align="center">
 
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Yash-Awasthi&bg_color=000000&color=FFD700&line=DAA520&point=FFD700&area=true&area_color=1a1200&hide_border=false&border_color=2d2000&title_color=FFD700)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Yash-Awasthi&bg_color=000000&color=FFD700&line=DAA520&point=FFD700&area=true&area_color=1a1200&hide_border=true&title_color=FFD700)](https://github.com/ashutosh00710/github-readme-activity-graph)
 
 </div>
 
@@ -79,14 +76,15 @@
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=DAA520&bg_color=000000&border_color=2d2000&include_all_commits=true&count_private=true"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=000000&border_color=2d2000"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=DAA520&bg_color=0D0D0D&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=21600"/>
+&nbsp;&nbsp;
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=0D0D0D&hide_border=true&cache_seconds=21600"/>
 
 </div>
 
 <div align="center">
 
-[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=000000&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&sideLabels=FFFFFF&dates=888888&border=2d2000)](https://git.io/streak-stats)
+[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=0D0D0D&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&sideLabels=FFFFFF&dates=AAAAAA&hide_border=true)](https://git.io/streak-stats)
 
 </div>
 
@@ -117,11 +115,11 @@
 | Project | Description | Stack |
 |:--------|:------------|:------|
 | [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberation platform — 4 LLMs argue, critique & synthesize scored consensus | TypeScript · Node.js · PostgreSQL |
-| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Scrapes 11 financial sources with TLS fingerprinting bypass · AI event-scoring · real-time dashboard | Python · TypeScript · Cloudflare |
-| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum crypto | Kotlin · Android |
-| [**CD**](https://github.com/Yash-Awasthi/CD) | Custom RISC-V instruction (`attn`) — modified GCC that auto-compiles attention patterns to hardware | C · GCC · RISC-V |
+| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Scrapes 11 financial sources · AI event-scoring · real-time WebSocket dashboard | Python · TypeScript · Cloudflare |
+| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange — local-first, post-quantum | Kotlin · Android |
+| [**CD**](https://github.com/Yash-Awasthi/CD) | Custom RISC-V instruction (`attn`) — GCC auto-compiles attention patterns to hardware | C · GCC · RISC-V |
 | [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus — sandboxed execution, event-sourced crash recovery | TypeScript |
-| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills — clone and go | Python |
+| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills | Python |
 
 </div>
 
