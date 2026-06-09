@@ -4,7 +4,7 @@
 
 <br/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Building+17-Agent+Autonomous+Systems;Security+Researcher+%26+Ethical+Hacker;Full-Stack+Builder;Founding+Team+%E2%80%94+GEEKS+by+ACE)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=3000&pause=1200&color=FFD700&center=true&vCenter=true&width=680&lines=Full-Stack+Developer;AI+%26+Multi-Agent+Systems;Security+Researcher;CodeChef+3%E2%98%85+%C2%B7+500%2B+Problems+Solved)](https://git.io/typing-svg)
 
 <br/>
 
@@ -16,7 +16,13 @@
 
 ### ◈ About Me
 
-_[Share your CV and I'll fill this in properly]_
+- 🎓 B.Tech CSE @ **NIT Raipur** — CGPA 9.24 · Batch of 2028
+- 🤖 Building full-stack & AI-driven systems — TypeScript, Python, Node.js, React
+- 🔬 Research intern @ Physics dept, NIT Raipur — real-time speech transmission across underwater-to-air interfaces
+- 🔐 Security researcher — authorized vulnerability assessment & ethical hacking
+- ⚡ Competitive programmer — CodeChef 3★ · 500+ problems · Global Rank #113 in Starters 213 Div3
+- 🎯 Class Representative, CSE Branch · Executive, Association of Computer Engineers
+- 📍 Raipur, India · Open to relocate
 
 <br/>
 
@@ -26,23 +32,30 @@ _[Share your CV and I'll fill this in properly]_
 
 <div align="center">
 
+![C++](https://img.shields.io/badge/C++-FFD700?style=for-the-badge&logo=cplusplus&logoColor=000000)
 ![JavaScript](https://img.shields.io/badge/JavaScript-FFD700?style=for-the-badge&logo=javascript&logoColor=000000)
 ![TypeScript](https://img.shields.io/badge/TypeScript-FFD700?style=for-the-badge&logo=typescript&logoColor=000000)
 ![Python](https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=000000)
-![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
-![Next.js](https://img.shields.io/badge/Next.js-FFD700?style=for-the-badge&logo=nextdotjs&logoColor=000000)
-![React](https://img.shields.io/badge/React-FFD700?style=for-the-badge&logo=react&logoColor=000000)
+![Java](https://img.shields.io/badge/Java-FFD700?style=for-the-badge&logo=openjdk&logoColor=000000)
 ![Kotlin](https://img.shields.io/badge/Kotlin-FFD700?style=for-the-badge&logo=kotlin&logoColor=000000)
-![C](https://img.shields.io/badge/C-FFD700?style=for-the-badge&logo=c&logoColor=000000)
 
 <br/>
 
-![Supabase](https://img.shields.io/badge/Supabase-FFD700?style=for-the-badge&logo=supabase&logoColor=000000)
+![React](https://img.shields.io/badge/React-FFD700?style=for-the-badge&logo=react&logoColor=000000)
+![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
+![Next.js](https://img.shields.io/badge/Next.js-FFD700?style=for-the-badge&logo=nextdotjs&logoColor=000000)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-FFD700?style=for-the-badge&logo=tailwindcss&logoColor=000000)
+![Fastify](https://img.shields.io/badge/Fastify-FFD700?style=for-the-badge&logo=fastify&logoColor=000000)
+
+<br/>
+
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
+![Redis](https://img.shields.io/badge/Redis-FFD700?style=for-the-badge&logo=redis&logoColor=000000)
+![Supabase](https://img.shields.io/badge/Supabase-FFD700?style=for-the-badge&logo=supabase&logoColor=000000)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-FFD700?style=for-the-badge&logo=cloudflare&logoColor=000000)
 ![Vercel](https://img.shields.io/badge/Vercel-FFD700?style=for-the-badge&logo=vercel&logoColor=000000)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
 ![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
 
 </div>
 
@@ -103,12 +116,12 @@ _[Share your CV and I'll fill this in properly]_
 
 | Project | Description | Stack |
 |:--------|:------------|:------|
-| [**workspace**](https://github.com/Yash-Awasthi/workspace) | 17-agent autonomous system — web & app dev at scale | Node.js · AI · 11 services |
-| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberative platform — 4+ AI agents argue, critique & produce scored consensus | TypeScript · AI |
-| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus with sandboxed execution & crash recovery | TypeScript |
+| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberation platform — 4 LLMs argue, critique & synthesize scored consensus | TypeScript · Node.js · PostgreSQL |
+| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Scrapes 11 financial sources with TLS fingerprinting bypass · AI event-scoring · real-time dashboard | Python · TypeScript · Cloudflare |
+| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum crypto | Kotlin · Android |
+| [**CD**](https://github.com/Yash-Awasthi/CD) | Custom RISC-V instruction (`attn`) — modified GCC that auto-compiles attention patterns to hardware | C · GCC · RISC-V |
+| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus — sandboxed execution, event-sourced crash recovery | TypeScript |
 | [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills — clone and go | Python |
-| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange for Android — local-first, post-quantum | Kotlin |
-| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Financial news scraper — company extraction, market impact analysis, live dashboard | Python |
 
 </div>
 
