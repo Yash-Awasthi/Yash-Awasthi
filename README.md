@@ -10,7 +10,7 @@
 
 ### ◈ About Me
 
-- 🎓 B.Tech CSE @ **NIT Raipur** · Batch of 2028
+- 🎓 B.Tech CSE @ **NIT Raipur** · Batch of 2028 · CPI 9.26
 - 🤖 Building full-stack & AI-driven systems — TypeScript, Python, Node.js, React
 - 🔐 Security researcher — authorized vulnerability assessment & ethical hacking
 - 📍 Raipur, India · Open to relocate
@@ -104,12 +104,11 @@
 
 | Project | Description | Stack |
 |:--------|:------------|:------|
-| [**Judica**](https://github.com/Yash-Awasthi/Judica) | Multi-agent deliberation platform — 4 LLMs argue, critique & synthesize scored consensus | TypeScript · Node.js · PostgreSQL |
+| [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | 107-package multi-agent AI orchestration — 15 LLM providers, council deliberation, pgvector memory, sandboxed code execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
 | [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Scrapes 11 financial sources · AI event-scoring · real-time WebSocket dashboard | Python · TypeScript · Cloudflare |
 | [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange — local-first, post-quantum | Kotlin · Android |
 | [**CD**](https://github.com/Yash-Awasthi/CD) | Custom RISC-V instruction (`attn`) — GCC auto-compiles attention patterns to hardware | C · GCC · RISC-V |
-| [**Ghoststack**](https://github.com/Yash-Awasthi/Ghoststack) | Deterministic local-first orchestration nucleus — sandboxed execution, event-sourced crash recovery | TypeScript |
-| [**Clayde**](https://github.com/Yash-Awasthi/Clayde) | 1,374 drop-in Claude agent skills | Python |
+| [**Claude-skill**](https://github.com/Yash-Awasthi/Claude-skill) | Drop-in Claude agent skills | Python |
 
 </div>
 
