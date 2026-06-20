@@ -30,23 +30,34 @@
 ![Python](https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=000000)
 ![Kotlin](https://img.shields.io/badge/Kotlin-FFD700?style=for-the-badge&logo=kotlin&logoColor=000000)
 ![Go](https://img.shields.io/badge/Go-FFD700?style=for-the-badge&logo=go&logoColor=000000)
+![SQL](https://img.shields.io/badge/SQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
 
 <br/>
 
 ![React](https://img.shields.io/badge/React-FFD700?style=for-the-badge&logo=react&logoColor=000000)
-![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
 ![Next.js](https://img.shields.io/badge/Next.js-FFD700?style=for-the-badge&logo=nextdotjs&logoColor=000000)
+![Three.js](https://img.shields.io/badge/Three.js-FFD700?style=for-the-badge&logo=threedotjs&logoColor=000000)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-FFD700?style=for-the-badge&logo=tailwindcss&logoColor=000000)
+![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
 ![Fastify](https://img.shields.io/badge/Fastify-FFD700?style=for-the-badge&logo=fastify&logoColor=000000)
+![Android](https://img.shields.io/badge/Android-FFD700?style=for-the-badge&logo=android&logoColor=000000)
 
 <br/>
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
 ![Redis](https://img.shields.io/badge/Redis-FFD700?style=for-the-badge&logo=redis&logoColor=000000)
+![SQLite](https://img.shields.io/badge/SQLite-FFD700?style=for-the-badge&logo=sqlite&logoColor=000000)
+![NumPy](https://img.shields.io/badge/NumPy-FFD700?style=for-the-badge&logo=numpy&logoColor=000000)
+![SciPy](https://img.shields.io/badge/SciPy-FFD700?style=for-the-badge&logo=scipy&logoColor=000000)
+
+<br/>
+
 ![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-FFD700?style=for-the-badge&logo=cloudflare&logoColor=000000)
 ![Vercel](https://img.shields.io/badge/Vercel-FFD700?style=for-the-badge&logo=vercel&logoColor=000000)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
+![WebSockets](https://img.shields.io/badge/WebSockets-FFD700?style=for-the-badge&logo=socket.io&logoColor=000000)
+![BullMQ](https://img.shields.io/badge/BullMQ-FFD700?style=for-the-badge&logo=bull&logoColor=000000)
 
 </div>
 
@@ -107,7 +118,7 @@
 | [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent AI orchestration — 15 LLM provider drivers, council deliberation, pgvector long-term memory, sandboxed polyglot execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
 | [**FinScrape**](https://github.com/Yash-Awasthi/fin-scrape) | Aggregates 11 financial sources (Bloomberg, Reuters, FT) with TLS fingerprinting at >95% success rate. Hybrid AI + keyword scoring, sub-second Telegram alerts | Python · TypeScript · Cloudflare |
 | [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange — no server, no account. Cryptographic key exchange over Bluetooth/NFC | Kotlin · Android |
-| [**Custom Instruction in RISC-V Toolchain**](https://github.com/Yash-Awasthi/Custom_Instruction_in_RISC-V_Toolchain_-_Attention_Mechanism_Transformer) | Custom `attn` RISC-V instruction — GCC toolchain extended to auto-compile transformer attention patterns to hardware | C · GCC · RISC-V |
+| [**RISC-V Injection**](https://github.com/Yash-Awasthi/RISC-V_Injection) | Custom `attn` RISC-V instruction — GCC toolchain extended to auto-compile transformer attention patterns to hardware | C · GCC · RISC-V |
 
 </div>
 
@@ -119,8 +130,6 @@
 
 - 🏆 Global Rank **113** — CodeChef Starters 213 Div3
 - ⭐ CodeChef 3-star · Max rating **1626**
-- 💡 500+ problems solved across LeetCode, Codeforces, CodeChef, and GFG
-- 🎓 Class Representative, CSE Branch · Executive, ACE NIT Raipur
 
 <br/>
 
