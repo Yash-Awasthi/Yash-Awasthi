@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:1a1200,100:3d2900&height=220&section=header&text=Yash%20Awasthi&fontSize=54&fontColor=FFD700&fontAlignY=40&desc=Builder%20%E2%80%A2%20Researcher%20%E2%80%A2%20Security&descAlignY=60&descSize=20&descColor=B8860B" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:1a1200,100:3d2900&height=220&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=48&fontColor=FFD700&fontAlignY=40&desc=Builder%20%E2%80%A2%20Researcher%20%E2%80%A2%20Security&descAlignY=60&descSize=20&descColor=B8860B" width="100%"/>
 
 </div>
 
@@ -11,9 +11,9 @@
 ### ◈ About Me
 
 - 🎓 B.Tech CSE @ **NIT Raipur** · Batch of 2028 · CPI 9.26
-- 🤖 Building full-stack & AI-driven systems — TypeScript, Python, Node.js, React
-- 🔐 Security researcher — authorized vulnerability assessment & ethical hacking
-- 📍 Raipur, India · Open to relocate
+- 🤖 Building full-stack and AI-driven systems — TypeScript, Python, Node.js, React
+- 🔐 Interests in cybersecurity, applied ML, and agentic systems
+- 📍 Raipur, India · Open to relocate · Seeking SDE / AI Engineering internships
 
 <br/>
 
@@ -23,12 +23,13 @@
 
 <div align="center">
 
+![C](https://img.shields.io/badge/C-FFD700?style=for-the-badge&logo=c&logoColor=000000)
 ![C++](https://img.shields.io/badge/C++-FFD700?style=for-the-badge&logo=cplusplus&logoColor=000000)
-![JavaScript](https://img.shields.io/badge/JavaScript-FFD700?style=for-the-badge&logo=javascript&logoColor=000000)
+![Java](https://img.shields.io/badge/Java-FFD700?style=for-the-badge&logo=openjdk&logoColor=000000)
 ![TypeScript](https://img.shields.io/badge/TypeScript-FFD700?style=for-the-badge&logo=typescript&logoColor=000000)
 ![Python](https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=000000)
-![Java](https://img.shields.io/badge/Java-FFD700?style=for-the-badge&logo=openjdk&logoColor=000000)
 ![Kotlin](https://img.shields.io/badge/Kotlin-FFD700?style=for-the-badge&logo=kotlin&logoColor=000000)
+![Go](https://img.shields.io/badge/Go-FFD700?style=for-the-badge&logo=go&logoColor=000000)
 
 <br/>
 
@@ -42,10 +43,9 @@
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
 ![Redis](https://img.shields.io/badge/Redis-FFD700?style=for-the-badge&logo=redis&logoColor=000000)
-![Supabase](https://img.shields.io/badge/Supabase-FFD700?style=for-the-badge&logo=supabase&logoColor=000000)
+![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-FFD700?style=for-the-badge&logo=cloudflare&logoColor=000000)
 ![Vercel](https://img.shields.io/badge/Vercel-FFD700?style=for-the-badge&logo=vercel&logoColor=000000)
-![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
 
 </div>
@@ -104,13 +104,23 @@
 
 | Project | Description | Stack |
 |:--------|:------------|:------|
-| [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | 107-package multi-agent AI orchestration — 15 LLM providers, council deliberation, pgvector memory, sandboxed code execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
-| [**fin-scrape**](https://github.com/Yash-Awasthi/fin-scrape) | Scrapes 11 financial sources · AI event-scoring · real-time WebSocket dashboard | Python · TypeScript · Cloudflare |
-| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange — local-first, post-quantum | Kotlin · Android |
-| [**CD**](https://github.com/Yash-Awasthi/CD) | Custom RISC-V instruction (`attn`) — GCC auto-compiles attention patterns to hardware | C · GCC · RISC-V |
-| [**Claude-skill**](https://github.com/Yash-Awasthi/Claude-skill) | Drop-in Claude agent skills | Python |
+| [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent AI orchestration — 15 LLM provider drivers, council deliberation, pgvector long-term memory, sandboxed polyglot execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
+| [**FinScrape**](https://github.com/Yash-Awasthi/fin-scrape) | Aggregates 11 financial sources (Bloomberg, Reuters, FT) with TLS fingerprinting at >95% success rate. Hybrid AI + keyword scoring, sub-second Telegram alerts | Python · TypeScript · Cloudflare |
+| [**Aura**](https://github.com/Yash-Awasthi/Aura) | Gesture-authenticated offline contact exchange — no server, no account. Cryptographic key exchange over Bluetooth/NFC | Kotlin · Android |
+| [**Custom Instruction in RISC-V Toolchain**](https://github.com/Yash-Awasthi/Custom_Instruction_in_RISC-V_Toolchain_-_Attention_Mechanism_Transformer) | Custom `attn` RISC-V instruction — GCC toolchain extended to auto-compile transformer attention patterns to hardware | C · GCC · RISC-V |
 
 </div>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+### ◈ Achievements
+
+- 🏆 Global Rank **113** — CodeChef Starters 213 Div3
+- ⭐ CodeChef 3-star · Max rating **1626**
+- 💡 500+ problems solved across LeetCode, Codeforces, CodeChef, and GFG
+- 🎓 Class Representative, CSE Branch · Executive, ACE NIT Raipur
 
 <br/>
 
