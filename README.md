@@ -116,7 +116,7 @@
 | Project | Description | Stack |
 |:--------|:------------|:------|
 | [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent AI orchestration — 15 LLM provider drivers, council deliberation, pgvector long-term memory, sandboxed polyglot execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
-| [**FinScrape**](https://github.com/Yash-Awasthi/fin-scrape) | Aggregates 11 financial sources (Bloomberg, Reuters, FT) with TLS fingerprinting at >95% success rate. Hybrid AI + keyword scoring, sub-second Telegram alerts | Python · TypeScript · Cloudflare |
+| [**FinScrape**](https://github.com/Yash-Awasthi/fin-scrape) | Aggregates 11 financial sources (Bloomberg, Reuters, FT) with TLS fingerprinting at >95% success rate. Hybrid AI + keyword scoring, sub-second Telegram alerts · [Live](https://winfin.pages.dev/)  | Python · TypeScript · Cloudflare |
 | [**Ping**](https://github.com/Yash-Awasthi/Ping) | Gesture-authenticated offline contact exchange — no server, no account. Cryptographic key exchange over Bluetooth/NFC | Kotlin · Android |
 | [**RISC-V Injection**](https://github.com/Yash-Awasthi/RISC-V_Injection) | Custom `attn` RISC-V instruction — GCC toolchain extended to auto-compile transformer attention patterns to hardware | C · GCC · RISC-V |
 
