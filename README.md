@@ -1,148 +1,39 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:1a1200,100:3d2900&height=220&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=48&fontColor=FFD700&fontAlignY=40&desc=Builder%20%E2%80%A2%20Researcher%20%E2%80%A2%20Security&descAlignY=60&descSize=20&descColor=B8860B" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2a8f8a,50:3d5bd9,100:5b5fc7&height=200&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=44&fontColor=ffffff&fontAlignY=36&desc=Software%20engineer%20%C2%B7%20backends%2C%20AI%20systems%2C%20mobile%20apps&descSize=18&descAlignY=58&descColor=eaf0f1" width="100%" alt="Yash Vaibhav Awasthi"/>
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-3d5bd9?style=flat-square&logo=vercel&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app) [![LinkedIn](https://img.shields.io/badge/LinkedIn-2a8f8a?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293) [![Resume](https://img.shields.io/badge/Resume-5b5fc7?style=flat-square&logo=readthedocs&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf) [![Email](https://img.shields.io/badge/Email-237a94?style=flat-square&logo=gmail&logoColor=white)](mailto:yashvaibhav.job@gmail.com)
 
 </div>
 
-<br/>
+B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working when things fail: backends that settle payments exactly once, streams that resume where the network dropped them, and models scored against what actually happened.
 
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+**Experience**
 
-### ◈ About Me
+- **Cloord Solutions**, App development intern, Jul - Sep 2026. Multi-tenant school platform for 1,000+ parents: Next.js API, web portal and 4 Expo apps on AWS.
+- **NIT Raipur, Department of Physics**, Research intern, May - Jul 2025. Real-time sea-to-air speech transmission, extending MIT Media Lab's TARF.
 
-- 🎓 B.Tech CSE @ **NIT Raipur** · Batch of 2028 · CPI 9.26
-- 🤖 Building full-stack and AI-driven systems — TypeScript, Python, Node.js, React
-- 🔐 Interests in cybersecurity,applied ML, and agentic systems
-- 📍 Raipur, India · Open to relocate · Seeking SDE / AI Engineering internships
+### Projects
 
-<br/>
+| Project | What it does |
+|:--|:--|
+| [**Nexus**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent LLM orchestration: 17 providers behind one streaming API, council deliberation, pgvector + BM25 memory. [Live](https://nexus-api-three-kappa.vercel.app) |
+| [**WorldFin**](https://github.com/Yash-Awasthi/fin-scrape) | Maps world news to sectors and tickers, scores every call against the market move that followed. LoRA-tuned ModernBERT, $0/month. [Live](https://winfin.pages.dev) |
+| [**AdapFit**](https://github.com/Yash-Awasthi/adapfit) | FastAPI + React Native recovery engine: train, reduce, recover or rest, from each user's own baseline. |
+| [**PocketDesk**](https://github.com/Yash-Awasthi/PocketDesk) | Drive Claude Code and other CLI agents on your PC from your phone; 60 fps desktop over pinned TLS. |
+| [**Case Files**](https://github.com/Yash-Awasthi/CTF) | 30-challenge CTF on Cloudflare Workers where every player gets unique, traceable evidence. |
+| [**Ping**](https://github.com/Yash-Awasthi/Ping) | Offline Android contact swap by holding the same hand gesture; BLE, ECDH, AES-256-GCM. |
+| [**RISC-V attn**](https://github.com/Yash-Awasthi/RISC-V_Injection) | Custom RISC-V instruction for transformer attention, with GCC, Binutils and a GIMPLE pass. |
 
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+### Stack
 
-### ◈ Tech Stack
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14" alt="TypeScript, Python, Kotlin, C++, React, Next.js, Node.js, FastAPI, PostgreSQL, Redis, AWS, Cloudflare, Docker, Three.js"/>
+</p>
 
-<div align="center">
+**Certified:** Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · Hedera Certified Foundation
 
-![C](https://img.shields.io/badge/C-FFD700?style=for-the-badge&logo=c&logoColor=000000)
-![C++](https://img.shields.io/badge/C++-FFD700?style=for-the-badge&logo=cplusplus&logoColor=000000)
-![Java](https://img.shields.io/badge/Java-FFD700?style=for-the-badge&logo=openjdk&logoColor=000000)
-![TypeScript](https://img.shields.io/badge/TypeScript-FFD700?style=for-the-badge&logo=typescript&logoColor=000000)
-![Python](https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=000000)
-![Kotlin](https://img.shields.io/badge/Kotlin-FFD700?style=for-the-badge&logo=kotlin&logoColor=000000)
-![Go](https://img.shields.io/badge/Go-FFD700?style=for-the-badge&logo=go&logoColor=000000)
-![SQL](https://img.shields.io/badge/SQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
-
-<br/>
-
-![React](https://img.shields.io/badge/React-FFD700?style=for-the-badge&logo=react&logoColor=000000)
-![Next.js](https://img.shields.io/badge/Next.js-FFD700?style=for-the-badge&logo=nextdotjs&logoColor=000000)
-![Three.js](https://img.shields.io/badge/Three.js-FFD700?style=for-the-badge&logo=threedotjs&logoColor=000000)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-FFD700?style=for-the-badge&logo=tailwindcss&logoColor=000000)
-![Node.js](https://img.shields.io/badge/Node.js-FFD700?style=for-the-badge&logo=nodedotjs&logoColor=000000)
-![Fastify](https://img.shields.io/badge/Fastify-FFD700?style=for-the-badge&logo=fastify&logoColor=000000)
-![Android](https://img.shields.io/badge/Android-FFD700?style=for-the-badge&logo=android&logoColor=000000)
-
-<br/>
-
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FFD700?style=for-the-badge&logo=postgresql&logoColor=000000)
-![Redis](https://img.shields.io/badge/Redis-FFD700?style=for-the-badge&logo=redis&logoColor=000000)
-![SQLite](https://img.shields.io/badge/SQLite-FFD700?style=for-the-badge&logo=sqlite&logoColor=000000)
-![NumPy](https://img.shields.io/badge/NumPy-FFD700?style=for-the-badge&logo=numpy&logoColor=000000)
-![SciPy](https://img.shields.io/badge/SciPy-FFD700?style=for-the-badge&logo=scipy&logoColor=000000)
-
-<br/>
-
-![Docker](https://img.shields.io/badge/Docker-FFD700?style=for-the-badge&logo=docker&logoColor=000000)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-FFD700?style=for-the-badge&logo=githubactions&logoColor=000000)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-FFD700?style=for-the-badge&logo=cloudflare&logoColor=000000)
-![Vercel](https://img.shields.io/badge/Vercel-FFD700?style=for-the-badge&logo=vercel&logoColor=000000)
-![WebSockets](https://img.shields.io/badge/WebSockets-FFD700?style=for-the-badge&logo=socket.io&logoColor=000000)
-![BullMQ](https://img.shields.io/badge/BullMQ-FFD700?style=for-the-badge&logo=bull&logoColor=000000)
-
-</div>
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-### ◈ Activity
-
-<div align="center">
-
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Yash-Awasthi&bg_color=000000&color=FFD700&line=DAA520&point=FFD700&area=true&area_color=1a1200&hide_border=true&title_color=FFD700)](https://github.com/ashutosh00710/github-readme-activity-graph)
-
-</div>
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-### ◈ GitHub Stats
-
-<div align="center">
-
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Yash-Awasthi&show_icons=true&title_color=FFD700&text_color=FFFFFF&icon_color=FFD700&bg_color=000000&hide_border=true&include_all_commits=true&count_private=true"/>
-&nbsp;
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yash-Awasthi&layout=compact&title_color=FFD700&text_color=FFFFFF&bg_color=000000&hide_border=true&langs_count=8"/>
-
-</div>
-
-<div align="center">
-
-[![GitHub Streak](https://streak-stats.demolab.com?user=Yash-Awasthi&background=000000&stroke=FFD700&ring=DAA520&fire=FFD700&currStreakLabel=FFD700&currStreakNum=FFFFFF&sideLabels=DAA520&sideNums=FFFFFF&dates=888888&hide_border=true)](https://git.io/streak-stats)
-
-</div>
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-### ◈ Contribution Graph
-
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg?v=2" alt="contribution snake" width="100%"/>
-
-</div>
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-### ◈ Featured Projects
-
-<div align="center">
-
-| Project | Description | Stack |
-|:--------|:------------|:------|
-| [**NEXUS**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent AI orchestration — 15 LLM provider drivers, council deliberation, pgvector long-term memory, sandboxed polyglot execution · [Live](https://nexus-api-three-kappa.vercel.app) | TypeScript · Fastify · pgvector |
-| [**FinScrape**](https://github.com/Yash-Awasthi/fin-scrape) | Aggregates 11 financial sources (Bloomberg, Reuters, FT) with TLS fingerprinting at >95% success rate. Hybrid AI + keyword scoring, sub-second Telegram alerts · [Live](https://winfin.pages.dev/)  | Python · TypeScript · Cloudflare |
-| [**Ping**](https://github.com/Yash-Awasthi/Ping) | Gesture-authenticated offline contact exchange — no server, no account. Cryptographic key exchange over Bluetooth/NFC | Kotlin · Android |
-| [**RISC-V Injection**](https://github.com/Yash-Awasthi/RISC-V_Injection) | Custom `attn` RISC-V instruction — GCC toolchain extended to auto-compile transformer attention patterns to hardware | C · GCC · RISC-V |
-
-</div>
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-### ◈ Achievements
-
-- 🏆 Global Rank **113** — CodeChef Starters 213 Div3
-- ⭐ CodeChef 3-star · Max rating **1626**
-
-<br/>
-
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
-
-<br/>
-
-<div align="center">
-
-![Visitor Count](https://komarev.com/ghpvc/?username=Yash-Awasthi&style=for-the-badge&color=B8860B&label=PROFILE+VIEWS&labelColor=000000)
-
-<br/><br/>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3d2900,50:1a1200,100:000000&height=120&section=footer" width="100%"/>
-
-</div>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake-dark.svg"/>
+  <img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg" alt="Contribution graph with a snake eating it" width="100%"/>
+</picture>
