@@ -21,6 +21,7 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 | [**WorldFin**](https://github.com/Yash-Awasthi/fin-scrape) | Maps world news to sectors and tickers, scores every call against the market move that followed. LoRA-tuned ModernBERT, $0/month. [Live](https://winfin.pages.dev) |
 | [**AdapFit**](https://github.com/Yash-Awasthi/adapfit) | FastAPI + React Native recovery engine: train, reduce, recover or rest, from each user's own baseline. |
 | [**PocketDesk**](https://github.com/Yash-Awasthi/PocketDesk) | Drive Claude Code and other CLI agents on your PC from your phone; 60 fps desktop over pinned TLS. |
+| [**Key Router**](https://github.com/Yash-Awasthi/Key-Router) | Cloudflare Worker that wraps any OpenAI-compatible provider key in a disposable gateway key with an expiry; streaming included, free plan. |
 | [**Case Files**](https://github.com/Yash-Awasthi/CTF) | 30-challenge CTF on Cloudflare Workers where every player gets unique, traceable evidence. |
 | [**Ping**](https://github.com/Yash-Awasthi/Ping) | Offline Android contact swap by holding the same hand gesture; BLE, ECDH, AES-256-GCM. |
 | [**RISC-V attn**](https://github.com/Yash-Awasthi/RISC-V_Injection) | Custom RISC-V instruction for transformer attention, with GCC, Binutils and a GIMPLE pass. |
