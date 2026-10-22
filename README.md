@@ -36,6 +36,6 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 **Certified:** Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · Hedera Certified Foundation
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake-dark.svg"/>
-  <img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/output/github-contribution-grid-snake.svg" alt="Contribution graph with a snake eating it" width="100%"/>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/main/assets/github-contribution-grid-snake-dark.svg"/>
+  <img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/main/assets/github-contribution-grid-snake.svg" alt="Contribution graph with a snake eating it" width="100%"/>
 </picture>
