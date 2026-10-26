@@ -26,7 +26,7 @@ THEMES = {
 }
 
 COL, BAR, DX, DY, DEPTH, MAX_H, RIVER = 22, 13, 10.0, 9.0, 0.6, 190, 62
-PAD_L, PAD_T, PAD_B, PAD_R = 28, 24, 34, 28
+PAD_L, PAD_T, PAD_B, PAD_R = 28, 40, 48, 28
 ROWS = 7
 
 
@@ -68,6 +68,51 @@ def grad(gid, c0, c1):
             f'<stop offset="0" stop-color="{c0}"/><stop offset="1" stop-color="{c1}"/></linearGradient>')
 
 
+def sky_scene(theme, width, horizon):
+    out = []
+    if theme == "dark":
+        for i in range(70):
+            h = zlib.crc32(b"star%d" % i)
+            x, y = h % int(width), 8 + (h >> 12) % int(horizon - 8)
+            out.append(f'<circle class="t" style="animation-delay:{h % 50 / 10}s" cx="{x}" cy="{y}" '
+                       f'r="{.5 + (h >> 24) % 3 * .35:.2f}" fill="#fff" opacity=".8"/>')
+        out.append('<circle cx="90" cy="46" r="15" fill="#fdf3c7" opacity=".95"/>'
+                   '<circle cx="97" cy="41" r="13" fill="#0b1324"/>')
+    else:
+        out.append('<circle cx="90" cy="48" r="28" fill="#ffd966" opacity=".18"/>'
+                   '<circle cx="90" cy="48" r="15" fill="#ffcf4d"/>')
+        for i, (x, y, s, dur) in enumerate(((180, 40, 1, 38), (420, 62, .8, 52), (720, 34, 1.15, 45))):
+            out.append(f'<g class="s" style="animation-duration:{dur}s" opacity=".85" fill="#fff">'
+                       f'<ellipse cx="{x}" cy="{y}" rx="{26 * s}" ry="{8 * s}"/>'
+                       f'<ellipse cx="{x - 9 * s}" cy="{y - 6 * s}" rx="{12 * s}" ry="{9 * s}"/>'
+                       f'<ellipse cx="{x + 8 * s}" cy="{y - 8 * s}" rx="{14 * s}" ry="{10 * s}"/></g>')
+    return "".join(out)
+
+
+def road(t, theme, x0, x1, y):
+    lane = "#2a3240" if theme == "dark" else "#8f9b95"
+    out = [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="10" fill="{lane}"/>',
+           f'<line x1="{x0}" y1="{y + 5}" x2="{x1}" y2="{y + 5}" stroke="#f5f1d0" stroke-opacity=".5" stroke-dasharray="6 6"/>',
+           f'<clipPath id="rd"><rect x="{x0}" y="{y}" width="{x1 - x0}" height="10"/></clipPath><g clip-path="url(#rd)">']
+    span = x1 - x0 + 40
+    palette = ["#ff6b6b", "#4dabf7", "#ffd43b", "#f8f9fa", "#b197fc"]
+    for i in range(9):
+        h = zlib.crc32(b"car%d" % i)
+        fwd = i % 2 == 0
+        dur = 9 + h % 9
+        lane_y = y + (1 if fwd else 6)
+        start = x0 - 20 if fwd else x1 + 20
+        lamp, tail = ("#fff6c2", "#ff3b3b")
+        body = palette[h % len(palette)]
+        nose, rear = (13, -1) if fwd else (-1, 13)
+        out.append(f'<g class="c" style="--d:{span if fwd else -span}px;animation-duration:{dur}s;animation-delay:-{h % 90 / 10}s">'
+                   f'<rect x="{start}" y="{lane_y}" width="12" height="3" rx="1" fill="{body}"/>'
+                   f'<circle cx="{start + nose}" cy="{lane_y + 1.5}" r="1" fill="{lamp}"/>'
+                   f'<circle cx="{start + rear}" cy="{lane_y + 1.5}" r=".8" fill="{tail}"/></g>')
+    out.append("</g>")
+    return "".join(out)
+
+
 def render(weeks, theme):
     t = THEMES[theme]
     peak = max(1, max(n for w in weeks for _, n in w))
@@ -102,9 +147,13 @@ def render(weeks, theme):
         "@keyframes rise{0%{opacity:0;transform:scaleY(.02)}15%{opacity:1}100%{opacity:1;transform:scaleY(1)}}"
         ".v{stroke-dasharray:5 11;animation:flow 2.6s linear infinite}@keyframes flow{to{stroke-dashoffset:-32}}"
         ".f{opacity:0;animation:fade 1s ease forwards}@keyframes fade{to{opacity:1}}"
-        ".t{animation:tw 4s ease-in-out infinite}@keyframes tw{50%{opacity:.1}}</style>",
+        ".t{animation:tw 4s ease-in-out infinite}@keyframes tw{50%{opacity:.1}}"
+        ".c{animation:drive linear infinite}@keyframes drive{from{transform:translateX(0)}to{transform:translateX(var(--d))}}"
+        ".a{animation:blink 1.6s steps(1) infinite}@keyframes blink{50%{opacity:.15}}"
+        ".s{animation:drift linear infinite alternate}@keyframes drift{to{transform:translateX(60px)}}</style>",
         '<rect width="100%" height="100%" rx="16" fill="url(#sky)"/>',
         '<rect width="100%" height="100%" rx="16" fill="url(#glow)"/>',
+        sky_scene(theme, width, base_y - MAX_H * 0.55),
         f'<polygon fill="{t["edge"]}" points="{g0},{gy} {g1},{gy} {g1},{gy + 6} {g0},{gy + 6}"/>',
         f'<polygon fill="{mix(t["edge"], "#000000", .2)}" points="{g1},{gy} {g1 + bkx},{gy + bky} {g1 + bkx},{gy + bky + 6} {g1},{gy + 6}"/>',
         f'<polygon fill="url(#gnd)" points="{plane(PAD_L, PAD_L + span, 10)}"/>',
@@ -119,9 +168,11 @@ def render(weeks, theme):
         for k in (-9, -3, 3, 9):
             out.append(f'<line class="v" style="animation-delay:{k / 10:.1f}s" x1="{cx + k + bkx}" y1="{gy + bky}" '
                        f'x2="{cx + k}" y2="{gy}" stroke="{t["wave"]}" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>')
-        out.append(f'<text x="{cx}" y="{gy + 22}" font-size="10" letter-spacing=".4" text-anchor="middle" '
+        out.append(f'<text x="{cx}" y="{gy + 34}" font-size="10" letter-spacing=".4" text-anchor="middle" '
                    f'fill="{t["muted"]}">{val} wk quiet</text></g>')
 
+    out.append(road(t, theme, g0, g1, gy + 6))
+    towers = sorted((n for w in weeks for _, n in w), reverse=True)[:3]
     for day in range(ROWS):  # Sunday is the back row; draw back to front for painter's order
         r = ROWS - 1 - day
         fog = r / ROWS * 0.4
@@ -157,6 +208,10 @@ def render(weeks, theme):
                         tw = f' class="t" style="animation-delay:{(seed + k) % 40 / 10}s"' if on == 0 and theme == "dark" else ""
                         parts.append(f'<rect{tw} x="{wx}" y="{wy:.1f}" width="2" height="2.4" fill="{t["win"]}" opacity="{t["win_on"]}"/>')
                 wy += 6
+            if n in towers and n:
+                ax, ay = bx + BAR / 2 + dx / 2, top - dy / 2
+                parts.append(f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{ax:.1f}" y2="{ay - 16:.1f}" stroke="{mix(col, "#000000", .4)}" stroke-width="1.2"/>'
+                             f'<circle class="a" style="animation-delay:{towers.index(n) * .5}s" cx="{ax:.1f}" cy="{ay - 17:.1f}" r="2" fill="#ff4d4d"/>')
             parts.append("</g>")
             out.append("".join(parts))
     out.append("</svg>")
