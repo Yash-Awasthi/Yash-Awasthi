@@ -4,6 +4,7 @@ import math
 import os
 import sys
 import urllib.request
+import zlib
 from datetime import date
 
 QUERY = """query($u:String!){user(login:$u){contributionsCollection{contributionCalendar{
@@ -11,19 +12,21 @@ weeks{contributionDays{date contributionCount}}}}}}"""
 
 THEMES = {
     "light": {
-        "bg": "#fafaf7", "ground": "#ecece6", "muted": "#6b6b6b", "empty": "#dcdcd3",
-        "water": "#9fd3ee", "wave": "#e8f6fd",
-        "levels": ["#a7e8b4", "#6fdc8c", "#22c55e", "#16a34a", "#0f7a3a", "#0a5c2c"],
+        "sky": ("#f6f9f7", "#e2ebe6"), "ground": ("#e4ebe7", "#d0dbd5"), "edge": "#b9c7c0",
+        "muted": "#6b7a73", "fog": "#eef3f0", "win": "#fffbe6", "win_on": 0.6,
+        "water": ("#c4e6f6", "#7cc3e8"), "wave": "#ffffff",
+        "levels": ["#9fe3b0", "#5fd47f", "#2bbf62", "#169e4c", "#0e7b3b", "#095c2d"],
     },
     "dark": {
-        "bg": "#0d1117", "ground": "#161b22", "muted": "#8b949e", "empty": "#262c35",
-        "water": "#1d4a6b", "wave": "#4c8fbf",
-        "levels": ["#1b4d2e", "#1f7a43", "#26a659", "#2fcc6c", "#5be38e", "#a6f5c0"],
+        "sky": ("#0b1324", "#04060b"), "ground": ("#162030", "#0b1018"), "edge": "#04070b",
+        "muted": "#7d8a99", "fog": "#0b1324", "win": "#ffe9a8", "win_on": 0.9,
+        "water": ("#15466b", "#0b2640"), "wave": "#6cc0f0",
+        "levels": ["#14532d", "#16733b", "#1f9a4e", "#2bc265", "#57e08a", "#a3f5bf"],
     },
 }
 
 COL, BAR, DX, DY, DEPTH, MAX_H, RIVER = 22, 13, 10.0, 9.0, 0.6, 190, 62
-PAD_L, PAD_T, PAD_B, PAD_R = 24, 24, 34, 24
+PAD_L, PAD_T, PAD_B, PAD_R = 28, 24, 34, 28
 ROWS = 7
 
 
@@ -52,10 +55,17 @@ def layout(weeks):
     return items, x
 
 
-def shade(hex_color, f):
-    r, g, b = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
-    mix = (lambda c: c + (255 - c) * f) if f > 0 else (lambda c: c * (1 + f))
-    return "#%02x%02x%02x" % tuple(round(mix(c)) for c in (r, g, b))
+def rgb(c):
+    return [int(c[i:i + 2], 16) for i in (1, 3, 5)]
+
+
+def mix(c, other, f):
+    return "#%02x%02x%02x" % tuple(round(a + (b - a) * f) for a, b in zip(rgb(c), rgb(other)))
+
+
+def grad(gid, c0, c1):
+    return (f'<linearGradient id="{gid}" x1="0" y1="0" x2="0" y2="1">'
+            f'<stop offset="0" stop-color="{c0}"/><stop offset="1" stop-color="{c1}"/></linearGradient>')
 
 
 def render(weeks, theme):
@@ -65,59 +75,90 @@ def render(weeks, theme):
     width = PAD_L + span + ROWS * DX + PAD_R
     height = PAD_T + MAX_H + ROWS * DY + PAD_B
     base_y = height - PAD_B
+    gy = base_y + 4
     dx, dy = DX * DEPTH, DY * DEPTH
-    back = (ROWS * DX, -ROWS * DY)
+    bkx, bky = ROWS * DX, -ROWS * DY
 
     def plane(x0, x1, pad=0):
-        y = base_y + 4
-        return (f"{x0 - pad},{y} {x1 + pad},{y} {x1 + pad + back[0]},{y + back[1]} "
-                f"{x0 - pad + back[0]},{y + back[1]}")
+        return (f"{x0 - pad},{gy} {x1 + pad},{gy} {x1 + pad + bkx},{gy + bky} "
+                f"{x0 - pad + bkx},{gy + bky}")
 
+    g0, g1 = PAD_L - 10, PAD_L + span + 10
+    accent = t["levels"][3]
     out = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">',
+        "<defs>",
+        grad("sky", *t["sky"]), grad("gnd", *t["ground"]), grad("wat", *t["water"]),
+        '<linearGradient id="lit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"/>'
+        '<stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient>',
+        '<linearGradient id="sid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".04"/>'
+        '<stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>',
+        f'<radialGradient id="glow" cx=".75" cy=".85" r=".55"><stop offset="0" stop-color="{accent}" stop-opacity=".2"/>'
+        f'<stop offset="1" stop-color="{accent}" stop-opacity="0"/></radialGradient>',
+        "</defs>",
         "<style>.b{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.02);opacity:0;"
-        "animation:rise 1.1s cubic-bezier(.22,1.4,.36,1) forwards}"
-        "@keyframes rise{0%{opacity:0;transform:scaleY(.02)}20%{opacity:1}100%{opacity:1;transform:scaleY(1)}}"
-        ".v{stroke-dasharray:6 10;animation:flow 3s linear infinite}@keyframes flow{to{stroke-dashoffset:-32}}"
-        ".f{opacity:0;animation:fade .8s ease forwards}@keyframes fade{to{opacity:1}}</style>",
-        f'<rect width="100%" height="100%" rx="14" fill="{t["bg"]}"/>',
-        f'<polygon fill="{t["ground"]}" points="{plane(PAD_L, PAD_L + span, 8)}"/>',
+        "animation:rise 1.2s cubic-bezier(.22,1.35,.36,1) forwards}"
+        "@keyframes rise{0%{opacity:0;transform:scaleY(.02)}15%{opacity:1}100%{opacity:1;transform:scaleY(1)}}"
+        ".v{stroke-dasharray:5 11;animation:flow 2.6s linear infinite}@keyframes flow{to{stroke-dashoffset:-32}}"
+        ".f{opacity:0;animation:fade 1s ease forwards}@keyframes fade{to{opacity:1}}"
+        ".t{animation:tw 4s ease-in-out infinite}@keyframes tw{50%{opacity:.1}}</style>",
+        '<rect width="100%" height="100%" rx="16" fill="url(#sky)"/>',
+        '<rect width="100%" height="100%" rx="16" fill="url(#glow)"/>',
+        f'<polygon fill="{t["edge"]}" points="{g0},{gy} {g1},{gy} {g1},{gy + 6} {g0},{gy + 6}"/>',
+        f'<polygon fill="{mix(t["edge"], "#000000", .2)}" points="{g1},{gy} {g1 + bkx},{gy + bky} {g1 + bkx},{gy + bky + 6} {g1},{gy + 6}"/>',
+        f'<polygon fill="url(#gnd)" points="{plane(PAD_L, PAD_L + span, 10)}"/>',
     ]
     for kind, x, val in items:
         if kind != "r":
             continue
-        x0, x1 = PAD_L + x + 6, PAD_L + x + RIVER - 6
+        x0, x1 = PAD_L + x + 8, PAD_L + x + RIVER - 8
         cx = (x0 + x1) / 2
-        out.append(f'<g class="f"><polygon fill="{t["water"]}" points="{plane(x0, x1)}"/>')
-        for k in (-8, 0, 8):
-            out.append(f'<line class="v" x1="{cx + k + back[0]}" y1="{base_y + 4 + back[1]}" x2="{cx + k}" '
-                       f'y2="{base_y + 4}" stroke="{t["wave"]}" stroke-width="1.2" stroke-linecap="round"/>')
-        label = f"{val} wk quiet"
-        out.append(f'<text x="{cx}" y="{base_y + 22}" font-size="10" text-anchor="middle" '
-                   f'fill="{t["muted"]}">{label}</text></g>')
+        out.append(f'<g class="f"><polygon fill="url(#wat)" points="{plane(x0, x1)}"/>'
+                   f'<rect x="{x0}" y="{gy}" width="{x1 - x0}" height="6" fill="{t["water"][1]}"/>')
+        for k in (-9, -3, 3, 9):
+            out.append(f'<line class="v" style="animation-delay:{k / 10:.1f}s" x1="{cx + k + bkx}" y1="{gy + bky}" '
+                       f'x2="{cx + k}" y2="{gy}" stroke="{t["wave"]}" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>')
+        out.append(f'<text x="{cx}" y="{gy + 22}" font-size="10" letter-spacing=".4" text-anchor="middle" '
+                   f'fill="{t["muted"]}">{val} wk quiet</text></g>')
 
     for day in range(ROWS):  # Sunday is the back row; draw back to front for painter's order
         r = ROWS - 1 - day
+        fog = r / ROWS * 0.4
         for kind, x, w in items:
             if kind != "w":
                 continue
-            hit = [d for d in w if (date.fromisoformat(d[0]).weekday() + 1) % 7 == day]
+            hit = [d for d in w if d[1] and (date.fromisoformat(d[0]).weekday() + 1) % 7 == day]
             if not hit:
                 continue
             d, n = hit[0]
             bx, by = PAD_L + x + r * DX, base_y - r * DY
             f = math.sqrt(n / peak)
-            h = 2 if n == 0 else 5 + MAX_H * f
-            col = t["empty"] if n == 0 else t["levels"][min(5, int(6 * f))]
+            h = 6 + MAX_H * f
+            col = mix(t["levels"][min(5, int(6 * f))], t["fog"], fog)
             top = by - h
-            delay = 0.15 + x / span * 2.2 + r * 0.09
-            out.append(
-                f'<g class="b" style="animation-delay:{delay:.2f}s"><title>{n} on {d}</title>'
-                f'<polygon fill="{shade(col, -0.3)}" points="{bx + BAR},{by} {bx + BAR + dx},{by - dy} {bx + BAR + dx},{top - dy:.1f} {bx + BAR},{top:.1f}"/>'
-                f'<rect x="{bx}" y="{top:.1f}" width="{BAR}" height="{h:.1f}" fill="{col}"/>'
-                f'<polygon fill="{shade(col, 0.32)}" points="{bx},{top:.1f} {bx + BAR},{top:.1f} {bx + BAR + dx},{top - dy:.1f} {bx + dx},{top - dy:.1f}"/></g>'
-            )
+            side = f"{bx + BAR},{by} {bx + BAR + dx},{by - dy} {bx + BAR + dx},{top - dy:.1f} {bx + BAR},{top:.1f}"
+            delay = 0.2 + x / span * 2.4 + r * 0.08
+            parts = [
+                f'<g class="b" style="animation-delay:{delay:.2f}s"><title>{n} on {d}</title>',
+                f'<polygon fill="{mix(col, "#000000", .32)}" points="{side}"/><polygon fill="url(#sid)" points="{side}"/>',
+                f'<rect x="{bx}" y="{top:.1f}" width="{BAR}" height="{h:.1f}" fill="{col}"/>',
+                f'<rect x="{bx}" y="{top:.1f}" width="{BAR}" height="{h:.1f}" fill="url(#lit)"/>',
+                f'<polygon fill="{mix(col, "#ffffff", .38)}" points="{bx},{top:.1f} {bx + BAR},{top:.1f} '
+                f'{bx + BAR + dx},{top - dy:.1f} {bx + dx},{top - dy:.1f}"/>',
+            ]
+            seed = zlib.crc32(d.encode())
+            wy, k = top + 5, 0
+            while wy < by - 6:
+                for wx in (bx + 3, bx + BAR - 5):
+                    k += 1
+                    on = (seed + k * 2654435761) % 7
+                    if on < 3:
+                        tw = f' class="t" style="animation-delay:{(seed + k) % 40 / 10}s"' if on == 0 and theme == "dark" else ""
+                        parts.append(f'<rect{tw} x="{wx}" y="{wy:.1f}" width="2" height="2.4" fill="{t["win"]}" opacity="{t["win_on"]}"/>')
+                wy += 6
+            parts.append("</g>")
+            out.append("".join(parts))
     out.append("</svg>")
     return "\n".join(out)
 
