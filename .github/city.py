@@ -12,13 +12,13 @@ weeks{contributionDays{date contributionCount}}}}}}"""
 
 THEMES = {
     "light": {
-        "sky": ("#f6f9f7", "#e2ebe6"), "ground": ("#e4ebe7", "#d0dbd5"), "edge": "#b9c7c0",
+        "sky": ("#f6f9f7", "#e2ebe6"), "ground": ("#e4ebe7", "#d0dbd5"), "edge": "#b9c7c0", "grass": "#7cc47f", "tuft": "#4f9d57", "leaf": "#4caf50", "trunk": "#7a5a3a",
         "muted": "#6b7a73", "fog": "#eef3f0", "win": "#fffbe6", "win_on": 0.6,
         "water": ("#c4e6f6", "#7cc3e8"), "wave": "#ffffff",
         "levels": ["#9fe3b0", "#5fd47f", "#2bbf62", "#169e4c", "#0e7b3b", "#095c2d"],
     },
     "dark": {
-        "sky": ("#0b1324", "#04060b"), "ground": ("#162030", "#0b1018"), "edge": "#04070b",
+        "sky": ("#0b1324", "#04060b"), "ground": ("#162030", "#0b1018"), "edge": "#04070b", "grass": "#173d24", "tuft": "#2e6b3e", "leaf": "#2e7d42", "trunk": "#4a3524",
         "muted": "#7d8a99", "fog": "#0b1324", "win": "#ffe9a8", "win_on": 0.9,
         "water": ("#15466b", "#0b2640"), "wave": "#6cc0f0",
         "levels": ["#14532d", "#16733b", "#1f9a4e", "#2bc265", "#57e08a", "#a3f5bf"],
@@ -26,7 +26,7 @@ THEMES = {
 }
 
 COL, BAR, DX, DY, DEPTH, MAX_H, RIVER = 22, 13, 10.0, 9.0, 0.6, 190, 62
-PAD_L, PAD_T, PAD_B, PAD_R = 28, 40, 48, 28
+PAD_L, PAD_T, PAD_B, PAD_R = 28, 40, 56, 28
 ROWS = 7
 
 
@@ -89,27 +89,64 @@ def sky_scene(theme, width, horizon):
     return "".join(out)
 
 
-def road(t, theme, x0, x1, y):
-    lane = "#2a3240" if theme == "dark" else "#8f9b95"
-    out = [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="10" fill="{lane}"/>',
-           f'<line x1="{x0}" y1="{y + 5}" x2="{x1}" y2="{y + 5}" stroke="#f5f1d0" stroke-opacity=".5" stroke-dasharray="6 6"/>',
-           f'<clipPath id="rd"><rect x="{x0}" y="{y}" width="{x1 - x0}" height="10"/></clipPath><g clip-path="url(#rd)">']
-    span = x1 - x0 + 40
-    palette = ["#ff6b6b", "#4dabf7", "#ffd43b", "#f8f9fa", "#b197fc"]
-    for i in range(9):
+def car(body, theme, glass):
+    """Side-view car facing +x, 18 long; origin at rear bumper, road level."""
+    beam = ('<polygon points="18,-3.2 40,-6 40,0" fill="#fff3b0" opacity=".22"/>' if theme == "dark" else "")
+    return (f'{beam}<path d="M0,-2.2 Q0,-4.6 2.5,-4.8 L5,-5 L7.2,-8 H12.4 L15.2,-5 Q18,-4.8 18,-2.6 V-1.4 H0 Z" fill="{body}"/>'
+            f'<path d="M7.8,-7.4 H10 V-5.2 H6.2 Z M10.7,-7.4 H12.1 L14.2,-5.2 H10.7 Z" fill="{glass}"/>'
+            '<rect x="0" y="-2.4" width="18" height=".7" fill="#000" opacity=".18"/>'
+            '<circle cx="4.2" cy="-1.2" r="1.7" fill="#14171c"/><circle cx="4.2" cy="-1.2" r=".7" fill="#9aa3ad"/>'
+            '<circle cx="13.8" cy="-1.2" r="1.7" fill="#14171c"/><circle cx="13.8" cy="-1.2" r=".7" fill="#9aa3ad"/>'
+            '<rect x="17" y="-4" width="1.2" height="1" rx=".4" fill="#fff6c2"/>'
+            '<rect x="-.2" y="-4" width="1" height="1" rx=".3" fill="#ff3b3b"/>')
+
+
+def road(theme, x0, x1, y):
+    asphalt, curb = ("#232a35", "#3a4350") if theme == "dark" else ("#7f8a85", "#c9d1cd")
+    glass = "#9fd3ff" if theme == "dark" else "#d9f0ff"
+    out = [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="18" fill="{asphalt}"/>',
+           f'<rect x="{x0}" y="{y + 18}" width="{x1 - x0}" height="2" fill="{curb}"/>',
+           f'<line x1="{x0}" y1="{y + 9}" x2="{x1}" y2="{y + 9}" stroke="#f5e9a8" stroke-opacity=".55" stroke-dasharray="7 7"/>',
+           f'<clipPath id="rd"><rect x="{x0}" y="{y - 12}" width="{x1 - x0}" height="30"/></clipPath><g clip-path="url(#rd)">']
+    span = x1 - x0 + 60
+    palette = ["#e5484d", "#3e8ef7", "#f5b82e", "#eceff1", "#8e6cf0", "#2bb673", "#ff8a3d"]
+    for i in range(11):
         h = zlib.crc32(b"car%d" % i)
         fwd = i % 2 == 0
-        dur = 9 + h % 9
-        lane_y = y + (1 if fwd else 6)
-        start = x0 - 20 if fwd else x1 + 20
-        lamp, tail = ("#fff6c2", "#ff3b3b")
-        body = palette[h % len(palette)]
-        nose, rear = (13, -1) if fwd else (-1, 13)
-        out.append(f'<g class="c" style="--d:{span if fwd else -span}px;animation-duration:{dur}s;animation-delay:-{h % 90 / 10}s">'
-                   f'<rect x="{start}" y="{lane_y}" width="12" height="3" rx="1" fill="{body}"/>'
-                   f'<circle cx="{start + nose}" cy="{lane_y + 1.5}" r="1" fill="{lamp}"/>'
-                   f'<circle cx="{start + rear}" cy="{lane_y + 1.5}" r=".8" fill="{tail}"/></g>')
+        base = y + (8 if fwd else 17)
+        start = x0 - 30 if fwd else x1 + 30
+        flip = "" if fwd else " scale(-1,1)"
+        out.append(f'<g class="c" style="--d:{span if fwd else -span}px;animation-duration:{10 + h % 10}s;animation-delay:-{h % 100 / 10}s">'
+                   f'<g transform="translate({start},{base}){flip}">{car(palette[h % len(palette)], theme, glass)}</g></g>')
     out.append("</g>")
+    return "".join(out)
+
+
+def flora(bx, by, dx, dy, seed, fog, t):
+    """A tree or hedge standing on an empty day cell."""
+    leaf = mix(t["leaf"], t["fog"], fog)
+    dark, light = mix(leaf, "#000000", .3), mix(leaf, "#ffffff", .25)
+    cx = bx + BAR / 2 + dx / 2
+    if seed % 3:
+        r = 4 + seed % 3
+        return (f'<line x1="{cx}" y1="{by - dy / 2}" x2="{cx}" y2="{by - dy / 2 - 6}" stroke="{t["trunk"]}" stroke-width="1.6"/>'
+                f'<circle cx="{cx}" cy="{by - dy / 2 - 6 - r * .6}" r="{r}" fill="{dark}"/>'
+                f'<circle cx="{cx - .8}" cy="{by - dy / 2 - 7 - r * .6}" r="{r * .75}" fill="{leaf}"/>'
+                f'<circle cx="{cx - 1.8}" cy="{by - dy / 2 - 8 - r * .6}" r="{r * .3}" fill="{light}"/>')
+    return (f'<polygon fill="{dark}" points="{bx + BAR},{by} {bx + BAR + dx},{by - dy} {bx + BAR + dx},{by - dy - 5} {bx + BAR},{by - 5}"/>'
+            f'<rect x="{bx}" y="{by - 5}" width="{BAR}" height="5" rx="1.5" fill="{leaf}"/>'
+            f'<polygon fill="{light}" points="{bx},{by - 5} {bx + BAR},{by - 5} {bx + BAR + dx},{by - dy - 5} {bx + dx},{by - dy - 5}"/>')
+
+
+def verge(t, x0, x1, y):
+    out = [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="6" fill="{t["grass"]}"/>']
+    x = x0 + 2
+    while x < x1 - 2:
+        h = zlib.crc32(b"tuft%d" % int(x))
+        tall = 2 + h % 4
+        out.append(f'<path d="M{x},{y + 1} l-1.2,-{tall} M{x},{y + 1} l0,-{tall + 1} M{x},{y + 1} l1.2,-{tall}" '
+                   f'stroke="{t["tuft"]}" stroke-width=".8" stroke-linecap="round"/>')
+        x += 4 + h % 6
     return "".join(out)
 
 
@@ -154,9 +191,9 @@ def render(weeks, theme):
         '<rect width="100%" height="100%" rx="16" fill="url(#sky)"/>',
         '<rect width="100%" height="100%" rx="16" fill="url(#glow)"/>',
         sky_scene(theme, width, base_y - MAX_H * 0.55),
-        f'<polygon fill="{t["edge"]}" points="{g0},{gy} {g1},{gy} {g1},{gy + 6} {g0},{gy + 6}"/>',
         f'<polygon fill="{mix(t["edge"], "#000000", .2)}" points="{g1},{gy} {g1 + bkx},{gy + bky} {g1 + bkx},{gy + bky + 6} {g1},{gy + 6}"/>',
         f'<polygon fill="url(#gnd)" points="{plane(PAD_L, PAD_L + span, 10)}"/>',
+        verge(t, g0, g1, gy),
     ]
     for kind, x, val in items:
         if kind != "r":
@@ -168,10 +205,10 @@ def render(weeks, theme):
         for k in (-9, -3, 3, 9):
             out.append(f'<line class="v" style="animation-delay:{k / 10:.1f}s" x1="{cx + k + bkx}" y1="{gy + bky}" '
                        f'x2="{cx + k}" y2="{gy}" stroke="{t["wave"]}" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>')
-        out.append(f'<text x="{cx}" y="{gy + 34}" font-size="10" letter-spacing=".4" text-anchor="middle" '
+        out.append(f'<text x="{cx}" y="{gy + 40}" font-size="10" letter-spacing=".4" text-anchor="middle" '
                    f'fill="{t["muted"]}">{val} wk quiet</text></g>')
 
-    out.append(road(t, theme, g0, g1, gy + 6))
+    out.append(road(theme, g0, g1, gy + 6))
     towers = sorted((n for w in weeks for _, n in w), reverse=True)[:3]
     for day in range(ROWS):  # Sunday is the back row; draw back to front for painter's order
         r = ROWS - 1 - day
@@ -179,11 +216,15 @@ def render(weeks, theme):
         for kind, x, w in items:
             if kind != "w":
                 continue
-            hit = [d for d in w if d[1] and (date.fromisoformat(d[0]).weekday() + 1) % 7 == day]
+            hit = [d for d in w if (date.fromisoformat(d[0]).weekday() + 1) % 7 == day]
             if not hit:
                 continue
             d, n = hit[0]
             bx, by = PAD_L + x + r * DX, base_y - r * DY
+            if not n:
+                delay = 0.6 + x / span * 2.4
+                out.append(f'<g class="f" style="animation-delay:{delay:.2f}s">{flora(bx, by, dx, dy, zlib.crc32(d.encode()), fog, t)}</g>')
+                continue
             f = math.sqrt(n / peak)
             h = 6 + MAX_H * f
             col = mix(t["levels"][min(5, int(6 * f))], t["fog"], fog)
