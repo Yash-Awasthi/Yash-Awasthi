@@ -1,0 +1,288 @@
+{
+  "$comment": "The single source of the profile table and badge row. Edit here, then run: python3 scripts/gen_readme.py --write",
+  "profile": {
+    "name": "Yash Vaibhav Awasthi",
+    "tagline": "Software engineer · backends, AI systems, mobile apps",
+    "links": [
+      {
+        "label": "Portfolio",
+        "url": "https://yash-portfolio-nine-navy.vercel.app",
+        "alt": "Portfolio — yash-portfolio-nine-navy.vercel.app",
+        "color": "3d5bd9",
+        "logo": "vercel"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293",
+        "alt": "LinkedIn — linkedin.com/in/yash-vaibhav-awasthi",
+        "color": "1d6f78",
+        "logo": "linkedin"
+      },
+      {
+        "label": "Resume",
+        "url": "https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf",
+        "alt": "Resume — PDF on the portfolio site",
+        "color": "0e7b3b",
+        "logo": "readthedocs"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:yashvaibhav.job@gmail.com",
+        "alt": "Email — yashvaibhav.job@gmail.com",
+        "color": "237a94",
+        "logo": "gmail"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "name": "Nexus",
+      "repo": "https://github.com/Yash-Awasthi/Nexus",
+      "claim": "Multi-agent LLM orchestration: 39 providers behind one streaming API, council deliberation, pgvector + BM25 memory.",
+      "live": "https://nexus-iosc.onrender.com",
+      "claim_source": [
+        {
+          "file": "apps/api/src/lib/provider-keys.ts",
+          "count": "DRIVER_FACTORIES",
+          "line": 70
+        },
+        {
+          "file": "README.md",
+          "any": [
+            "Council deliberation"
+          ],
+          "line": 127
+        },
+        {
+          "file": "docs/FEATURES.md",
+          "any": [
+            "pgvector",
+            "BM25"
+          ],
+          "line": 19
+        }
+      ],
+      "cold_start": true,
+      "cold_start_note": "Render free tier sleeps; measured 45.8 s to first byte on 2026-11-23."
+    },
+    {
+      "name": "FinScrape",
+      "repo": "https://github.com/Yash-Awasthi/FinScrape",
+      "claim": "Maps world news to sectors and tickers through Laya (a small fine-tuned classifier), the LLM and keywords, then scores every call against the market move that followed. Runs at $0/month on four free tiers.",
+      "live": "https://winfin.pages.dev",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "Laya (a small fine-tuned classifier)"
+          ],
+          "line": 33
+        },
+        {
+          "file": "README.md",
+          "any": [
+            "Cost-%240%20while%20free%20tiers%20hold"
+          ],
+          "line": 8
+        },
+        {
+          "file": "docs/COST.md",
+          "any": [
+            "The live stack costs **$0/month** on four free services"
+          ],
+          "line": 3
+        }
+      ]
+    },
+    {
+      "name": "AdapFit",
+      "repo": "https://github.com/Yash-Awasthi/AdapFit",
+      "claim": "FastAPI + React Native recovery engine: train, reduce, recover or rest, from each user's own baseline.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "personal baseline"
+          ],
+          "line": 71
+        },
+        {
+          "file": "backend/app/services/daily_decision.py",
+          "any": [
+            "TRAIN",
+            "REDUCE",
+            "RECOVER",
+            "REST"
+          ],
+          "line": 15
+        }
+      ]
+    },
+    {
+      "name": "PocketDesk",
+      "repo": "https://github.com/Yash-Awasthi/PocketDesk",
+      "claim": "Drive Claude Code and other CLI agents on your PC from your phone; 60 fps desktop over pinned TLS.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "60 fps"
+          ],
+          "line": 46
+        },
+        {
+          "file": "README.md",
+          "any": [
+            "certificate pinning"
+          ],
+          "line": 696
+        }
+      ]
+    },
+    {
+      "name": "KeyRouter",
+      "repo": "https://github.com/Yash-Awasthi/KeyRouter",
+      "claim": "Cloudflare Worker that wraps an OpenAI- or Anthropic-style provider key in disposable `sk-gw-` gateway keys that expire on their own; streaming included, free plan.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "sk-gw-"
+          ],
+          "line": 3
+        },
+        {
+          "file": "README.md",
+          "any": [
+            "Anthropic"
+          ],
+          "line": 5
+        }
+      ]
+    },
+    {
+      "name": "CaseFiles",
+      "repo": "https://github.com/Yash-Awasthi/CaseFiles",
+      "claim": "30-challenge CTF on Cloudflare Workers where every player gets unique, traceable evidence.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "thirty sequential challenges"
+          ],
+          "line": 5
+        },
+        {
+          "file": "README.md",
+          "any": [
+            "traced back to their owner"
+          ],
+          "line": 7
+        }
+      ]
+    },
+    {
+      "name": "Ping",
+      "repo": "https://github.com/Yash-Awasthi/Ping",
+      "claim": "Offline Android contact swap by holding the same hand gesture; the gesture is the PAKE password on P-256, cards sealed with AES-256-GCM over BLE.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "PAKE",
+            "AES-256-GCM",
+            "BLE"
+          ],
+          "line": 14
+        }
+      ]
+    },
+    {
+      "name": "LobIQ",
+      "repo": "https://github.com/Yash-Awasthi/LobIQ",
+      "claim": "Limit order book intelligence in C++23: replays Nasdaq ITCH days, paper-trades a live prediction market and scores microstructure research out of sample.",
+      "live": "https://yash-awasthi.github.io/LobIQ/",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "C++23",
+            "TotalView-ITCH",
+            "Polymarket"
+          ],
+          "line": 8
+        }
+      ]
+    },
+    {
+      "name": "RISC-VInjection",
+      "repo": "https://github.com/Yash-Awasthi/RISC-VInjection",
+      "claim": "Custom RISC-V instruction for transformer attention, with GCC, Binutils and a GIMPLE pass.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "binutils",
+            "GCC"
+          ],
+          "line": 16
+        },
+        {
+          "file": "docs/recognizer.md",
+          "any": [
+            "GIMPLE"
+          ],
+          "line": 11
+        }
+      ]
+    }
+  ],
+  "stack": [
+    "TypeScript",
+    "Python",
+    "Kotlin",
+    "C++",
+    "React",
+    "Next.js",
+    "Node.js",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "AWS",
+    "Cloudflare",
+    "Docker",
+    "Three.js"
+  ],
+  "archive": [
+    {
+      "name": "sign-setu",
+      "repo": "https://github.com/Yash-Awasthi/sign-setu",
+      "claim": "Offline Android aid for police talking to a deaf or non-verbal person: a 3D character signs, typed text is played in Indian Sign Language order, sessions sit in an encrypted SQLCipher database.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "An offline Android app that helps a police officer",
+            "SQLCipher"
+          ],
+          "line": 3
+        }
+      ]
+    },
+    {
+      "name": "ToolkitArchive",
+      "repo": "https://github.com/Yash-Awasthi/ToolkitArchive",
+      "claim": "Verified archive of AI models, coding agents, free tiers and benchmarks, with head-to-head charts over 99 models.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "Every AI model, coding agent, free tier, skill and benchmark worth knowing",
+            "99_models"
+          ],
+          "line": 5
+        }
+      ]
+    }
+  ]
+}

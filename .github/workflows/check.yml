@@ -1,0 +1,78 @@
+name: Check profile page
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays: the network checks
+  workflow_dispatch:
+
+# Least privilege: this workflow only reads. `needs` is why `links` waits on `static`.
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.14.8"
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24.22.3"
+
+      - name: Markdown lint
+        run: npx --yes markdownlint-cli2@0.16.0 "README.md" "SECURITY.md" "docs/*.md"
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Claims match their repositories, on the lines they cite
+        run: python3 scripts/check_claims.py
+
+      - name: Every claim still sits on its pinned line
+        run: python3 scripts/pin_claims.py --check
+
+      - name: README table matches projects.json
+        run: python3 scripts/gen_readme.py --check
+
+      - name: The "Now" snapshot is present and fresh
+        run: python3 scripts/gen_now.py --check
+
+      - name: Page guards
+        run: python3 scripts/check_page.py
+
+      - name: Privacy rules
+        run: python3 scripts/check_privacy.py
+
+  links:
+    # A push should not wait on third-party hosts; only the weekly/manual run fetches them.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.14.8"
+
+      - name: Every external URL answers
+        run: python3 scripts/check_links.py
+
+      - name: Every live demo answers, and every claim has a source
+        run: python3 scripts/check_claims.py --links
+
+      - name: The resume carries no phone number or address
+        run: python3 scripts/check_privacy.py --resume

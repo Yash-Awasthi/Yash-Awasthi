@@ -1,9 +1,26 @@
 name: Generate 3D Contribution City
 
 on:
+  # 02:30 UTC: late enough that the previous UTC day's count has settled, early enough
+  # that the banner is current for the European morning. See docs/CI.md.
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "30 2 * * *"
   workflow_dispatch:
+    inputs:
+      year:
+        description: "Render only this calendar year (blank renders the last 52 weeks)"
+        required: false
+        default: ""
+        type: string
+
+# Least privilege by default: jobs that need to write opt in at job level.
+permissions:
+  contents: read
+
+# A manual run must not race the cron: one run at a time, the queued one supersedes.
+concurrency:
+  group: contrib-city
+  cancel-in-progress: true
 
 jobs:
   generate:
@@ -13,9 +30,24 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - run: python3 .github/city.py ${{ github.repository_owner }}
+      # A floating python3 on the runner image is not a toolchain; pin it (docs/CI.md).
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.14.8"
+
+      - run: python3 .github/city.py ${{ github.repository_owner }} ${{ inputs.year && format('--year {0}', inputs.year) || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # The page keeps itself current: the "Now" line and the table come from data,
+      # never from a hand edit. A --year run leaves both alone.
+      - name: Refresh the "Now" line
+        if: inputs.year == ''
+        run: |
+          python3 scripts/gen_now.py --write
+          python3 scripts/gen_readme.py --write
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -23,5 +55,15 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets
-          git diff --cached --quiet || { git commit -m "Update contribution city" && git push; }
+          git add assets README.md now.json
+          if git diff --cached --quiet; then
+            echo "assets unchanged; nothing to commit"
+            exit 0
+          fi
+          git commit -m "Update contribution city"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          if [ "$(git rev-parse HEAD~1)" != "$(git rev-parse "origin/$GITHUB_REF_NAME")" ]; then
+            echo "::error::origin/$GITHUB_REF_NAME moved since checkout; refusing to push a stale city"
+            exit 1
+          fi
+          git push origin "HEAD:$GITHUB_REF_NAME"

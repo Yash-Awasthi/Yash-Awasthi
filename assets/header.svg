@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" width="1200" height="200" role="img" aria-label="Gradient banner">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a8f8a"/>
+      <stop offset=".5" stop-color="#3d5bd9"/>
+      <stop offset="1" stop-color="#5b5fc7"/>
+    </linearGradient>
+    <linearGradient id="foam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="200" fill="url(#brand)"/>
+  <path d="M0,142 C200,92 400,192 600,142 C800,92 1000,192 1200,142 L1200,200 L0,200 Z" fill="url(#foam)"/>
+  <path d="M0,170 C240,122 420,208 660,162 C900,116 1040,202 1200,168 L1200,200 L0,200 Z" fill="#ffffff" fill-opacity=".12"/>
+  <path d="M0,186 C300,150 520,214 780,182 C980,158 1100,196 1200,184 L1200,200 L0,200 Z" fill="#0b1324" fill-opacity=".10"/>
+</svg>
