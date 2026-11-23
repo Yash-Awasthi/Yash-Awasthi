@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Check every project row of README.md against the repository it describes.
+"""Check every claim in projects.json against the repository it describes.
 
-Each row is a claim. This script holds the source of that claim — a file in the
-target repository and a snippet that must appear in it — and exits non-zero when
-a row and its repository disagree, so a drifting claim fails instead of shipping.
+`projects.json` is the source of truth for the profile table, and every project
+carries `claim_source`: the file in its own repository and the snippet that backs
+the claim. This script verifies those snippets and exits non-zero when a claim
+has drifted from its repository, so a mismatch fails CI instead of shipping.
 
     python3 scripts/check_claims.py            # snippets only, no network
-    python3 scripts/check_claims.py --links    # also HEAD every live URL
+    python3 scripts/check_claims.py --links    # also fetch every live URL
 
 Sibling checkouts are used when present (``../Nexus``, ``../FinScrape``, …);
 otherwise the file is fetched from ``raw.githubusercontent.com`` on the default
@@ -23,81 +24,16 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PROJECTS = ROOT / "projects.json"
 OWNER = "Yash-Awasthi"
 
-# row name -> checks against the repository named in the row's link.
-#   {"file": path in the target repo, "any": [snippets that must appear]}
-#   {"file": path, "count": "DRIVER_FACTORIES"}, parsed against the row's "N providers"
-CLAIMS: dict[str, dict] = {
-    "Nexus": {
-        "checks": [
-            {"file": "apps/api/src/lib/provider-keys.ts", "count": "DRIVER_FACTORIES"},
-            {"file": "README.md", "any": ["Council deliberation"]},
-            {"file": "docs/FEATURES.md", "any": ["pgvector", "BM25"]},
-        ]
-    },
-    "FinScrape": {
-        "checks": [
-            {"file": "README.md", "any": ["Laya (a small fine-tuned classifier)"]},
-            {"file": "README.md", "any": ["$0%2Fmonth"]},
-        ]
-    },
-    "AdapFit": {
-        "checks": [
-            {"file": "README.md", "any": ["personal baseline"]},
-            {"file": "backend/app/services/daily_decision.py",
-             "any": ["TRAIN", "REDUCE", "RECOVER", "REST"]},
-        ]
-    },
-    "PocketDesk": {
-        "checks": [
-            {"file": "README.md", "any": ["60 fps"]},
-            {"file": "README.md", "any": ["certificate pinning"]},
-        ]
-    },
-    "KeyRouter": {
-        "checks": [
-            {"file": "README.md", "any": ["sk-gw-"]},
-            {"file": "README.md", "any": ["Anthropic"]},
-        ]
-    },
-    "CaseFiles": {
-        "checks": [
-            {"file": "README.md", "any": ["thirty sequential challenges"]},
-            {"file": "README.md", "any": ["traced back to their owner"]},
-        ]
-    },
-    "Ping": {
-        "checks": [
-            {"file": "README.md", "any": ["PAKE", "AES-256-GCM", "BLE"]},
-        ]
-    },
-    "LobIQ": {
-        "checks": [
-            {"file": "README.md", "any": ["C++23", "TotalView-ITCH", "Polymarket"]},
-        ]
-    },
-    "RISC-VInjection": {
-        "checks": [
-            {"file": "README.md", "any": ["binutils", "GCC"]},
-            {"file": "docs/recognizer.md", "any": ["GIMPLE"]},
-        ]
-    },
-}
 
-ROW = re.compile(r"^\|\s*\[\*\*(?P<name>[^*]+)\*\*\]\((?P<url>https://github\.com/[^)]+)\)")
-LIVE = re.compile(r"\[Live\]\((?P<url>[^)]+)\)")
+def load() -> dict:
+    return json.loads(PROJECTS.read_text(encoding="utf-8"))
 
 
-def rows(readme: str) -> dict[str, dict]:
-    found = {}
-    for line in readme.splitlines():
-        m = ROW.match(line)
-        if not m:
-            continue
-        live = LIVE.search(line)
-        found[m.group("name")] = {"url": m.group("url"), "live": live.group("url") if live else None}
-    return found
+def repo_name(url: str) -> str:
+    return url.rstrip("/").rsplit("/", 1)[-1]
 
 
 def read(target: str, path: str) -> str | None:
@@ -120,43 +56,51 @@ def count_entries(text: str, name: str) -> int:
     end = text.find("\n};", start)
     if end < 0:
         return -1
-    block = text[start:end]
-    return len(re.findall(r"^  [a-z0-9_]+:", block, re.MULTILINE))
+    return len(re.findall(r"^  [a-z0-9_]+:", text[start:end], re.MULTILINE))
 
 
-def check(name: str, row: dict, text_of) -> list[str]:
+def check_project(p: dict) -> list[str]:
+    name = p["name"]
+    if not p.get("claim"):
+        return [f"{name}: no claim"]
+    if not p.get("claim_source"):
+        return [f"{name}: claim has no claim_source"]
+    target = repo_name(p["repo"])
     problems = []
-    spec = CLAIMS[name]
-    for c in spec["checks"]:
-        text = text_of(c["file"])
+    for c in p["claim_source"]:
+        text = read(target, c["file"])
         if text is None:
-            problems.append(f"{name}: cannot read {c['file']}")
+            problems.append(f"{name}: cannot read {target}/{c['file']}")
             continue
         if "count" in c:
-            claimed = re.search(r"(\d+) providers", row["line"])
+            claimed = re.search(r"(\d+) providers", p["claim"])
             actual = count_entries(text, c["count"])
             if actual < 0:
                 problems.append(f"{name}: {c['count']} not found in {c['file']}")
             elif not claimed:
-                problems.append(f"{name}: row states no provider count")
+                problems.append(f"{name}: claim states no provider count")
             elif int(claimed.group(1)) != actual:
-                problems.append(f"{name}: row claims {claimed.group(1)} providers, {c['file']} has {actual}")
+                problems.append(f"{name}: claim says {claimed.group(1)} providers, {c['file']} has {actual}")
             continue
-        missing = [s for s in c["any"] if s not in text]
+        missing = [s for s in c.get("any", []) if s not in text]
         if missing:
-            problems.append(f"{name}: {c['file']} lacks {missing!r}")
+            problems.append(f"{name}: {target}/{c['file']} lacks {missing!r}")
     return problems
 
 
 def head_ok(url: str) -> tuple[bool, str]:
-    req = urllib.request.Request(url, method="GET", headers={"User-Agent": "check_claims/1"})
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:  # noqa: S310 - row URLs
-            return r.status == 200, str(r.status)
-    except urllib.error.HTTPError as e:
-        return False, str(e.code)
-    except (urllib.error.URLError, TimeoutError) as e:
-        return False, repr(e)
+    """A live demo on a free tier can cold-start; measured 45.8 s on Render, so allow 120 s and one retry."""
+    last = ""
+    for attempt in (1, 2):
+        req = urllib.request.Request(url, headers={"User-Agent": "check_claims/1"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:  # noqa: S310 - data URLs
+                return r.status == 200, f"{r.status}" if attempt == 1 else f"{r.status} after retry"
+        except urllib.error.HTTPError as e:
+            return False, str(e.code)
+        except (urllib.error.URLError, TimeoutError) as e:
+            last = repr(e)
+    return False, last
 
 
 def main() -> int:
@@ -164,41 +108,29 @@ def main() -> int:
     ap.add_argument("--links", action="store_true", help="also fetch every live URL")
     args = ap.parse_args()
 
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    found = rows(readme)
-
-    for name, row in found.items():
-        row["line"] = next(ln for ln in readme.splitlines() if f"[**{name}**](" in ln)
-
-    problems: list[str] = []
-    for name in sorted(set(found) | set(CLAIMS)):
-        if name not in found:
-            problems.append(f"{name}: expected row missing from README.md")
-        elif name not in CLAIMS:
-            problems.append(f"{name}: row has no claim source in scripts/check_claims.py")
-        else:
-            target = found[name]["url"].rstrip("/").rsplit("/", 1)[-1]
-            cache: dict[str, str | None] = {}
-
-            def text_of(path: str, target=target, cache=cache) -> str | None:
-                if path not in cache:
-                    cache[path] = read(target, path)
-                return cache[path]
-
-            problems += check(name, found[name], text_of)
+    data = load()
+    problems = []
+    for p in data["projects"]:
+        problems += check_project(p)
+    for link in data["profile"]["links"]:
+        url = link["url"]
+        if not url.startswith(("http://", "https://", "mailto:")):
+            problems.append(f"profile link {link['label']}: {url!r} is not a destination")
+        if not link.get("alt"):
+            problems.append(f"profile link {link['label']}: no alt text")
 
     if args.links:
-        for name, row in sorted(found.items()):
-            if not row["live"]:
+        for p in data["projects"]:
+            if not p.get("live"):
                 continue
-            ok, status = head_ok(row["live"])
-            print(f"{'ok  ' if ok else 'FAIL'} live  {name:16} {status:>6}  {row['live']}")
+            ok, status = head_ok(p["live"])
+            print(f"{'ok  ' if ok else 'FAIL'} live  {p['name']:16} {status:>6}  {p['live']}")
             if not ok:
-                problems.append(f"{name}: live URL {row['live']} -> {status}")
+                problems.append(f"{p['name']}: live URL {p['live']} -> {status}")
 
     for p in problems:
         print(f"FAIL {p}")
-    print(f"{len(found)} rows, {len(problems)} problem(s)")
+    print(f"{len(data['projects'])} projects, {len(problems)} problem(s)")
     return 1 if problems else 0
 
 

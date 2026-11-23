@@ -32,6 +32,9 @@ jobs:
       - name: Claims match their repositories
         run: python3 scripts/check_claims.py
 
+      - name: README table matches projects.json
+        run: python3 scripts/gen_readme.py --check
+
       - name: Page guards
         run: python3 scripts/check_page.py
 
