@@ -24,4 +24,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets
-          git diff --cached --quiet || { git commit -m "Update contribution city" && git push; }
+          if git diff --cached --quiet; then
+            echo "assets unchanged; nothing to commit"
+            exit 0
+          fi
+          git commit -m "Update contribution city"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          if [ "$(git rev-parse HEAD~1)" != "$(git rev-parse "origin/$GITHUB_REF_NAME")" ]; then
+            echo "::error::origin/$GITHUB_REF_NAME moved since checkout; refusing to push a stale city"
+            exit 1
+          fi
+          git push origin "HEAD:$GITHUB_REF_NAME"
