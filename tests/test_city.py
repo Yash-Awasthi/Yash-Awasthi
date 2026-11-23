@@ -130,5 +130,12 @@ class WriteTest(unittest.TestCase):
         self.assertFalse([p for p in Path(self.dir).iterdir() if p.name.startswith(".city-")])
 
 
+class SummaryTest(unittest.TestCase):
+    def test_summary_names_total_and_range(self):
+        weeks = [[("2026-11-01", 2), ("2026-11-02", 0)], [("2026-11-03", 5)]]
+        self.assertEqual(city.summary(weeks),
+                         "7 contributions, 2026-11-01 to 2026-11-03, 2 weeks")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -294,6 +294,13 @@ def render(weeks, theme):
     return "\n".join(out)
 
 
+def summary(weeks):
+    """One line for the job log: how much was rendered, over which days."""
+    days = [d for w in weeks for d, _ in w]
+    total = sum(n for w in weeks for _, n in w)
+    return f"{total} contributions, {min(days)} to {max(days)}, {len(weeks)} weeks"
+
+
 def write_assets(weeks, out_dir="assets"):
     """Render both themes first, then swap both files in, so neither theme can go stale."""
     rendered = {theme: render(weeks, theme) for theme in THEMES}
@@ -320,4 +327,5 @@ if __name__ == "__main__":
         weeks = fetch(sys.argv[1], os.environ["GITHUB_TOKEN"])
     except FetchError as e:
         sys.exit(f"city.py: {e} (assets left untouched)")
+    print(f"city.py: {summary(weeks)}")
     write_assets(weeks)

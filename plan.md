@@ -112,7 +112,8 @@ whether the committed image is stale, empty, or mangled.
   - verified-here: `python3 -m unittest discover -s tests` → `Ran 7 tests … OK` (6 of them error against the old `fetch`: `FAILED (errors=6)` with the change stashed); end to end `GITHUB_TOKEN=not-a-real-token python3 .github/city.py Yash-Awasthi` → `city.py: GraphQL HTTP 401 Unauthorized (assets left untouched)`, exit 1, `sha1sum -c` → both SVGs `OK`.
 - [x] Write to a temp path and `os.replace` both files only after both render successfully, so a crash cannot leave one theme updated and the other stale. `[C]`
   - verified-here: `python3 -m unittest discover -s tests` → `Ran 10 tests … OK` (the 3 `WriteTest` cases error against the old inline write: `FAILED (errors=3)` with the change stashed). `write_assets` renders both themes into memory, stages each through `tempfile.mkstemp(dir=assets)` and only then `os.replace`es both; a render that raises on the second theme leaves both files byte-identical, and no `.city-*` temp survives.
-- [ ] Log the contribution total and the date range rendered, so a silently empty year is visible in the job log. `[C]`
+- [x] Log the contribution total and the date range rendered, so a silently empty year is visible in the job log. `[C]`
+  - verified-here: `python3 -m unittest discover -s tests` → `Ran 11 tests … OK` (the `SummaryTest` case errors without it); `city.summary([[('2026-11-01',2),('2026-11-02',0)],[('2026-11-03',5)]])` → `7 contributions, 2026-11-01 to 2026-11-03, 2 weeks`, which `__main__` prints as `city.py: <summary>` before any file is written, so a zero/low year shows in the job log.
 - [ ] Add `--year` and `--out` flags so the script can be run locally without touching `assets/`. `[C]`
 
 ---
@@ -318,7 +319,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Generate city assets | `python .github/city.py` (stdlib only: `json`, `math`, `os`, `sys`, `urllib.request`; 267 lines) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
-| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M1.4: 10 fetch/write tests) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M1.4: 11 tests) |
 | **Determinism check** | — | **missing** (M2.2) |
 | **Link check** | — | **missing** (M1.2) |
 | **Claim audit** | — | **missing** (M1.1) |
@@ -366,7 +367,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 6 | documented | documented | host list |
-| Tests | 10 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
+| Tests | 11 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -417,3 +418,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.3.4 [x] `concurrency: contrib-city` added (timeout was already 10) | proof: `yaml.safe_load` → concurrency + timeout-minutes 10 | next: m1.4.1
 - 2026-11-23 m1.4.1 [x] bad fetch (HTTP error, non-200, `errors`, empty calendar) fails instead of rendering | proof: `python3 -m unittest discover -s tests` → 7 OK (6 fail on the old code); live 401 → exit 1, SVGs unchanged | next: m1.4.2
 - 2026-11-23 m1.4.2 [x] both themes staged and swapped together | proof: `python3 -m unittest discover -s tests` → 10 OK; 3 WriteTest cases error on the old code | next: m1.4.3
+- 2026-11-23 m1.4.3 [x] job log names total, date range and week count | proof: `python3 -m unittest discover -s tests` → 11 OK; `city.summary(...)` → `7 contributions, 2026-11-01 to 2026-11-03, 2 weeks` | next: m1.4.4
