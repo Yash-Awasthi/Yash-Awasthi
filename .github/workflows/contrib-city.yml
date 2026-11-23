@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# A manual run must not race the cron: one run at a time, the queued one supersedes.
+concurrency:
+  group: contrib-city
+  cancel-in-progress: true
+
 jobs:
   generate:
     runs-on: ubuntu-latest
