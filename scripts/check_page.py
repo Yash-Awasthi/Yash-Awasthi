@@ -43,8 +43,32 @@ def check_readme_lines() -> list[str]:
     return []
 
 
+def check_images_and_links() -> list[str]:
+    """Every image states what it is, and every link goes somewhere."""
+    text = README.read_text(encoding="utf-8")
+    problems = []
+    for m in re.finditer(r"<img\b[^>]*>", text):
+        tag = m.group(0)
+        if not re.search(r"\balt=", tag):
+            problems.append(f"<img> without alt: {tag[:80]}")
+    for m in re.finditer(r"!\[([^\]]*)\]\(([^)]*)\)", text):
+        alt, src = m.group(1), m.group(2)
+        if not alt.strip():
+            problems.append(f"markdown image without alt text: {src[:80]}")
+        if not src.strip():
+            problems.append("markdown image without a source")
+    for m in re.finditer(r"\[([^\]]*)\]\(\s*\)", text):
+        problems.append(f"link without a destination: [{m.group(1)}]()")
+    for m in re.finditer(r"<a\b[^>]*href\s*=\s*[\"']\s*[\"']", text):
+        problems.append(f"anchor without a destination: {m.group(0)[:80]}")
+    if not problems:
+        imgs = len(re.findall(r"<img\b[^>]*>", text)) + len(re.findall(r"!\[", text))
+        print(f"ok   alt   {imgs} images, every link has a destination")
+    return problems
+
+
 def main() -> int:
-    problems = check_asset_size() + check_readme_lines()
+    problems = check_asset_size() + check_readme_lines() + check_images_and_links()
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")

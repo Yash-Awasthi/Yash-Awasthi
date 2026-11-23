@@ -127,7 +127,8 @@ whether the committed image is stale, empty, or mangled.
   - verified-here: `npx --yes markdownlint-cli2@0.16.0 "README.md"` → `Summary: 0 error(s)` (`.markdownlint-cli2.jsonc` allows the banner/`<picture>` HTML and long badge URLs; README headings moved to `## Experience`, `## Projects`, `## Stack`, `## Certifications` to clear MD001/MD036); `python3 scripts/check_page.py` → `0 problem(s)` (143,082 B + 129,218 B under a 200,000 B budget); `python3 scripts/check_links.py` → 22 URLs, `0 problem(s)`, LinkedIn reported `999 (bot wall)` rather than failed; with one URL changed to `…/LobIQ/nope-404.html` → `FAIL 404`, exit 1. `.github/workflows/check.yml` parses (`jobs: ['static', 'links']`, workflow `contents: read`, checkout pinned, `links` gated to schedule/dispatch).
 - [x] Fail when the README exceeds a line budget (currently 41; a profile page that grows into a résumé loses the reader). `[P]`
   - verified-here: `python3 scripts/check_page.py` → `ok   lines README.md 50 (budget 60)`, `0 problem(s)`; with 15 blank lines appended → `FAIL README.md is 65 lines, over the 60-line budget`, exit 1. (The script counts the unterminated last line, so it reports 50 where `wc -l` reports 49.)
-- [ ] Fail on a raw `<img>` without `alt`, and on a link without a destination. `[P]`
+- [x] Fail on a raw `<img>` without `alt`, and on a link without a destination. `[P]`
+  - verified-here: `python3 scripts/check_page.py` → `ok   alt   7 images, every link has a destination`, `0 problem(s)`; appending `<img src="…">`, `[nowhere]()` and `![](…)` → three `FAIL` lines and exit 1. An empty `alt=""` is accepted on purpose: the icon strip is decorative because the stack is also written as text (m1.2.3).
 - [ ] Verify the two SVG themes declare the same viewBox and dimensions, so dark/light do not jump. `[P]`
 
 ### M2.2 Determinism of the city
@@ -427,3 +428,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.4.4 [x] `--year` and `--out` flags; real render runs into a temp dir | proof: `unittest discover` → 14 OK; `city.py Yash-Awasthi --out /tmp/cityout` → 3470 contributions, 2025-11-23 to 2026-11-24, 53 weeks, assets untouched | next: m2.1.1
 - 2026-11-23 m2.1.1 [x] `check.yml` (lint, tests, claims, size) + weekly link job | proof: markdownlint 0 errors, `check_page.py` 0 problems, `check_links.py` 22 URLs 0 problems (broken URL → exit 1) | next: m2.1.2
 - 2026-11-23 m2.1.2 [x] README line budget of 60 enforced | proof: `check_page.py` → `lines README.md 50 (budget 60)`; 65 lines → exit 1 | next: m2.1.3
+- 2026-11-23 m2.1.3 [x] every `<img>` needs `alt`, every link a destination | proof: `check_page.py` → `ok alt 7 images`; injected `<img>` without alt / `[x]()` / `![]()` → 3 FAIL, exit 1 | next: m2.1.4
