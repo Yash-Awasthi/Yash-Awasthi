@@ -1,0 +1,48 @@
+name: Check profile page
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays: the network checks
+  workflow_dispatch:
+
+# Least privilege: this workflow only reads. `needs` is why `links` waits on `static`.
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Markdown lint
+        run: npx --yes markdownlint-cli2@0.16.0 "README.md"
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Claims match their repositories
+        run: python3 scripts/check_claims.py
+
+      - name: Page guards
+        run: python3 scripts/check_page.py
+
+  links:
+    # A push should not wait on third-party hosts; only the weekly/manual run fetches them.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Every external URL answers
+        run: python3 scripts/check_links.py

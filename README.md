@@ -12,12 +12,12 @@ Software engineer · backends, AI systems, mobile apps
 
 B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working when things fail: backends that settle payments exactly once, streams that resume where the network dropped them, and models scored against what actually happened.
 
-**Experience**
+## Experience
 
 - **Cloord Solutions**, App development intern, Jul - Sep 2026. Multi-tenant school platform for 1,000+ parents: Next.js API, web portal and 4 Expo apps on AWS.
 - **NIT Raipur, Department of Physics**, Research intern, May - Jul 2025. Real-time sea-to-air speech transmission, extending MIT Media Lab's TARF.
 
-### Projects
+## Projects
 
 | Project | What it does |
 |:--|:--|
@@ -31,7 +31,7 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 | [**LobIQ**](https://github.com/Yash-Awasthi/LobIQ) | Limit order book intelligence in C++23: replays Nasdaq ITCH days, paper-trades a live prediction market and scores microstructure research out of sample. [Live](https://yash-awasthi.github.io/LobIQ/) |
 | [**RISC-VInjection**](https://github.com/Yash-Awasthi/RISC-VInjection) | Custom RISC-V instruction for transformer attention, with GCC, Binutils and a GIMPLE pass. |
 
-### Stack
+## Stack
 
 **Stack:** TypeScript · Python · Kotlin · C++ · React · Next.js · Node.js · FastAPI · PostgreSQL · Redis · AWS · Cloudflare · Docker · Three.js
 
@@ -39,7 +39,9 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
   <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14" alt=""/>
 </p>
 
-**Certified:** Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · Hedera Certified Foundation
+## Certifications
+
+Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · Hedera Certified Foundation
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/city-dark.svg"/>

@@ -1,0 +1,11 @@
+{
+  // markdownlint config for a GitHub profile README: the banner, badges and the
+  // theme-aware <picture> are inline HTML on purpose, and badge URLs are long.
+  "config": {
+    "MD013": false,
+    "MD041": false,
+    "MD033": {
+      "allowed_elements": ["div", "img", "p", "picture", "source", "br"]
+    }
+  }
+}

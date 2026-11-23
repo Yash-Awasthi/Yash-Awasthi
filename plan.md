@@ -33,7 +33,7 @@ reproducible automation), `data-ml` §8 (measured numbers only),
 
 | Fact | Measured | Claimed | Source |
 |---|---|---|---|
-| README size | 45 lines | — | `wc -l` |
+| README size | 49 lines | — | `wc -l` |
 | Sections | header image, 4 badge links, 1 para, experience (2 roles), project table (9 projects), stack icons, certifications, city image | — | `README.md` |
 | Live links | portfolio, LinkedIn, resume PDF, email, 3 live demos (Nexus, FinScrape, LobIQ) | all present | `README.md:3-26` |
 | Generated assets | 2 SVGs, 272 KB total, regenerated daily | — | `assets/`, workflow `cron: 0 0 * * *` |
@@ -123,7 +123,8 @@ whether the committed image is stale, empty, or mangled.
 
 ### M2.1 A CI that guards the page
 
-- [ ] Workflow `check`: markdown lint, `check_claims.py`, link check on every external URL (with a weekly run for the network ones), and a size budget on `assets/*.svg`. `[P]`
+- [x] Workflow `check`: markdown lint, `check_claims.py`, link check on every external URL (with a weekly run for the network ones), and a size budget on `assets/*.svg`. `[P]`
+  - verified-here: `npx --yes markdownlint-cli2@0.16.0 "README.md"` → `Summary: 0 error(s)` (`.markdownlint-cli2.jsonc` allows the banner/`<picture>` HTML and long badge URLs; README headings moved to `## Experience`, `## Projects`, `## Stack`, `## Certifications` to clear MD001/MD036); `python3 scripts/check_page.py` → `0 problem(s)` (143,082 B + 129,218 B under a 200,000 B budget); `python3 scripts/check_links.py` → 22 URLs, `0 problem(s)`, LinkedIn reported `999 (bot wall)` rather than failed; with one URL changed to `…/LobIQ/nope-404.html` → `FAIL 404`, exit 1. `.github/workflows/check.yml` parses (`jobs: ['static', 'links']`, workflow `contents: read`, checkout pinned, `links` gated to schedule/dispatch).
 - [ ] Fail when the README exceeds a line budget (currently 41; a profile page that grows into a résumé loses the reader). `[P]`
 - [ ] Fail on a raw `<img>` without `alt`, and on a link without a destination. `[P]`
 - [ ] Verify the two SVG themes declare the same viewBox and dimensions, so dark/light do not jump. `[P]`
@@ -321,8 +322,10 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
 | **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M1.4: 14 tests) |
+| **Page guards** | `python3 scripts/check_page.py` (size budget; alt/line/viewBox next) | exists (M2.1) |
+| **CI** | `.github/workflows/check.yml` — lint, tests, claims, page guards on push; link check weekly | exists (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
-| **Link check** | — | **missing** (M1.2) |
+| **Link check** | `python3 scripts/check_links.py` (network; weekly job) | exists (M2.1) |
 | **Claim audit** | — | **missing** (M1.1) |
 
 ---
@@ -363,7 +366,7 @@ claim that cannot be sourced is deleted, not softened.
 
 | Metric | Now (measured) | W1 | W3 | How measured |
 |---|---|---|---|---|
-| README lines | 47 | 40–60 | 60–90 | `wc -l` |
+| README lines | 49 | 40–60 | 60–90 | `wc -l` |
 | Claims with a source field | unknown | 100% | 100% | `projects.json` |
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
@@ -393,7 +396,7 @@ claim that cannot be sourced is deleted, not softened.
 
 | Claim | Command | Result | Status |
 |---|---|---|---|
-| README is 45 lines | `wc -l < README.md` | 45 | verified-here |
+| README is 49 lines | `wc -l < README.md` | 49 | verified-here |
 | Two SVGs, 272 KB | `ls -l assets` | 143,082 + 129,218 B | verified-here |
 | `city.py` 267 lines, stdlib only | `wc -l .github/city.py`, `grep '^import'` | json, math, os, sys, urllib.request | verified-here |
 | `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | now SHA-pinned `# v4.4.0` / write / `0 0 * * *` | verified-here |
@@ -421,3 +424,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.4.2 [x] both themes staged and swapped together | proof: `python3 -m unittest discover -s tests` → 10 OK; 3 WriteTest cases error on the old code | next: m1.4.3
 - 2026-11-23 m1.4.3 [x] job log names total, date range and week count | proof: `python3 -m unittest discover -s tests` → 11 OK; `city.summary(...)` → `7 contributions, 2026-11-01 to 2026-11-03, 2 weeks` | next: m1.4.4
 - 2026-11-23 m1.4.4 [x] `--year` and `--out` flags; real render runs into a temp dir | proof: `unittest discover` → 14 OK; `city.py Yash-Awasthi --out /tmp/cityout` → 3470 contributions, 2025-11-23 to 2026-11-24, 53 weeks, assets untouched | next: m2.1.1
+- 2026-11-23 m2.1.1 [x] `check.yml` (lint, tests, claims, size) + weekly link job | proof: markdownlint 0 errors, `check_page.py` 0 problems, `check_links.py` 22 URLs 0 problems (broken URL → exit 1) | next: m2.1.2
