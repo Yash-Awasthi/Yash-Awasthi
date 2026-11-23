@@ -137,5 +137,25 @@ class SummaryTest(unittest.TestCase):
                          "7 contributions, 2026-11-01 to 2026-11-03, 2 weeks")
 
 
+class YearAndCliTest(unittest.TestCase):
+    WEEKS = [[("2025-12-30", 1), ("2026-01-01", 4)], [("2026-01-04", 2)]]
+
+    def test_filter_year_drops_other_years(self):
+        self.assertEqual(city.filter_year(self.WEEKS, 2026),
+                         [[("2026-01-01", 4)], [("2026-01-04", 2)]])
+
+    def test_filter_year_refuses_a_year_with_nothing_in_it(self):
+        with self.assertRaises(city.FetchError):
+            city.filter_year(self.WEEKS, 2024)
+
+    def test_cli_offers_year_and_out(self):
+        import subprocess, sys
+        out = subprocess.run([sys.executable, str(ROOT / ".github" / "city.py"), "--help"],
+                             capture_output=True, text=True, check=True)
+        self.assertIn("--year", out.stdout)
+        self.assertIn("--out", out.stdout)
+        self.assertIn("$GITHUB_USER", out.stdout)  # the positional user's default
+
+
 if __name__ == "__main__":
     unittest.main()

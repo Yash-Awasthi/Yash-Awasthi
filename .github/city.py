@@ -1,4 +1,5 @@
 """Render the last year of contributions as an oblique 3D city (light and dark SVGs)."""
+import argparse
 import json
 import math
 import os
@@ -294,6 +295,18 @@ def render(weeks, theme):
     return "\n".join(out)
 
 
+def filter_year(weeks, year):
+    """Keep only the days of `year`; a week that loses every day is dropped."""
+    kept = []
+    for w in weeks:
+        days = [(d, n) for d, n in w if date.fromisoformat(d).year == year]
+        if days:
+            kept.append(days)
+    if not any(n for w in kept for _, n in w):
+        raise FetchError(f"no contributions recorded in {year}")
+    return kept
+
+
 def summary(weeks):
     """One line for the job log: how much was rendered, over which days."""
     days = [d for w in weeks for d, _ in w]
@@ -323,9 +336,22 @@ def write_assets(weeks, out_dir="assets"):
 
 
 if __name__ == "__main__":
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("user", nargs="?", help="GitHub login to render (default: $GITHUB_USER)")
+    ap.add_argument("--year", type=int, help="render only this calendar year")
+    ap.add_argument("--out", default="assets", help="output directory for the two SVGs (default: assets)")
+    args = ap.parse_args()
+    user = args.user or os.environ.get("GITHUB_USER")
+    if not user:
+        ap.error("no user given; pass one or set GITHUB_USER")
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        ap.error("GITHUB_TOKEN is not set")
     try:
-        weeks = fetch(sys.argv[1], os.environ["GITHUB_TOKEN"])
+        weeks = fetch(user, token)
+        if args.year:
+            weeks = filter_year(weeks, args.year)
     except FetchError as e:
         sys.exit(f"city.py: {e} (assets left untouched)")
     print(f"city.py: {summary(weeks)}")
-    write_assets(weeks)
+    write_assets(weeks, args.out)
