@@ -134,7 +134,8 @@ whether the committed image is stale, empty, or mangled.
 
 ### M2.2 Determinism of the city
 
-- [ ] Render the same contribution data twice and assert byte-identical SVG (the script uses `zlib`; confirm no timestamps, no random ids, no dict-order dependence). `[P]`
+- [x] Render the same contribution data twice and assert byte-identical SVG (the script uses `zlib`; confirm no timestamps, no random ids, no dict-order dependence). `[P]`
+  - verified-here: `python3 -m unittest discover -s tests` → `Ran 16 tests … OK`, including `DeterminismTest` (two renders equal per theme; two subprocesses under `PYTHONHASHSEED=0` and `PYTHONHASHSEED=12345` produce the same SHA-256). Real calendar, two processes with `PYTHONHASHSEED=0` and `99991`: `md5sum` → `c717bf9a…` for both darks and `aa7acdf3…` for both lights.
 - [ ] Add a committed fixture JSON (the calendar payload) and a test that renders from it, so the generator is testable without the network. `[P]`
 - [ ] Golden-hash the fixture render; a visual change needs an intentional update. `[P]`
 - [ ] Assert the SVG contains no `<script>`, no external `href`, and no `<image>` — GitHub sanitises, but a generated asset must not rely on that. `[P]`
@@ -324,7 +325,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Generate city assets | `python3 .github/city.py <user> [--year YYYY] [--out DIR]` (stdlib only; 14 tests in `tests/test_city.py`) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
-| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M1.4: 14 tests) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M2.2: 16 tests) |
 | **Page guards** | `python3 scripts/check_page.py` (size budget; alt/line/viewBox next) | exists (M2.1) |
 | **CI** | `.github/workflows/check.yml` — lint, tests, claims, page guards on push; link check weekly | exists (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
@@ -374,7 +375,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 6 | documented | documented | host list |
-| Tests | 14 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
+| Tests | 16 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -431,3 +432,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.1.2 [x] README line budget of 60 enforced | proof: `check_page.py` → `lines README.md 50 (budget 60)`; 65 lines → exit 1 | next: m2.1.3
 - 2026-11-23 m2.1.3 [x] every `<img>` needs `alt`, every link a destination | proof: `check_page.py` → `ok alt 7 images`; injected `<img>` without alt / `[x]()` / `![]()` → 3 FAIL, exit 1 | next: m2.1.4
 - 2026-11-23 m2.1.4 [x] both themes must share viewBox/dimensions | proof: `check_page.py` → `ok box … share viewBox 0 0 938 349`; edited light theme → exit 1 | next: m2.2.1
+- 2026-11-23 m2.2.1 [x] rendering is deterministic inside and across processes | proof: `unittest discover` → 16 OK; real run under two hash seeds → identical md5s | next: m2.2.2

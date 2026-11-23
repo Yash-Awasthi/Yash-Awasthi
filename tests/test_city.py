@@ -157,5 +157,38 @@ class YearAndCliTest(unittest.TestCase):
         self.assertIn("$GITHUB_USER", out.stdout)  # the positional user's default
 
 
+class DeterminismTest(unittest.TestCase):
+    """The same calendar must always produce the same bytes, in this process and any other."""
+
+    WEEKS = [[("2026-11-%02d" % (d + 1), (d * 3) % 7) for d in range(7)],
+             [("2026-11-%02d" % (d + 8), 0 if d % 2 else d) for d in range(7)],
+             [("2026-11-%02d" % (d + 15), d * 2) for d in range(7)]]
+
+    def test_two_renders_are_byte_identical(self):
+        for theme in city.THEMES:
+            self.assertEqual(city.render(self.WEEKS, theme), city.render(self.WEEKS, theme), theme)
+
+    def test_a_separate_process_agrees_under_another_hash_seed(self):
+        import hashlib, json, os, subprocess, sys, tempfile
+        digest = []
+        for seed in ("0", "12345"):
+            with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+                json.dump(self.WEEKS, fh)
+                path = fh.name
+            code = (
+                "import hashlib, importlib.util, json, sys;"
+                f"spec=importlib.util.spec_from_file_location('city', {str(ROOT / '.github' / 'city.py')!r});"
+                "m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);"
+                f"weeks=json.load(open({path!r}));"
+                "print(hashlib.sha256(''.join(m.render(weeks,t) for t in m.THEMES).encode()).hexdigest())"
+            )
+            env = dict(os.environ, PYTHONHASHSEED=seed)
+            out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=env, check=True)
+            digest.append(out.stdout.strip())
+            os.unlink(path)
+        self.assertEqual(digest[0], digest[1])
+        self.assertEqual(len(digest[0]), 64)
+
+
 if __name__ == "__main__":
     unittest.main()
