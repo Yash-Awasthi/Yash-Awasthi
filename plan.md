@@ -40,7 +40,7 @@ reproducible automation), `data-ml` §8 (measured numbers only),
 | Generator | `.github/city.py`, 267 lines, stdlib only, GitHub GraphQL | — | `city.py:1-35` |
 | Workflow actions | `actions/checkout@11d5960a…` pinned by SHA with `# v4.4.0` (was `@v4`), `contents: write`, cron + manual | — | `contrib-city.yml` |
 | Bot commits | daily commit to `assets/` when the diff is non-empty | — | `contrib-city.yml:24-27` |
-| External images | capsule-render, shields.io ×4, skillicons.dev, raw.githubusercontent | 6 third-party hosts | `README.md` |
+| External images | capsule-render, shields.io ×4, skillicons.dev, raw.githubusercontent | 10 hosts / 23 URLs: 4 image hosts, 6 link hosts | `README.md` |
 | Provider count | profile says "17 providers"; `Nexus/apps/api/src/lib/provider-keys.ts` `DRIVER_FACTORIES` names **39 providers** a key can be added for (`packages/llm/src/drivers/index.ts` defines 43 driver classes, 4 of them local/self-hosted entry points) | "17 providers" | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 |
 | FinScrape claim | profile says "LoRA-tuned ModernBERT" | ModernBERT appears nowhere in FinScrape's tree; `docs/BACKFILL.md:82` says "No LoRA was published"; the classifier is Laya (`scripts/laya_train/train.py`, base `convaiinnovations/laya`) | `README.md:23`, `FinScrape/README.md` |
 | Alt text | present on header, stack icons, city image, and on all 4 badge links (`![Portfolio](…)` etc. — the badge alt is the label) | — | `README.md:3-5` |
@@ -145,7 +145,8 @@ whether the committed image is stale, empty, or mangled.
 
 ### M2.3 Third-party dependency policy
 
-- [ ] List the six external hosts with what breaks if each goes down, in a short `docs/DEPENDENCIES.md`. `[P]`
+- [x] List the six external hosts with what breaks if each goes down, in a short `docs/DEPENDENCIES.md`. `[P]`
+  - verified-here: `python3 scripts/check_page.py` → `ok   hosts 10 hosts, 23 URLs, all documented`. Plan corrected: the page reaches **10 hosts (23 URLs)** — 4 image hosts (`capsule-render.vercel.app`, `img.shields.io`, `skillicons.dev`, `raw.githubusercontent.com`) and 6 link hosts — not six. The doc gives each host what it serves and what breaks, plus a rule that `check_page.py` fails when README gains an undocumented host; pointing the icons at `icons.example.org` → `FAIL icons.example.org is used by README.md but not listed in docs/DEPENDENCIES.md`, exit 1.
 - [ ] Pin the image URLs' parameters (`theme`, `perline`, sizes) so an upstream default change cannot silently alter the page. `[P]`
 - [ ] Replace anything with a self-hosted equivalent where cost is zero (e.g. generate the header locally as a static SVG). `[P]`
 - [ ] Check the third-party hosts' terms allow hotlinking from a profile page; record the finding. `[P]`
@@ -345,7 +346,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | R2 | Daily job fails silently, leaving a stale image | Med | Wrong impression | no failure path | M1.4 |
 | R3 | Actions pinned by tag (`@v4`), not SHA | Med | Supply chain | `contrib-city.yml:16` | M1.3 |
 | R4 | 272 KB of SVG on a mobile profile view | Med | Slow first paint | file size | M3.2 |
-| R5 | Six third-party image hosts can change or die | Med | Broken header | no check | M2.3 |
+| R5 | Ten third-party hosts (4 image, 6 link) can change or die | Med | Broken header | `check_page.py` host rule + weekly link check | M2.3 |
 | R6 | Table and badge text typed by hand | High | Divergence | manual | M3.1 |
 | R7 | No `alt` on some badges | Low | Accessibility | `README.md` audit | M1.2 |
 | R8 | Demo links on free tiers cold-start | Certain | "offline" impression | unchecked | M4.2 |
@@ -377,7 +378,7 @@ claim that cannot be sourced is deleted, not softened.
 | Claims with a source field | unknown | 100% | 100% | `projects.json` |
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
-| Third-party hosts | 6 | documented | documented | host list |
+| Third-party hosts | 10 (4 image, 6 link) | documented | documented | host list |
 | Tests | 21 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
@@ -439,3 +440,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.2.2 [x] committed 53-week calendar fixture renders without network | proof: `unittest discover` → 18 OK, `FixtureTest` parses 53 weeks and renders both themes | next: m2.2.3
 - 2026-11-23 m2.2.3 [x] golden hash of the fixture render | proof: `unittest discover` → 19 OK; fixture day +5 → GoldenTest fails; `UPDATE_GOLDEN=1` regenerates | next: m2.2.4
 - 2026-11-23 m2.2.4 [x] generated SVGs proven inert (`unsafe_refs`) | proof: `check_page.py` → `ok inert`; injected `<image href=…>` → exit 1; `unittest discover` → 21 OK | next: m2.3.1
+- 2026-11-23 m2.3.1 [x] `docs/DEPENDENCIES.md` lists all 10 hosts and their failure modes; CI fails on an undocumented host | proof: `check_page.py` → `ok hosts 10 hosts, 23 URLs`; injected `icons.example.org` → exit 1 | next: m2.3.2

@@ -113,9 +113,26 @@ def check_asset_safety() -> list[str]:
     return problems
 
 
+def check_hosts_documented() -> list[str]:
+    """A new external host is a new dependency; docs/DEPENDENCIES.md must name it."""
+    from urllib.parse import urlparse
+
+    text = README.read_text(encoding="utf-8")
+    urls = re.findall(r'(?:href|src)="(https?://[^"]+)"', text)
+    urls += re.findall(r'srcset="(https?://[^"]+)"', text)
+    urls += re.findall(r"\]\((https?://[^)]+)\)", text)
+    documented = (ROOT / "docs" / "DEPENDENCIES.md").read_text(encoding="utf-8")
+    hosts = sorted({urlparse(u).netloc for u in urls})
+    problems = [f"{h} is used by README.md but not listed in docs/DEPENDENCIES.md"
+                for h in hosts if h not in documented]
+    if not problems:
+        print(f"ok   hosts {len(hosts)} hosts, {len(urls)} URLs, all documented")
+    return problems
+
+
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
-                + check_theme_geometry() + check_asset_safety())
+                + check_theme_geometry() + check_asset_safety() + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")
