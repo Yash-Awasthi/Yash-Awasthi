@@ -44,8 +44,21 @@ default change cannot restyle the page silently:
 | Host | Pinned |
 |---|---|
 | `img.shields.io` | `style=flat-square` × 4, `logo`, `logoColor=white`, `labelColor=555` |
-| `skillicons.dev` | `perline=14`, `theme=light` (the theme default is what would otherwise drift) |
+| `skillicons.dev` | `perline=14`, `theme=dark` (skillicons' documented default — pinned so a default change cannot restyle the strip) |
 | `raw.githubusercontent.com` | exact branch (`master`) and file name |
+
+## Terms and hotlinking (checked 2026-11-23)
+
+| Host | Finding |
+|---|---|
+| `skillicons.dev` | Hotlinking is the documented use: the project's own README tells you to paste `<img src="https://skillicons.dev/icons?i=…">` into a readme (skillicons.dev docs: *Example*, *Specifying Icons*, *Themed Icons*). No account, no key. Source is MIT-licensed (`tandpfun/skill-icons`). |
+| `img.shields.io` | Badges exist to be embedded; the Shield docs describe inline SVG badges "that can easily be included in GitHub readmes or any other web page" (shields.io/badges). The privacy policy states no cookies and no stored request logs, and rate limits are handled server-side with a shared token pool (shields.io/blog/token-pool). No prohibition on hotlinking. |
+| `raw.githubusercontent.com` | Serving repository files verbatim is the endpoint's purpose; GitHub's Acceptable Use Policies limit abusive volume, not ordinary embedding. 3 requests per page load. The content is this repository's own. |
+| Link hosts (`github.com`, portfolio, LinkedIn, Render, Cloudflare Pages, GitHub Pages) | Linked, never embedded, so no hotlinking question arises. |
+
+Conclusion: every remaining image host permits embedding from a profile README, so
+none has to be replaced under rule 4. `capsule-render` was replaced anyway (m2.3.3)
+because a hand-written 1 KB SVG replaced it at zero cost.
 
 ## Counting the hosts
 
