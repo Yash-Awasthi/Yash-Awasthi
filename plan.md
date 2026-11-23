@@ -83,7 +83,9 @@ under a minute, and a mismatch fails a check.
   - verified-here: `grep -oE '!\[[^]]*\]' README.md` → `![Portfolio — yash-portfolio-nine-navy.vercel.app]`, `![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi]`, `![Resume — PDF on the portfolio site]`, `![Email — yashvaibhav.job@gmail.com]`. Plan corrected: the badges did already carry short alt text (`![Portfolio](…)`) — Appendix C's "badges carry no alt" was wrong; the gap was that the alt named the label, not the destination.
 - [x] The header uses a third-party renderer with a URL-encoded name and no fallback; add a plain `<h1>`-equivalent text line so the page degrades if capsule-render is down. `[C]`
   - verified-here: `head -8 README.md` → the banner is now decorative (`alt="Gradient banner"`) and is followed by real text `# Yash Vaibhav Awasthi` and the tagline `Software engineer · backends, AI systems, mobile apps`; with images blocked the name and tagline still render. `wc -l < README.md` → 45 (was 41).
-- [ ] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
+- [x] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
+  - verified-here: `sed -n '/### Stack/,/<picture>/p' README.md` → a visible `**Stack:** TypeScript · Python · … · Three.js` line (14 names, same order as the `?i=` list) now precedes the icon strip, which is marked decorative with `alt=""`.
+  - deviation: the stack list is adjacent visible text rather than stuffed into the image `alt`, so a screen reader announces the stack once instead of twice. Badges keep destination-bearing alt (m1.2.1); their label text is still readable with images blocked because the link text is the badge. Host-down behaviour is recorded in m2.3.1.
 - [ ] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
 
 ### M1.3 Pin the automation
@@ -351,7 +353,7 @@ claim that cannot be sourced is deleted, not softened.
 
 | Metric | Now (measured) | W1 | W3 | How measured |
 |---|---|---|---|---|
-| README lines | 45 | 40–60 | 60–90 | `wc -l` |
+| README lines | 47 | 40–60 | 60–90 | `wc -l` |
 | Claims with a source field | unknown | 100% | 100% | `projects.json` |
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
@@ -399,3 +401,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.1.5 [x] `scripts/check_claims.py` guards all 9 rows | proof: `python3 scripts/check_claims.py` → `9 rows, 0 problem(s)`; with "42 providers" → exit 1 | next: m1.2.1
 - 2026-11-23 m1.2.1 [x] badge alt text names the destination | proof: `grep -oE '!\[[^]]*\]' README.md` → 4 alts with host/mailbox | next: m1.2.2
 - 2026-11-23 m1.2.2 [x] name and tagline are real text, banner decorative | proof: `head -8 README.md` → `# Yash Vaibhav Awasthi` + tagline; `wc -l < README.md` → 45 | next: m1.2.3
+- 2026-11-23 m1.2.3 [x] stack has a visible text fallback; icon strip decorative (`alt=""`) | proof: `sed -n '/### Stack/,/<picture>/p' README.md` → `**Stack:** …` line + `alt=""`; `wc -l` → 47 | deviation: text list instead of repeating it in alt | next: m1.2.4

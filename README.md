@@ -33,8 +33,10 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 
 ### Stack
 
+**Stack:** TypeScript · Python · Kotlin · C++ · React · Next.js · Node.js · FastAPI · PostgreSQL · Redis · AWS · Cloudflare · Docker · Three.js
+
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14" alt="TypeScript, Python, Kotlin, C++, React, Next.js, Node.js, FastAPI, PostgreSQL, Redis, AWS, Cloudflare, Docker, Three.js"/>
+  <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14" alt=""/>
 </p>
 
 **Certified:** Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · Hedera Certified Foundation
