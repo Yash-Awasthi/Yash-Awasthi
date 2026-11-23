@@ -33,7 +33,7 @@ reproducible automation), `data-ml` §8 (measured numbers only),
 
 | Fact | Measured | Claimed | Source |
 |---|---|---|---|
-| README size | 41 lines | — | `wc -l` |
+| README size | 45 lines | — | `wc -l` |
 | Sections | header image, 4 badge links, 1 para, experience (2 roles), project table (9 projects), stack icons, certifications, city image | — | `README.md` |
 | Live links | portfolio, LinkedIn, resume PDF, email, 3 live demos (Nexus, FinScrape, LobIQ) | all present | `README.md:3-26` |
 | Generated assets | 2 SVGs, 272 KB total, regenerated daily | — | `assets/`, workflow `cron: 0 0 * * *` |
@@ -81,7 +81,8 @@ under a minute, and a mismatch fails a check.
 
 - [x] Every badge link gets `alt` text that says where it goes; today the icons are decorative URLs. `[C]`
   - verified-here: `grep -oE '!\[[^]]*\]' README.md` → `![Portfolio — yash-portfolio-nine-navy.vercel.app]`, `![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi]`, `![Resume — PDF on the portfolio site]`, `![Email — yashvaibhav.job@gmail.com]`. Plan corrected: the badges did already carry short alt text (`![Portfolio](…)`) — Appendix C's "badges carry no alt" was wrong; the gap was that the alt named the label, not the destination.
-- [ ] The header uses a third-party renderer with a URL-encoded name and no fallback; add a plain `<h1>`-equivalent text line so the page degrades if capsule-render is down. `[C]`
+- [x] The header uses a third-party renderer with a URL-encoded name and no fallback; add a plain `<h1>`-equivalent text line so the page degrades if capsule-render is down. `[C]`
+  - verified-here: `head -8 README.md` → the banner is now decorative (`alt="Gradient banner"`) and is followed by real text `# Yash Vaibhav Awasthi` and the tagline `Software engineer · backends, AI systems, mobile apps`; with images blocked the name and tagline still render. `wc -l < README.md` → 45 (was 41).
 - [ ] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
 - [ ] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
 
@@ -350,7 +351,7 @@ claim that cannot be sourced is deleted, not softened.
 
 | Metric | Now (measured) | W1 | W3 | How measured |
 |---|---|---|---|---|
-| README lines | 41 | 40–60 | 60–90 | `wc -l` |
+| README lines | 45 | 40–60 | 60–90 | `wc -l` |
 | Claims with a source field | unknown | 100% | 100% | `projects.json` |
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
@@ -380,7 +381,7 @@ claim that cannot be sourced is deleted, not softened.
 
 | Claim | Command | Result | Status |
 |---|---|---|---|
-| README is 41 lines | `wc -l < README.md` | 41 | verified-here |
+| README is 45 lines | `wc -l < README.md` | 45 | verified-here |
 | Two SVGs, 272 KB | `ls -l assets` | 143,082 + 129,218 B | verified-here |
 | `city.py` 267 lines, stdlib only | `wc -l .github/city.py`, `grep '^import'` | 267; json, math, os, sys, urllib.request | verified-here |
 | `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | v4 / write / `0 0 * * *` | verified-here |
@@ -397,3 +398,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.1.4 [x] five live links checked | proof: `curl -s -o /dev/null -w "%{http_code}" -m 25 -L <url>` → 200 ×5 (Nexus 45.8 s cold start) | next: m1.1.5
 - 2026-11-23 m1.1.5 [x] `scripts/check_claims.py` guards all 9 rows | proof: `python3 scripts/check_claims.py` → `9 rows, 0 problem(s)`; with "42 providers" → exit 1 | next: m1.2.1
 - 2026-11-23 m1.2.1 [x] badge alt text names the destination | proof: `grep -oE '!\[[^]]*\]' README.md` → 4 alts with host/mailbox | next: m1.2.2
+- 2026-11-23 m1.2.2 [x] name and tagline are real text, banner decorative | proof: `head -8 README.md` → `# Yash Vaibhav Awasthi` + tagline; `wc -l < README.md` → 45 | next: m1.2.3

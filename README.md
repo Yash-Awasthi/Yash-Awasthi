@@ -1,6 +1,10 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2a8f8a,50:3d5bd9,100:5b5fc7&height=200&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=44&fontColor=ffffff&fontAlignY=36&desc=Software%20engineer%20%C2%B7%20backends%2C%20AI%20systems%2C%20mobile%20apps&descSize=18&descAlignY=58&descColor=eaf0f1" width="100%" alt="Yash Vaibhav Awasthi"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2a8f8a,50:3d5bd9,100:5b5fc7&height=200&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=44&fontColor=ffffff&fontAlignY=36&desc=Software%20engineer%20%C2%B7%20backends%2C%20AI%20systems%2C%20mobile%20apps&descSize=18&descAlignY=58&descColor=eaf0f1" width="100%" alt="Gradient banner"/>
+
+# Yash Vaibhav Awasthi
+
+Software engineer · backends, AI systems, mobile apps
 
 [![Portfolio — yash-portfolio-nine-navy.vercel.app](https://img.shields.io/badge/Portfolio-3d5bd9?style=flat-square&logo=vercel&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app) [![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi](https://img.shields.io/badge/LinkedIn-2a8f8a?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293) [![Resume — PDF on the portfolio site](https://img.shields.io/badge/Resume-5b5fc7?style=flat-square&logo=readthedocs&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf) [![Email — yashvaibhav.job@gmail.com](https://img.shields.io/badge/Email-237a94?style=flat-square&logo=gmail&logoColor=white)](mailto:yashvaibhav.job@gmail.com)
 
