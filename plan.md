@@ -38,7 +38,7 @@ reproducible automation), `data-ml` §8 (measured numbers only),
 | Live links | portfolio, LinkedIn, resume PDF, email, 3 live demos (Nexus, FinScrape, LobIQ) | all present | `README.md:3-26` |
 | Generated assets | 2 SVGs, 272 KB total, regenerated daily | — | `assets/`, workflow `cron: 0 0 * * *` |
 | Generator | `.github/city.py`, 267 lines, stdlib only, GitHub GraphQL | — | `city.py:1-35` |
-| Workflow actions | `actions/checkout@v4` (tag, not SHA), `contents: write`, cron + manual | — | `contrib-city.yml` |
+| Workflow actions | `actions/checkout@11d5960a…` pinned by SHA with `# v4.4.0` (was `@v4`), `contents: write`, cron + manual | — | `contrib-city.yml` |
 | Bot commits | daily commit to `assets/` when the diff is non-empty | — | `contrib-city.yml:24-27` |
 | External images | capsule-render, shields.io ×4, skillicons.dev, raw.githubusercontent | 6 third-party hosts | `README.md` |
 | Provider count | profile says "17 providers"; `Nexus/apps/api/src/lib/provider-keys.ts` `DRIVER_FACTORIES` names **39 providers** a key can be added for (`packages/llm/src/drivers/index.ts` defines 43 driver classes, 4 of them local/self-hosted entry points) | "17 providers" | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 |
@@ -92,7 +92,8 @@ under a minute, and a mismatch fails a check.
 
 ### M1.3 Pin the automation
 
-- [ ] `actions/checkout@v4` → commit SHA with a `# v4.x.y` comment. `[C]`
+- [x] `actions/checkout@v4` → commit SHA with a `# v4.x.y` comment. `[C]`
+  - verified-here: `grep -nE 'uses:' .github/workflows/contrib-city.yml` → `actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0`; the SHA is the tag commit per `curl -s https://api.github.com/repos/actions/checkout/git/refs/tags/v4.4.0 | grep sha`.
 - [ ] Replace the hand-rolled commit step with `git commit -m ...` plus `git push` guarded on `git diff --cached --quiet` (already) and add `--force-with-lease`-free safety: fail if the branch moved. `[C]`
 - [ ] Add `permissions: contents: write` only on the job that needs it, and `actions: read` elsewhere. `[C]`
 - [ ] Add `timeout-minutes` and a `concurrency` group so a manual run cannot race the cron. `[C]`
@@ -310,7 +311,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Purpose | Command | Status |
 |---|---|---|
 | Generate city assets | `python .github/city.py` (stdlib only: `json`, `math`, `os`, `sys`, `urllib.request`; 267 lines) | exists |
-| Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout@v4`) | exists; actions pinned by tag, not SHA |
+| Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
 | **Any test** | — | **missing** (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
@@ -361,7 +362,7 @@ claim that cannot be sourced is deleted, not softened.
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 6 | documented | documented | host list |
 | Tests | 0 | ≥1 (determinism) | + link check | file list |
-| Actions pinned by SHA | 0 | 1 | 1 | workflow |
+| Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
 
@@ -388,7 +389,7 @@ claim that cannot be sourced is deleted, not softened.
 | README is 45 lines | `wc -l < README.md` | 45 | verified-here |
 | Two SVGs, 272 KB | `ls -l assets` | 143,082 + 129,218 B | verified-here |
 | `city.py` 267 lines, stdlib only | `wc -l .github/city.py`, `grep '^import'` | 267; json, math, os, sys, urllib.request | verified-here |
-| `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | v4 / write / `0 0 * * *` | verified-here |
+| `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | now SHA-pinned `# v4.4.0` / write / `0 0 * * *` | verified-here |
 | Nine distinct providers named in Nexus | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` | 39 | verified-here |
 | "17 providers" | `README.md:20` | was stale; row now says 39 | verified-here |
 | "LoRA-tuned ModernBERT" | `grep -rniE "modernbert" --exclude-dir=.venv FinScrape`; absent from `FinScrape/README.md` | no match in tree; row now says "Laya (a small fine-tuned classifier)" | verified-here |
@@ -405,3 +406,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.2.2 [x] name and tagline are real text, banner decorative | proof: `head -8 README.md` → `# Yash Vaibhav Awasthi` + tagline; `wc -l < README.md` → 45 | next: m1.2.3
 - 2026-11-23 m1.2.3 [x] stack has a visible text fallback; icon strip decorative (`alt=""`) | proof: `sed -n '/### Stack/,/<picture>/p' README.md` → `**Stack:** …` line + `alt=""`; `wc -l` → 47 | deviation: text list instead of repeating it in alt | next: m1.2.4
 - 2026-11-23 m1.2.4 [x] default branch confirmed `master`; city `<picture>` URL verified as the one GitHub serves | proof: `curl -s api.github.com/repos/Yash-Awasthi/Yash-Awasthi \| grep default_branch` → master; relative path would 404 | deviation: absolute raw URL kept | next: m1.3.1
+- 2026-11-23 m1.3.1 [x] checkout pinned by SHA with version comment | proof: `grep -nE 'uses:' .github/workflows/contrib-city.yml` → `actions/checkout@11d5960a… # v4.4.0` | next: m1.3.2
