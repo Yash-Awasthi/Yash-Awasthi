@@ -17,7 +17,9 @@ ASSETS = ROOT / "assets"
 
 # Budgets. M3.2 tightens the SVG budget to 100 KB per theme.
 SVG_BUDGET = 200_000
-README_MAX_LINES = 120
+# §12 of plan.md holds the page to 40–60 lines at W1: a profile that turns into
+# a résumé loses the reader. Raising this is a deliberate, reviewed change.
+README_MAX_LINES = 60
 
 
 def check_asset_size() -> list[str]:
@@ -33,8 +35,16 @@ def check_asset_size() -> list[str]:
     return problems
 
 
+def check_readme_lines() -> list[str]:
+    lines = README.read_text(encoding="utf-8").count("\n") + 1
+    if lines > README_MAX_LINES:
+        return [f"README.md is {lines} lines, over the {README_MAX_LINES}-line budget"]
+    print(f"ok   lines README.md {lines} (budget {README_MAX_LINES})")
+    return []
+
+
 def main() -> int:
-    problems = check_asset_size()
+    problems = check_asset_size() + check_readme_lines()
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")
