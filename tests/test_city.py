@@ -191,6 +191,7 @@ class DeterminismTest(unittest.TestCase):
 
 
 FIXTURE = ROOT / "tests" / "fixtures" / "calendar.json"
+GOLDEN = ROOT / "tests" / "fixtures" / "golden.json"
 
 
 class FixtureTest(unittest.TestCase):
@@ -211,6 +212,21 @@ class FixtureTest(unittest.TestCase):
             svg = city.render(weeks, theme)
             self.assertTrue(svg.startswith("<svg"))
             self.assertTrue(svg.rstrip().endswith("</svg>"))
+
+
+class GoldenTest(unittest.TestCase):
+    """A pixel change from the committed fixture has to be an intentional commit."""
+
+    def test_fixture_render_matches_the_committed_hash(self):
+        import hashlib, os
+        weeks = city.parse_calendar(json.loads(FIXTURE.read_text(encoding="utf-8")))
+        actual = {theme: hashlib.sha256(city.render(weeks, theme).encode()).hexdigest()
+                  for theme in city.THEMES}
+        if os.environ.get("UPDATE_GOLDEN") == "1":
+            GOLDEN.write_text(json.dumps(actual, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        stored = json.loads(GOLDEN.read_text(encoding="utf-8"))
+        self.assertEqual(actual, stored,
+                         "rendered output changed; rerun with UPDATE_GOLDEN=1 only if that is intended")
 
 
 if __name__ == "__main__":
