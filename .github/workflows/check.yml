@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Markdown lint
-        run: npx --yes markdownlint-cli2@0.16.0 "README.md"
+        run: npx --yes markdownlint-cli2@0.16.0 "README.md" "SECURITY.md" "docs/*.md"
 
       - name: Unit tests
         run: python3 -m unittest discover -s tests -v
