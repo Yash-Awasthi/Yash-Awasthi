@@ -34,7 +34,6 @@ def check_asset_size() -> list[str]:
         problems.append("assets/ has no SVG")
     return problems
 
-
 def check_readme_lines() -> list[str]:
     lines = README.read_text(encoding="utf-8").count("\n") + 1
     if lines > README_MAX_LINES:
@@ -67,8 +66,35 @@ def check_images_and_links() -> list[str]:
     return problems
 
 
+def check_theme_geometry() -> list[str]:
+    """The dark and light SVGs must agree on their box, or the page jumps between themes."""
+    boxes = {}
+    for svg in sorted(ASSETS.glob("*.svg")):
+        tag = re.search(r"<svg\b[^>]*>", svg.read_text(encoding="utf-8"))
+        if not tag:
+            return [f"{svg.name} has no <svg> tag"]
+        boxes[svg.name] = {
+            attr: re.search(rf'\b{attr}="([^"]+)"', tag.group(0)) for attr in ("viewBox", "width", "height")
+        }
+        if not boxes[svg.name]["viewBox"]:
+            return [f"{svg.name} declares no viewBox"]
+    if len(boxes) < 2:
+        return ["expected one SVG per theme in assets/"]
+    ref_name, ref = next(iter(boxes.items()))
+    problems = []
+    for name, box in boxes.items():
+        for attr in ("viewBox", "width", "height"):
+            a = ref[attr].group(1) if ref[attr] else None
+            b = box[attr].group(1) if box[attr] else None
+            if a != b:
+                problems.append(f"{name} {attr}={b!r} differs from {ref_name} {attr}={a!r}")
+    if not problems:
+        print(f"ok   box   {', '.join(boxes)} share viewBox {ref['viewBox'].group(1)}")
+    return problems
+
+
 def main() -> int:
-    problems = check_asset_size() + check_readme_lines() + check_images_and_links()
+    problems = check_asset_size() + check_readme_lines() + check_images_and_links() + check_theme_geometry()
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")

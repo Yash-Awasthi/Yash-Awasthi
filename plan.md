@@ -129,7 +129,8 @@ whether the committed image is stale, empty, or mangled.
   - verified-here: `python3 scripts/check_page.py` → `ok   lines README.md 50 (budget 60)`, `0 problem(s)`; with 15 blank lines appended → `FAIL README.md is 65 lines, over the 60-line budget`, exit 1. (The script counts the unterminated last line, so it reports 50 where `wc -l` reports 49.)
 - [x] Fail on a raw `<img>` without `alt`, and on a link without a destination. `[P]`
   - verified-here: `python3 scripts/check_page.py` → `ok   alt   7 images, every link has a destination`, `0 problem(s)`; appending `<img src="…">`, `[nowhere]()` and `![](…)` → three `FAIL` lines and exit 1. An empty `alt=""` is accepted on purpose: the icon strip is decorative because the stack is also written as text (m1.2.3).
-- [ ] Verify the two SVG themes declare the same viewBox and dimensions, so dark/light do not jump. `[P]`
+- [x] Verify the two SVG themes declare the same viewBox and dimensions, so dark/light do not jump. `[P]`
+  - verified-here: `python3 scripts/check_page.py` → `ok   box   city-dark.svg, city-light.svg share viewBox 0 0 938 349`, exit 0; with `city-light.svg` edited to `viewBox="0 0 940 349"` → `FAIL city-light.svg viewBox='0 0 940 349' differs from city-dark.svg viewBox='0 0 938 349'`, exit 1. Neither theme declares `width`/`height`, so the viewBox is the whole geometry contract and the check compares all three attributes.
 
 ### M2.2 Determinism of the city
 
@@ -429,3 +430,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.1.1 [x] `check.yml` (lint, tests, claims, size) + weekly link job | proof: markdownlint 0 errors, `check_page.py` 0 problems, `check_links.py` 22 URLs 0 problems (broken URL → exit 1) | next: m2.1.2
 - 2026-11-23 m2.1.2 [x] README line budget of 60 enforced | proof: `check_page.py` → `lines README.md 50 (budget 60)`; 65 lines → exit 1 | next: m2.1.3
 - 2026-11-23 m2.1.3 [x] every `<img>` needs `alt`, every link a destination | proof: `check_page.py` → `ok alt 7 images`; injected `<img>` without alt / `[x]()` / `![]()` → 3 FAIL, exit 1 | next: m2.1.4
+- 2026-11-23 m2.1.4 [x] both themes must share viewBox/dimensions | proof: `check_page.py` → `ok box … share viewBox 0 0 938 349`; edited light theme → exit 1 | next: m2.2.1
