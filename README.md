@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2a8f8a,50:3d5bd9,100:5b5fc7&height=200&section=header&text=Yash%20Vaibhav%20Awasthi&fontSize=44&fontColor=ffffff&fontAlignY=36&desc=Software%20engineer%20%C2%B7%20backends%2C%20AI%20systems%2C%20mobile%20apps&descSize=18&descAlignY=58&descColor=eaf0f1" width="100%" alt="Gradient banner"/>
+<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg" width="100%" height="200" alt=""/>
 
 # Yash Vaibhav Awasthi
 

@@ -69,19 +69,21 @@ def check_images_and_links() -> list[str]:
 def check_theme_geometry() -> list[str]:
     """The dark and light SVGs must agree on their box, or the page jumps between themes."""
     boxes = {}
+    problems = []
     for svg in sorted(ASSETS.glob("*.svg")):
         tag = re.search(r"<svg\b[^>]*>", svg.read_text(encoding="utf-8"))
         if not tag:
-            return [f"{svg.name} has no <svg> tag"]
-        boxes[svg.name] = {
-            attr: re.search(rf'\b{attr}="([^"]+)"', tag.group(0)) for attr in ("viewBox", "width", "height")
-        }
-        if not boxes[svg.name]["viewBox"]:
-            return [f"{svg.name} declares no viewBox"]
+            problems.append(f"{svg.name} has no <svg> tag")
+            continue
+        box = {attr: re.search(rf'\b{attr}="([^"]+)"', tag.group(0))
+               for attr in ("viewBox", "width", "height")}
+        if not box["viewBox"]:
+            problems.append(f"{svg.name} declares no viewBox")
+        if svg.name.startswith("city-"):
+            boxes[svg.name] = box
     if len(boxes) < 2:
-        return ["expected one SVG per theme in assets/"]
+        return problems + ["expected one SVG per theme in assets/"]
     ref_name, ref = next(iter(boxes.items()))
-    problems = []
     for name, box in boxes.items():
         for attr in ("viewBox", "width", "height"):
             a = ref[attr].group(1) if ref[attr] else None
