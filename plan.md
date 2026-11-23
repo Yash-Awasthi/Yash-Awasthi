@@ -96,7 +96,8 @@ under a minute, and a mismatch fails a check.
   - verified-here: `grep -nE 'uses:' .github/workflows/contrib-city.yml` → `actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0`; the SHA is the tag commit per `curl -s https://api.github.com/repos/actions/checkout/git/refs/tags/v4.4.0 | grep sha`.
 - [x] Replace the hand-rolled commit step with `git commit -m ...` plus `git push` guarded on `git diff --cached --quiet` (already) and add `--force-with-lease`-free safety: fail if the branch moved. `[C]`
   - verified-here: the Commit step now exits 0 on an unchanged `assets/`, commits otherwise, and compares `HEAD~1` with a freshly fetched `origin/$GITHUB_REF_NAME` before `::error::` + exit 1. Rehearsed in a scratch bare repo (`/tmp/gtest`): unchanged → CASE1 exit 0; a second clone pushed first → CASE2 `git rev-parse HEAD~1` `bdafac1…` ≠ `origin/master` `3172dc2…` → guard fires; no competing push → CASE3 parent matches, push succeeds. Workflow still parses (`yaml.safe_load` → jobs: ['generate']).
-- [ ] Add `permissions: contents: write` only on the job that needs it, and `actions: read` elsewhere. `[C]`
+- [x] Add `permissions: contents: write` only on the job that needs it, and `actions: read` elsewhere. `[C]`
+  - verified-here: `python3 -c "import yaml; …"` over the workflow → workflow-level `{'contents': 'read'}`, job `generate` `{'contents': 'write'}`, `jobs: ['generate']`. Nothing else needs `actions: read` today; the read default is what a future `check` job (m2.1) inherits.
 - [ ] Add `timeout-minutes` and a `concurrency` group so a manual run cannot race the cron. `[C]`
 
 ### M1.4 The generator has no failure path
@@ -409,3 +410,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.2.4 [x] default branch confirmed `master`; city `<picture>` URL verified as the one GitHub serves | proof: `curl -s api.github.com/repos/Yash-Awasthi/Yash-Awasthi \| grep default_branch` → master; relative path would 404 | deviation: absolute raw URL kept | next: m1.3.1
 - 2026-11-23 m1.3.1 [x] checkout pinned by SHA with version comment | proof: `grep -nE 'uses:' .github/workflows/contrib-city.yml` → `actions/checkout@11d5960a… # v4.4.0` | next: m1.3.2
 - 2026-11-23 m1.3.2 [x] commit step refuses to push when the branch moved | proof: scratch-repo rehearsal of the step → CASE1 exit 0, CASE2 guard fires (HEAD~1 ≠ origin/master), CASE3 push ok | next: m1.3.3
+- 2026-11-23 m1.3.3 [x] least-privilege default, write only on the generating job | proof: `yaml.safe_load` → workflow `contents: read`, job `generate` `contents: write` | next: m1.3.4
