@@ -35,6 +35,9 @@ jobs:
       - name: Page guards
         run: python3 scripts/check_page.py
 
+      - name: Privacy rules
+        run: python3 scripts/check_privacy.py
+
   links:
     # A push should not wait on third-party hosts; only the weekly/manual run fetches them.
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -46,3 +49,6 @@ jobs:
 
       - name: Every external URL answers
         run: python3 scripts/check_links.py
+
+      - name: The resume carries no phone number or address
+        run: python3 scripts/check_privacy.py --resume

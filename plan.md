@@ -156,7 +156,8 @@ whether the committed image is stale, empty, or mangled.
 
 ### M2.4 Privacy and safety
 
-- [ ] Confirm no personal data beyond the public email, city and employer names; add a rule in `docs/` about what never goes on the profile. `[P]`
+- [x] Confirm no personal data beyond the public email, city and employer names; add a rule in `docs/` about what never goes on the profile. `[P]`
+  - verified-here: `grep -oE "yashvaibhav\.job@gmail\.com|linkedin\.com/in/[a-z0-9-]+" README.md` → only the public email and the LinkedIn handle; the page's other personal facts are the name, `NIT Raipur`, CGPA 9.26, and two employers. `docs/PRIVACY.md` records an *Allowed* table and a seven-point *Never* list (phone, sub-city address, government IDs, credentials, other people's data, unpublished employer internals, health/financial data). `python3 scripts/check_privacy.py` → `0 problem(s)`; injecting `+91 98765 43210`, `Flat No 4, Sector 12` and `ghp_…` → 5 `FAIL` lines, exit 1. Wired into the `static` CI job.
 - [ ] The resume PDF is a live third-party URL; add a check that it exists and that it contains no phone number or address (open it, read the header block). `[P]`
 - [ ] Add `SECURITY.md` (contact, no bug bounty, response window) because the profile invites contact. `[P]`
 
@@ -447,3 +448,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.3.2 [x] image URLs pin their appearance (`labelColor=555`, `theme=dark`) and the doc tabulates them | proof: `grep -o 'img.shields.io/badge/[^)]*'` → 4× `labelColor=555`; 5 image URLs → 200 | next: m2.3.3
 - 2026-11-23 m2.3.3 [x] banner self-hosted as `assets/header.svg`, capsule-render dropped | proof: `grep -c capsule README.md` → 0; `check_page.py` → `ok hosts 9 hosts, 23 URLs`, `ok inert` | pushed → header raw URL 200 | next: m2.3.4
 - 2026-11-23 m2.3.4 [x] hotlinking terms checked and recorded; skillicons pinned to its documented default `theme=dark` | proof: `docs/DEPENDENCIES.md` *Terms and hotlinking* table; `grep -o 'skillicons.dev[^"]*' README.md` → `theme=dark`, 200 | next: m2.4.1
+- 2026-11-23 m2.4.1 [x] `docs/PRIVACY.md` rules + `scripts/check_privacy.py` in CI | proof: `check_privacy.py` → 0 problems; injected phone/address/token → 5 FAIL, exit 1 | next: m2.4.2
