@@ -60,7 +60,13 @@ def scan(label: str, text: str) -> list[str]:
 
 
 def pdf_text(data: bytes) -> str:
-    """Best-effort text from a PDF: decompress each stream and keep the text operators."""
+    """Best-effort text from a PDF: decompress each stream and keep the text operators.
+
+    Literal `(…)` strings and hex `<…>` strings are both read, so a contact block
+    typeset either way shows up. Fonts that ship a custom encoding without a
+    ToUnicode map can still hide text; `main` reports how much was readable so a
+    thin result is visible instead of passing silently.
+    """
     out = []
     for m in re.finditer(rb"stream\r?\n(.*?)endstream", data, re.S):
         raw = m.group(1)
@@ -70,6 +76,11 @@ def pdf_text(data: bytes) -> str:
             continue
         for t in re.findall(rb"\((.*?)(?<!\\)\)", raw, re.S):
             out.append(t.decode("latin-1", "replace"))
+        for h in re.findall(rb"<([0-9A-Fa-f]{4,})>", raw):
+            try:
+                out.append(bytes.fromhex(h.decode()).decode("utf-16-be", "replace"))
+            except ValueError:
+                continue
     return "\n".join(out)
 
 
@@ -91,9 +102,9 @@ def main() -> int:
         else:
             text = pdf_text(data)
             if len(text) < 200:
-                problems.append(f"resume: extracted only {len(text)} characters of text; check it by hand")
+                problems.append(f"resume: extracted only {len(text)} characters of text; read it by hand")
             problems += scan("resume.pdf", text)
-            print(f"ok   resume {len(data):,} B, {len(text)} chars of text scanned")
+            print(f"ok   resume {len(data):,} B, {len(text):,} chars of text scanned")
 
     for p in problems:
         print(f"FAIL {p}")
