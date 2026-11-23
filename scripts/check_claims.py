@@ -88,19 +88,48 @@ def check_project(p: dict) -> list[str]:
     return problems
 
 
-def head_ok(url: str) -> tuple[bool, str]:
-    """A live demo on a free tier can cold-start; measured 45.8 s on Render, so allow 120 s and one retry."""
-    last = ""
-    for attempt in (1, 2):
+def head_ok(url: str, budget: float) -> tuple[bool, str, bool]:
+    """Fetch the URL and decide whether it answered inside `budget` seconds (one retry)."""
+    import time
+
+    last, elapsed, slow = "", 0.0, False
+    for _ in range(2):
         req = urllib.request.Request(url, headers={"User-Agent": "check_claims/1"})
+        t0 = time.monotonic()
         try:
-            with urllib.request.urlopen(req, timeout=120) as r:  # noqa: S310 - data URLs
-                return r.status == 200, f"{r.status}" if attempt == 1 else f"{r.status} after retry"
+            with urllib.request.urlopen(req, timeout=budget) as r:  # noqa: S310 - data URLs
+                elapsed = time.monotonic() - t0
+                slow = elapsed > budget
+                return r.status == 200 and not slow, f"{r.status} in {elapsed:.1f}s", slow
         except urllib.error.HTTPError as e:
-            return False, str(e.code)
+            return False, str(e.code), False
         except (urllib.error.URLError, TimeoutError) as e:
             last = repr(e)
-    return False, last
+    return False, last, True
+
+
+LIVE_BUDGET = 10.0       # every live URL must answer inside 10 s
+COLD_START_BUDGET = 120.0  # a free-tier app that sleeps: measured 45.8 s on Render
+
+
+def budget_for(p: dict) -> float:
+    """10 s is the contract; a documented free-tier app that sleeps gets the cold-start budget."""
+    return COLD_START_BUDGET if p.get("cold_start") else LIVE_BUDGET
+
+
+def check_source(p: dict) -> list[str]:
+    """Every claim carries a machine-checkable source."""
+    name = p["name"]
+    srcs = p.get("claim_source")
+    if not srcs:
+        return [f"{name}: no claim_source"]
+    problems = []
+    for c in srcs:
+        if not c.get("file"):
+            problems.append(f"{name}: a claim_source entry has no file")
+        elif not (c.get("any") or c.get("count")):
+            problems.append(f"{name}: claim_source {c['file']} has neither any[] nor count")
+    return problems
 
 
 def main() -> int:
@@ -112,6 +141,7 @@ def main() -> int:
     problems = []
     for p in data["projects"]:
         problems += check_project(p)
+        problems += check_source(p)
     for link in data["profile"]["links"]:
         url = link["url"]
         if not url.startswith(("http://", "https://", "mailto:")):
@@ -123,10 +153,11 @@ def main() -> int:
         for p in data["projects"]:
             if not p.get("live"):
                 continue
-            ok, status = head_ok(p["live"])
-            print(f"{'ok  ' if ok else 'FAIL'} live  {p['name']:16} {status:>6}  {p['live']}")
+            budget = budget_for(p)
+            ok, detail, _ = head_ok(p["live"], budget)
+            print(f"{'ok  ' if ok else 'FAIL'} live  {p['name']:16} {detail:>14}  {p['live']}")
             if not ok:
-                problems.append(f"{p['name']}: live URL {p['live']} -> {status}")
+                problems.append(f"{p['name']}: live URL {p['live']} -> {detail} (budget {budget:.0f}s)")
 
     for p in problems:
         print(f"FAIL {p}")

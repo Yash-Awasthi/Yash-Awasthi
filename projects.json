@@ -58,7 +58,9 @@
             "BM25"
           ]
         }
-      ]
+      ],
+      "cold_start": true,
+      "cold_start_note": "Render free tier sleeps; measured 45.8 s to first byte on 2026-11-23."
     },
     {
       "name": "FinScrape",

@@ -179,7 +179,9 @@ can diverge and a claim change is a text edit.
   - [x] Generate the badge row from the same data so a link and its label cannot diverge. `[F]`
     - verified-here: `python3 scripts/gen_readme.py --check` → `ok   data 4 badges, 9 projects, README.md matches`; renaming the first link's label in `projects.json` without regenerating → `FAIL README.md is not what projects.json renders`, exit 1. Each badge is built from `label`/`url`/`alt`/`color`/`logo` with `style=flat-square`, `logoColor=white` and `labelColor=555` always pinned (`BadgeTest` asserts all three on every badge); the README badge row now sits between `<!-- badges:start -->` and `<!-- badges:end -->`. `python3 -m unittest discover -s tests` → `Ran 28 tests … OK`; markdownlint 0 errors; `check_page.py` and `check_claims.py` clean.
 - **m3.1.2 Checks**
-  - [ ] A check that every `live URL` in `projects.json` answers 200 within 10 s, and that every claim has a `source` field. `[F]`
+  - [x] A check that every `live URL` in `projects.json` answers 200 within 10 s, and that every claim has a `source` field. `[F]`
+    - verified-here: `python3 scripts/check_claims.py --links` → `ok   live  Nexus 200 in 0.9s`, `FinScrape 200 in 0.7s`, `LobIQ 200 in 0.5s`, `9 projects, 0 problem(s)`; with FinScrape's live URL pointed at a 404 and one project's `claim_source` emptied → `FAIL FinScrape: live URL … -> 404 (budget 10s)` + two `claim has no claim_source` failures, exit 1. `python3 -m unittest discover -s tests` → `Ran 35 tests … OK` (`BudgetTest`, `SourceTest`, `LiveUrlTest`).
+    - deviation: the 10 s contract cannot hold for a sleeping free tier — Nexus cold-started in **45.8 s** on 2026-11-23. That one project carries `"cold_start": true` plus a `cold_start_note` and gets a 120 s budget; every other live URL is held to 10 s, and `BudgetTest` asserts the note exists for any exemption. The `links` CI job now runs `check_claims.py --links`.
 
 ### M3.2 The city asset
 
@@ -338,7 +340,8 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links`; live URLs get 120 s and one retry for cold starts) | exists (M1.1, data-driven since M3.1) |
 | **Table is data** | `python3 scripts/gen_readme.py --check` (`--write` to regenerate; covers badge row + table) | exists (M3.1) |
-| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M3.1: 28 tests) |
+| **Live URLs + sources** | `python3 scripts/check_claims.py --links` (10 s budget, 120 s for a documented cold start) | exists (M3.1) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M3.1: 35 tests) |
 | **Page guards** | `python3 scripts/check_page.py` (size budget; alt/line/viewBox next) | exists (M2.1) |
 | **CI** | `.github/workflows/check.yml` — lint, tests, claims, page guards on push; link check weekly | exists (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
@@ -388,7 +391,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 147 KB + 133 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 9 (3 image, 6 link) | documented | documented | host list |
-| Tests | 28 (`tests/test_city.py`, `tests/test_readme.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
+| Tests | 35 (`tests/test_city.py`, `tests/test_readme.py`, `tests/test_claims.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -458,3 +461,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.4.3 [x] `SECURITY.md` with contact, no bounty, response windows | proof: file present, markdownlint 0 errors over README + SECURITY + docs, privacy check clean | W1 complete — next: m3.1.1
 - 2026-11-23 m3.1.1 [x] profile table is rendered from `projects.json`; claims read `claim_source` from it | proof: `gen_readme.py --check` → 9 projects in sync; edited claim without regenerating → exit 1; caught FinScrape's changed cost badge | next: m3.1.2
 - 2026-11-23 m3.1.2 [x] badge row rendered from the same data | proof: `gen_readme.py --check` → 4 badges + 9 projects in sync; renamed label → exit 1; 28 tests OK | next: m3.1.3
+- 2026-11-23 m3.1.3 [x] live URLs checked with a 10 s budget and every claim needs a source | proof: `check_claims.py --links` → 3 demos 200 in <1 s, 0 problems; 404 + empty source → exit 1; 35 tests OK | deviation: Nexus gets 120 s (`cold_start`, measured 45.8 s) | next: m3.2.1
