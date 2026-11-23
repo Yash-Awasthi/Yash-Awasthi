@@ -72,7 +72,8 @@ under a minute, and a mismatch fails a check.
   - verified-here: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39; the README row now reads "39 providers behind one streaming API". The plan's earlier "9 distinct providers" figure was a partial grep and is corrected in §0.
 - [x] FinScrape row: confirm the LoRA/ModernBERT claim in FinScrape's tree; if unverified, remove it. `[C]`
   - verified-here: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match anywhere in the tree; `FinScrape/docs/BACKFILL.md:82` says "No LoRA was published". Row now says "Laya (a small fine-tuned classifier), the LLM and keywords" (`FinScrape/README.md:33`) and keeps `$0/month` (`FinScrape/README.md:8`).
-- [ ] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
+- [x] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
+  - verified-here: `for u in <5 urls>; do curl -s -o /dev/null -w "%{http_code}" -m 25 -L "$u"; done` → portfolio 200, resume PDF 200 (`application/pdf`, 58,916 B), winfin.pages.dev 200 (`<title>FinScrape — See what moves markets…`), yash-awasthi.github.io/LobIQ/ 200 (`<title>LobIQ demo reports`), nexus-iosc.onrender.com 200 after **45.8 s** cold start (Render free tier; SPA, no `<title>`, `apple-mobile-web-app-title` = Nexus). LinkedIn returns 999 to `curl` (bot wall, not a 404) → needs-verify: 2026-11-23 li-at-909a62293 | M4.2 needs the Nexus cold-start note.
 - [ ] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
 
 ### M1.2 Fix the broken or unverifiable presentation bits
@@ -390,3 +391,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.1.1 [x] project rows rewritten to repo-backed sentences (KeyRouter provider style, Ping PAKE/AES) | proof: `grep -nE 'KeyRouter|Ping' README.md` → both rows now quote their own README | next: m1.1.2
 - 2026-11-23 m1.1.2 [x] Nexus "17 providers" → 39, the count of `DRIVER_FACTORIES` | proof: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 | next: m1.1.3
 - 2026-11-23 m1.1.3 [x] FinScrape "LoRA-tuned ModernBERT" removed; row quotes FinScrape's own README | proof: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match; `grep -n "fine-tuned classifier" FinScrape/README.md` → :33 | next: m1.1.4
+- 2026-11-23 m1.1.4 [x] five live links checked | proof: `curl -s -o /dev/null -w "%{http_code}" -m 25 -L <url>` → 200 ×5 (Nexus 45.8 s cold start) | next: m1.1.5
