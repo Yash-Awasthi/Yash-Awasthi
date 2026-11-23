@@ -79,7 +79,8 @@ under a minute, and a mismatch fails a check.
 
 ### M1.2 Fix the broken or unverifiable presentation bits
 
-- [ ] Every badge link gets `alt` text that says where it goes; today the icons are decorative URLs. `[C]`
+- [x] Every badge link gets `alt` text that says where it goes; today the icons are decorative URLs. `[C]`
+  - verified-here: `grep -oE '!\[[^]]*\]' README.md` → `![Portfolio — yash-portfolio-nine-navy.vercel.app]`, `![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi]`, `![Resume — PDF on the portfolio site]`, `![Email — yashvaibhav.job@gmail.com]`. Plan corrected: the badges did already carry short alt text (`![Portfolio](…)`) — Appendix C's "badges carry no alt" was wrong; the gap was that the alt named the label, not the destination.
 - [ ] The header uses a third-party renderer with a URL-encoded name and no fallback; add a plain `<h1>`-equivalent text line so the page degrades if capsule-render is down. `[C]`
 - [ ] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
 - [ ] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
@@ -386,7 +387,7 @@ claim that cannot be sourced is deleted, not softened.
 | Nine distinct providers named in Nexus | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` | 39 | verified-here |
 | "17 providers" | `README.md:20` | was stale; row now says 39 | verified-here |
 | "LoRA-tuned ModernBERT" | `grep -rniE "modernbert" --exclude-dir=.venv FinScrape`; absent from `FinScrape/README.md` | no match in tree; row now says "Laya (a small fine-tuned classifier)" | verified-here |
-| Alt text on badges | inspected `<img>` tags | badges carry no `alt` | verified-here |
+| Alt text on badges | inspected `<img>` tags | the four badges carried label-only alt (`![Portfolio](…)`); now each names its destination | verified-here |
 
 ## 13. Journal
 
@@ -395,3 +396,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.1.3 [x] FinScrape "LoRA-tuned ModernBERT" removed; row quotes FinScrape's own README | proof: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match; `grep -n "fine-tuned classifier" FinScrape/README.md` → :33 | next: m1.1.4
 - 2026-11-23 m1.1.4 [x] five live links checked | proof: `curl -s -o /dev/null -w "%{http_code}" -m 25 -L <url>` → 200 ×5 (Nexus 45.8 s cold start) | next: m1.1.5
 - 2026-11-23 m1.1.5 [x] `scripts/check_claims.py` guards all 9 rows | proof: `python3 scripts/check_claims.py` → `9 rows, 0 problem(s)`; with "42 providers" → exit 1 | next: m1.2.1
+- 2026-11-23 m1.2.1 [x] badge alt text names the destination | proof: `grep -oE '!\[[^]]*\]' README.md` → 4 alts with host/mailbox | next: m1.2.2
