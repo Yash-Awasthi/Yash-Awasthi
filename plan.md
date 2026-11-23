@@ -1,0 +1,388 @@
+# plan.md — Yash-Awasthi (profile repository)
+
+Consolidated plan for the GitHub profile repository. There was no prior plan
+file; this replaces the implicit backlog in the README and in
+`.github/city.py` comments. Scope is deliberately narrow: the artefact is a
+41-line README plus one generator and two SVG assets. The work is therefore
+**claim integrity, build determinism and reader-facing craft**, not features.
+
+Generated 2026-11-24. Evidence base: `README.md` (41 lines), `assets/city-dark.svg`
+(143 KB), `assets/city-light.svg` (129 KB), `.github/city.py` (267 lines),
+`.github/workflows/contrib-city.yml`, and cross-checks against the README of
+Nexus, FinScrape, AdapFit, PocketDesk, KeyRouter, CaseFiles, Ping, LobIQ and
+RISC-VInjection.
+
+**Order:** corrective → preventive → perfective → widening → depth → enterprise.
+
+**Hierarchy:** Phase → Major (M#.#) → Minor (m#.#.#) → Subtask. One subtask = one
+
+**Done tasks stay.** A finished subtask becomes `- [x]` in place with one evidence line under it (`verified-here: <command> → <result>`). Nothing is ever removed from this list.
+PR = one command that proves it.
+
+**Tag (exactly one):** `[C]` corrective · `[P]` preventive · `[F]` perfective ·
+`[W]` widening · `[D]` depth · `[E]` enterprise.
+
+**Method anchors:** `writing-docs` §1 (every claim has a source), `design-ux`
+§1/§5 (first screen, hierarchy, accessibility), `devops-cloud` §8 (pinned,
+reproducible automation), `data-ml` §8 (measured numbers only),
+`security-operations` §5 (third-party images and unpinned actions).
+
+---
+
+## 0. Verified ground truth
+
+| Fact | Measured | Claimed | Source |
+|---|---|---|---|
+| README size | 41 lines | — | `wc -l` |
+| Sections | header image, 4 badge links, 1 para, experience (2 roles), project table (9 projects), stack icons, certifications, city image | — | `README.md` |
+| Live links | portfolio, LinkedIn, resume PDF, email, 3 live demos (Nexus, FinScrape, LobIQ) | all present | `README.md:3-26` |
+| Generated assets | 2 SVGs, 272 KB total, regenerated daily | — | `assets/`, workflow `cron: 0 0 * * *` |
+| Generator | `.github/city.py`, 267 lines, stdlib only, GitHub GraphQL | — | `city.py:1-35` |
+| Workflow actions | `actions/checkout@v4` (tag, not SHA), `contents: write`, cron + manual | — | `contrib-city.yml` |
+| Bot commits | daily commit to `assets/` when the diff is non-empty | — | `contrib-city.yml:24-27` |
+| External images | capsule-render, shields.io ×4, skillicons.dev, raw.githubusercontent | 6 third-party hosts | `README.md` |
+| Provider count | profile says "17 providers"; `Nexus/packages/llm/src` names **9 distinct providers** (`anthropic`, `deepseek`, `gemini`, `groq`, `mistral`, `ollama`, `openai`, `openrouter`, `xai`) plus free-tier variants | "17 providers" | `grep -rhoE '"(anthropic\|deepseek\|gemini\|groq\|mistral\|ollama\|openai\|openrouter\|xai)"' Nexus/packages/llm/src \| sort -u` → 9 |
+| FinScrape claim | profile says "LoRA-tuned ModernBERT" | not stated in FinScrape README | `README.md:23`, `FinScrape/README.md` |
+| Alt text | present on header, stack icons, city image; absent on the 4 badge links? | — | `README.md:3-5` |
+
+Invariants:
+
+1. **Every claim is verifiable in one click.** A number in this README must match the repository it describes, or it is removed.
+2. **No private data.** No phone number, no address, no employer-only links, no API keys; the public email is the contact.
+3. **The city asset is generated, never hand-edited.** `assets/*.svg` are outputs of `city.py`.
+4. **The daily job must not fail silently.** A missed run leaves a stale image with no signal today.
+5. **Accessibility is not optional.** Every image has an `alt`; colour is not the only carrier of meaning; the page is readable with images blocked.
+
+---
+
+## Phase 1 — Corrective
+
+### M1.1 Claim integrity across the nine projects
+
+**Why:** the profile is the entry point to every repository, and two claims do
+not match their own READMEs ("17 providers" vs eight named and "and more";
+"LoRA-tuned ModernBERT" absent from FinScrape's README). A reader who checks
+once stops trusting the rest.
+**Done when:** every project line can be checked against that project's README in
+under a minute, and a mismatch fails a check.
+
+- [x] Rewrite each project row to one verifiable sentence, quoting the number only where the project's own README states it. `[C]`
+  - verified-here: `grep -nE 'KeyRouter|Ping' README.md` → KeyRouter row now says "OpenAI- or Anthropic-style" and expiring `sk-gw-` keys (KeyRouter/README.md:3,5); Ping row now says gesture-keyed PAKE on P-256 + AES-256-GCM over BLE (Ping/README.md:45,152,156), replacing the narrower "ECDH" wording. The other 7 rows matched their repository README as written.
+- [ ] Nexus row: replace "17 providers" with the number the Nexus README or code supports, or drop the count. `[C]`
+- [ ] FinScrape row: confirm the LoRA/ModernBERT claim in FinScrape's tree; if unverified, remove it. `[C]`
+- [ ] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
+- [ ] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
+
+### M1.2 Fix the broken or unverifiable presentation bits
+
+- [ ] Every badge link gets `alt` text that says where it goes; today the icons are decorative URLs. `[C]`
+- [ ] The header uses a third-party renderer with a URL-encoded name and no fallback; add a plain `<h1>`-equivalent text line so the page degrades if capsule-render is down. `[C]`
+- [ ] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
+- [ ] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
+
+### M1.3 Pin the automation
+
+- [ ] `actions/checkout@v4` → commit SHA with a `# v4.x.y` comment. `[C]`
+- [ ] Replace the hand-rolled commit step with `git commit -m ...` plus `git push` guarded on `git diff --cached --quiet` (already) and add `--force-with-lease`-free safety: fail if the branch moved. `[C]`
+- [ ] Add `permissions: contents: write` only on the job that needs it, and `actions: read` elsewhere. `[C]`
+- [ ] Add `timeout-minutes` and a `concurrency` group so a manual run cannot race the cron. `[C]`
+
+### M1.4 The generator has no failure path
+
+**Why:** `city.py` calls the GraphQL API with `urllib` and writes both SVGs. On a
+rate limit, an auth failure or a partial response, today's behaviour decides
+whether the committed image is stale, empty, or mangled.
+**Done when:** a failed fetch leaves the previous asset untouched and the job goes red.
+
+- [ ] Treat any non-200, `errors` payload or empty calendar as a failure: exit non-zero, write nothing. `[C]`
+- [ ] Write to a temp path and `os.replace` both files only after both render successfully, so a crash cannot leave one theme updated and the other stale. `[C]`
+- [ ] Log the contribution total and the date range rendered, so a silently empty year is visible in the job log. `[C]`
+- [ ] Add `--year` and `--out` flags so the script can be run locally without touching `assets/`. `[C]`
+
+---
+
+## Phase 2 — Preventive
+
+### M2.1 A CI that guards the page
+
+- [ ] Workflow `check`: markdown lint, `check_claims.py`, link check on every external URL (with a weekly run for the network ones), and a size budget on `assets/*.svg`. `[P]`
+- [ ] Fail when the README exceeds a line budget (currently 41; a profile page that grows into a résumé loses the reader). `[P]`
+- [ ] Fail on a raw `<img>` without `alt`, and on a link without a destination. `[P]`
+- [ ] Verify the two SVG themes declare the same viewBox and dimensions, so dark/light do not jump. `[P]`
+
+### M2.2 Determinism of the city
+
+- [ ] Render the same contribution data twice and assert byte-identical SVG (the script uses `zlib`; confirm no timestamps, no random ids, no dict-order dependence). `[P]`
+- [ ] Add a committed fixture JSON (the calendar payload) and a test that renders from it, so the generator is testable without the network. `[P]`
+- [ ] Golden-hash the fixture render; a visual change needs an intentional update. `[P]`
+- [ ] Assert the SVG contains no `<script>`, no external `href`, and no `<image>` — GitHub sanitises, but a generated asset must not rely on that. `[P]`
+
+### M2.3 Third-party dependency policy
+
+- [ ] List the six external hosts with what breaks if each goes down, in a short `docs/DEPENDENCIES.md`. `[P]`
+- [ ] Pin the image URLs' parameters (`theme`, `perline`, sizes) so an upstream default change cannot silently alter the page. `[P]`
+- [ ] Replace anything with a self-hosted equivalent where cost is zero (e.g. generate the header locally as a static SVG). `[P]`
+- [ ] Check the third-party hosts' terms allow hotlinking from a profile page; record the finding. `[P]`
+
+### M2.4 Privacy and safety
+
+- [ ] Confirm no personal data beyond the public email, city and employer names; add a rule in `docs/` about what never goes on the profile. `[P]`
+- [ ] The resume PDF is a live third-party URL; add a check that it exists and that it contains no phone number or address (open it, read the header block). `[P]`
+- [ ] Add `SECURITY.md` (contact, no bug bounty, response window) because the profile invites contact. `[P]`
+
+---
+
+## Phase 3 — Perfective
+
+### M3.1 The table becomes data
+
+**Why:** the project table and the badge row are hand-typed, so a link and its label
+can diverge and a claim change is a text edit.
+**Done when:** both render from one file.
+
+- **m3.1.1 Data**
+  - [ ] Move the project table's data to `projects.json` (name, repo, one-line claim, live URL, claim source) and generate the table; a claim change becomes a data edit. `[F]`
+  - [ ] Generate the badge row from the same data so a link and its label cannot diverge. `[F]`
+- **m3.1.2 Checks**
+  - [ ] A check that every `live URL` in `projects.json` answers 200 within 10 s, and that every claim has a `source` field. `[F]`
+
+### M3.2 The city asset
+
+**Why:** the two SVGs are 272 KB combined and carry no accessible text; `city.py`
+is 267 lines in one file.
+**Done when:** each SVG is under 100 KB with `<title>`/`<desc>`, and the generator is
+three modules.
+
+- **m3.2.1 Size and accessibility**
+  - [ ] Cut SVG size: target under 100 KB each with path simplification and shared defs. `[F]`
+  - [ ] Add `<title>` and `<desc>` to both SVGs so a screen reader announces the year and total, not "image". `[F]`
+- **m3.2.2 Generator shape**
+  - [ ] Reduce `city.py`'s 267 lines into render, layout and theme modules; the SVG writing stays pure functions over the fixture. `[F]`
+
+### M3.3 Automation hygiene
+
+**Why:** the workflow runs a floating `python3` on a cron that is more frequent than
+the data changes.
+**Done when:** versions are pinned and the cadence matches the data.
+
+- **m3.3.1 Pinning**
+  - [ ] Node/Python versions for the workflow pinned explicitly (no floating `python3`), with the version in `docs/`. `[F]`
+- **m3.3.2 Cadence**
+  - [ ] Replace the daily cron with a schedule that matches the data's update rate and add `workflow_dispatch` with a `--year` input. `[F]`
+
+---
+
+## Phase 4 — Widening
+
+### M4.1 Freshness without manual edits
+
+**Why:** the page claims to be current but only the city image changes.
+**Done when:** the "now" section is generated from a real source.
+
+- **m4.1.1 Now**
+  - [ ] Add a "What I am working on now" section, generated from the most recently pushed public repository, so the page stays current without manual edits. `[W]`
+- **m4.1.2 Writing**
+  - [ ] Add a compact "Selected writing" or "Notes" section only if real posts exist; never placeholder links. `[W]`
+
+### M4.2 Live surfaces
+
+**Why:** three demo links exist and none is checked.
+**Done when:** every demo link is verified and its cold-start state is visible.
+
+- **m4.2.1 Demo links**
+  - [ ] Add per-project demo links that are checked automatically, and mark any that are cold-starting (Render free tier) with a note. `[W]`
+- **m4.2.2 Growth**
+  - [ ] Add an "archive" section for older projects, collapsed, so the main table stays short as the portfolio grows. `[W]`
+  - [ ] Add a machine-readable `profile.json` (projects, links, stack) so the table, badges and a future personal site all read one source. `[W]`
+
+---
+
+## Phase 5 — Depth
+
+### M5.1 First-screen craft
+
+Method: `design-ux` §1 — the page has one screen above the fold; judge that
+screen, not the whole file.
+
+- [ ] Screenshot the rendered profile at 360/768/1440 in light and dark, into `docs/screenshots/before/`. `[D]`
+- [ ] Above the fold: name, one sentence, three links. Measure what is actually visible at 360×640 and move anything that pushes the sentence out. `[D]`
+- [ ] Type and spacing consistency across sections; no section uses a different heading level for the same weight. `[D]`
+- [ ] Table at 360 px: two columns fit; verify no horizontal scroll and that long project names wrap cleanly. `[D]`
+- [ ] Colour: the four badge colours and the city theme agree; check contrast of badge text at 4.5:1. `[D]`
+
+### M5.2 The city as a data graphic
+
+- [ ] Every building height maps to a stated quantity (contributions per day) and the legend says so; today the mapping is implicit. `[D]`
+- [ ] Add a text alternative with the same information: total contributions, longest streak, busiest month, rendered as one line under the image. `[D]`
+- [ ] Colour-blind check on the six levels: the ramp must be distinguishable in the most common deficiency, or a pattern/label added. `[D]`
+- [ ] Reduced-motion: if any animation exists in the SVG, gate it behind `prefers-reduced-motion`. `[D]`
+
+### M5.3 Claim audit depth
+
+- [ ] For each of the nine projects, record the exact file and line that supports the profile sentence; store it in `projects.json` as `claim_source`. `[D]`
+- [ ] Re-audit quarterly with a checklist: number, live link, licence, last commit date. `[D]`
+- [ ] Remove any project that has not been touched in a year and has no live demo, or move it to the archive section with the date. `[D]`
+
+---
+
+## Phase 6 — Enterprise (profile as a maintained artefact)
+
+### M6.1 Cadence and provenance
+
+**Why:** nobody knows when the profile was last reviewed, and a stale SVG cannot be
+identified from the file itself.
+**Done when:** a review date is recorded and the asset names its generator.
+
+- **m6.1.1 Review cadence**
+  - [ ] Ownership and cadence: a quarterly review with a recorded date, and the reviewer checklist in `docs/REVIEW.md`. `[E]`
+- **m6.1.2 Generator provenance**
+  - [ ] Release discipline for the generator: tags, a changelog, and a note in the job log naming the script commit that produced the current assets. `[E]`
+  - [ ] Embedded provenance: the SVG carries a comment with generator version, data range and commit, so a stale image can be identified from the file alone. `[E]`
+
+### M6.2 Failure and accessibility
+
+**Why:** the job can fail silently and accessibility is asserted, not tested.
+**Done when:** a failed run is visible and the claim is scoped.
+
+- **m6.2.1 Runbook**
+  - [ ] Runbook: cron job failed, GraphQL rate-limited, an external image host is down, a live demo is offline, a claim is disputed. `[E]`
+- **m6.2.2 Accessibility statement**
+  - [ ] What is verified (alt text, contrast, text alternative) and what is not (screen-reader testing on every platform). `[E]`
+
+### M6.3 Succession
+
+**Why:** the profile only makes sense with the owner's memory.
+**Done when:** someone else can update it from the files.
+
+- **m6.3.1 Handover**
+  - [ ] The README, `projects.json` and the scripts are enough for someone else to update the profile without the owner's memory. `[E]`
+
+---
+
+## 7. Execution model: waves, effort, exit gates
+
+Effort: **S** ≤ 1 day, **M** 2–3 days.
+
+| Wave | Days | Objective | Majors | Effort | Gate |
+|---|---|---|---|---|---|
+| **W0** | 1–2 | Claim integrity, links, pinned automation, a failure path | M1.1–M1.4 | M+S+S+S | every claim names its source; no external link 404s; the workflow pins its actions by SHA; a failed run opens an issue or fails loudly |
+| **W1** | 2–3 | CI, determinism, third-party policy, privacy | M2.1–M2.4 | M+S+S+S | CI regenerates the assets and diffs them; `city.py` is deterministic from a fixture; the host list is documented |
+| **W2** | 3–4 | Data-driven table, city size/accessibility, automation hygiene | M3.1–M3.3 | M+M+S | `projects.json` is the only source; each SVG < 100 KB with title/desc; versions pinned |
+| **W3** | 4–5 | Freshness, live surfaces, machine-readable profile | M4.1–M4.2 | M+S | demo links checked automatically; `profile.json` exists |
+| **W4** | 5–6 | First-screen craft, city as a data graphic, claim depth | M5.1–M5.3 | M+M+S | each claim has a click-path a stranger can follow |
+| **W5** | quarter | Cadence, provenance, runbook, succession | M6.1–M6.3 | S×3 | a stale asset identifies itself; a second person updates it |
+
+Wave rules: W0 is one afternoon of work and removes the only claims that could be
+called wrong. W1's determinism test is what makes W2's generator split safe.
+
+---
+
+## 8. Dependencies and the critical path
+
+```
+M1.1 (claims)        → M5.3 (claim depth)
+M1.3 (pinned actions)→ M2.1 (CI guard)         → M3.3 (hygiene)
+M1.4 (failure path)  → M6.2 (runbook)
+M2.2 (determinism)   → M3.2 (city refactor)
+M3.1 (projects.json) → M4.2 (profile.json)
+```
+
+Critical path: **M1.1 → M3.1 → M4.2**. The profile is a claim surface; making the
+claims data is what lets every later surface share one source.
+
+Do not start: M3.2 before M2.2 (refactoring the generator without a determinism test);
+M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem).
+
+---
+
+## 9. Verification harness (commands that exist today)
+
+| Purpose | Command | Status |
+|---|---|---|
+| Generate city assets | `python .github/city.py` (stdlib only: `json`, `math`, `os`, `sys`, `urllib.request`; 267 lines) | exists |
+| Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout@v4`) | exists; actions pinned by tag, not SHA |
+| **Any test** | — | **missing** (M2.1) |
+| **Determinism check** | — | **missing** (M2.2) |
+| **Link check** | — | **missing** (M1.2) |
+| **Claim audit** | — | **missing** (M1.1) |
+
+---
+
+## 10. Risk register
+
+| # | Risk | Prob | Impact | Detection | Mitigation |
+|---|---|---|---|---|---|
+| R1 | "17 providers" and "LoRA-tuned ModernBERT" are unverifiable as phrased | High | Credibility | claim audit (M1.1) | name the measured number (9 providers) or cite the repo |
+| R2 | Daily job fails silently, leaving a stale image | Med | Wrong impression | no failure path | M1.4 |
+| R3 | Actions pinned by tag (`@v4`), not SHA | Med | Supply chain | `contrib-city.yml:16` | M1.3 |
+| R4 | 272 KB of SVG on a mobile profile view | Med | Slow first paint | file size | M3.2 |
+| R5 | Six third-party image hosts can change or die | Med | Broken header | no check | M2.3 |
+| R6 | Table and badge text typed by hand | High | Divergence | manual | M3.1 |
+| R7 | No `alt` on some badges | Low | Accessibility | `README.md` audit | M1.2 |
+| R8 | Demo links on free tiers cold-start | Certain | "offline" impression | unchecked | M4.2 |
+| R9 | Generator untested, 267 lines | Med | Silent SVG corruption | none | M2.2 |
+| R10 | No recorded review date | High | Staleness | none | M6.1 |
+
+---
+
+## 11. PR batching and rollback
+
+| Batch | Contents | Rollback |
+|---|---|---|
+| B1 | claim fixes + source fields | revert README |
+| B2 | action pinning + failure path | revert workflow |
+| B3 | determinism fixture + check | revert |
+| B4 | `projects.json` + generated table/badges | revert; table returns to hand-written |
+| B5 | city size/accessibility + generator split | revert assets |
+
+Rollback rules: generated assets are replaced only with their producer command; a
+claim that cannot be sourced is deleted, not softened.
+
+---
+
+## 12. Progress metrics
+
+| Metric | Now (measured) | W1 | W3 | How measured |
+|---|---|---|---|---|
+| README lines | 41 | 40–60 | 60–90 | `wc -l` |
+| Claims with a source field | unknown | 100% | 100% | `projects.json` |
+| Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
+| SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
+| Third-party hosts | 6 | documented | documented | host list |
+| Tests | 0 | ≥1 (determinism) | + link check | file list |
+| Actions pinned by SHA | 0 | 1 | 1 | workflow |
+
+---
+
+## Appendix A — Blocked on the owner
+
+- Which projects stay on the front table versus the archive, and whether the archive section should exist at all.
+- The exact provider count for Nexus (repo-level truth decides; the profile follows).
+- Whether the resume PDF may be regenerated or must stay as published.
+- Whether to self-host the header image (removes one third-party dependency).
+- Licence choice for this repository (none today); a `LICENSE` for the generator and assets.
+
+## Appendix B — Definition of done
+
+1. Every claim on the page has a `claim_source` in `projects.json`, and `check_claims.py` passes.
+2. Links checked, images have `alt`, both SVG themes regenerate byte-identically from the committed fixture.
+3. The daily job fails loudly and leaves the previous assets untouched on any error.
+4. The page is readable with images blocked and with a screen reader: name, sentence, links, and a text alternative for the city.
+5. No private data anywhere in the tree or the published resume.
+
+## Appendix C — Evidence ledger
+
+| Claim | Command | Result | Status |
+|---|---|---|---|
+| README is 41 lines | `wc -l < README.md` | 41 | verified-here |
+| Two SVGs, 272 KB | `ls -l assets` | 143,082 + 129,218 B | verified-here |
+| `city.py` 267 lines, stdlib only | `wc -l .github/city.py`, `grep '^import'` | 267; json, math, os, sys, urllib.request | verified-here |
+| `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | v4 / write / `0 0 * * *` | verified-here |
+| Nine distinct providers named in Nexus | `grep -rhoE '"(anthropic\|deepseek\|gemini\|groq\|mistral\|ollama\|openai\|openrouter\|xai)"' Nexus/packages/llm/src \| sort -u` | 9 | verified-here |
+| "17 providers" | `README.md:20` | no definition of the number | needs-verify |
+| "LoRA-tuned ModernBERT" | `README.md:21`; absent from `FinScrape/README.md` | unsupported phrasing | needs-verify |
+| Alt text on badges | inspected `<img>` tags | badges carry no `alt` | verified-here |
+
+## 13. Journal
+
+- 2026-11-23 m1.1.1 [x] project rows rewritten to repo-backed sentences (KeyRouter provider style, Ping PAKE/AES) | proof: `grep -nE 'KeyRouter|Ping' README.md` → both rows now quote their own README | next: m1.1.2
