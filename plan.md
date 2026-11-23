@@ -74,7 +74,8 @@ under a minute, and a mismatch fails a check.
   - verified-here: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match anywhere in the tree; `FinScrape/docs/BACKFILL.md:82` says "No LoRA was published". Row now says "Laya (a small fine-tuned classifier), the LLM and keywords" (`FinScrape/README.md:33`) and keeps `$0/month` (`FinScrape/README.md:8`).
 - [x] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
   - verified-here: `for u in <5 urls>; do curl -s -o /dev/null -w "%{http_code}" -m 25 -L "$u"; done` → portfolio 200, resume PDF 200 (`application/pdf`, 58,916 B), winfin.pages.dev 200 (`<title>FinScrape — See what moves markets…`), yash-awasthi.github.io/LobIQ/ 200 (`<title>LobIQ demo reports`), nexus-iosc.onrender.com 200 after **45.8 s** cold start (Render free tier; SPA, no `<title>`, `apple-mobile-web-app-title` = Nexus). LinkedIn returns 999 to `curl` (bot wall, not a 404) → needs-verify: 2026-11-23 li-at-909a62293 | M4.2 needs the Nexus cold-start note.
-- [ ] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
+- [x] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
+  - verified-here: `python3 scripts/check_claims.py` → `9 rows, 0 problem(s)` exit 0; with the Nexus row edited to "42 providers" → `FAIL Nexus: row claims 42 providers, apps/api/src/lib/provider-keys.ts has 39`, exit 1. Sibling checkouts are used when present, else `raw.githubusercontent.com/.../HEAD/<path>` (fallback proven by re-pointing `ROOT` at `scripts/`). Local interpreter on this box is `FinScrape/.venv/Scripts/python.exe` (3.14.8): no `python`/`python3` is on PATH.
 
 ### M1.2 Fix the broken or unverifiable presentation bits
 
@@ -304,6 +305,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 |---|---|---|
 | Generate city assets | `python .github/city.py` (stdlib only: `json`, `math`, `os`, `sys`, `urllib.request`; 267 lines) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout@v4`) | exists; actions pinned by tag, not SHA |
+| **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
 | **Any test** | — | **missing** (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
 | **Link check** | — | **missing** (M1.2) |
@@ -392,3 +394,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.1.2 [x] Nexus "17 providers" → 39, the count of `DRIVER_FACTORIES` | proof: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 | next: m1.1.3
 - 2026-11-23 m1.1.3 [x] FinScrape "LoRA-tuned ModernBERT" removed; row quotes FinScrape's own README | proof: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match; `grep -n "fine-tuned classifier" FinScrape/README.md` → :33 | next: m1.1.4
 - 2026-11-23 m1.1.4 [x] five live links checked | proof: `curl -s -o /dev/null -w "%{http_code}" -m 25 -L <url>` → 200 ×5 (Nexus 45.8 s cold start) | next: m1.1.5
+- 2026-11-23 m1.1.5 [x] `scripts/check_claims.py` guards all 9 rows | proof: `python3 scripts/check_claims.py` → `9 rows, 0 problem(s)`; with "42 providers" → exit 1 | next: m1.2.1
