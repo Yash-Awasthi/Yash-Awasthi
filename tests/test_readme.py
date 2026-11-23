@@ -40,11 +40,34 @@ class TableTest(unittest.TestCase):
 
     def test_readme_is_in_sync_with_the_data(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertEqual(readme, gen.replace_block(readme, gen.render_block(self.data)))
+        self.assertEqual(readme, gen.render_readme(readme, self.data))
 
     def test_a_missing_marker_block_is_an_error_not_a_rewrite(self):
         with self.assertRaises(SystemExit):
-            gen.replace_block("# no block here\n", "x")
+            gen.replace_block("# no block here\n", "projects", "x")
+
+
+class BadgeTest(unittest.TestCase):
+    def setUp(self):
+        self.data = gen.load()
+
+    def test_every_link_gets_one_badge_with_its_alt_and_url(self):
+        row = gen.render_badges(self.data["profile"]["links"])
+        for link in self.data["profile"]["links"]:
+            self.assertIn(f"[![{link['alt']}]", row)
+            self.assertIn(f"]({link['url']})", row)
+        self.assertEqual(row.count("[!["), len(self.data["profile"]["links"]))
+
+    def test_appearance_parameters_are_pinned(self):
+        row = gen.render_badges(self.data["profile"]["links"])
+        for fragment in ("style=flat-square", "logoColor=white", "labelColor=555"):
+            self.assertEqual(row.count(fragment), len(self.data["profile"]["links"]), fragment)
+
+    def test_a_changed_link_changes_the_row(self):
+        links = [{"label": "A", "url": "https://a.example", "alt": "A — a.example",
+                  "color": "000000", "logo": "github"}]
+        self.assertIn("https://a.example", gen.render_badges(links))
+        self.assertIn("badge/A-000000", gen.render_badges(links))
 
 
 if __name__ == "__main__":

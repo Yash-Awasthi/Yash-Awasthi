@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Render the README's project table from projects.json, so a claim is a data edit.
+"""Render the README's project table and badge row from projects.json.
 
-    python3 scripts/gen_readme.py --write   # rewrite the block in README.md
+A claim becomes a data edit, and a link cannot drift from its label.
+
+    python3 scripts/gen_readme.py --write   # rewrite the generated blocks
     python3 scripts/gen_readme.py --check   # exit 1 if README.md has drifted
 
-The generated block sits between `<!-- projects:start -->` and
-`<!-- projects:end -->`. Everything outside those markers is hand-written.
+Two generated blocks, each between markers; everything outside them is
+hand-written:
+
+    <!-- badges:start --> … <!-- badges:end -->
+    <!-- projects:start --> … <!-- projects:end -->
 """
 from __future__ import annotations
 
@@ -17,8 +22,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 PROJECTS = ROOT / "projects.json"
-START = "<!-- projects:start -->"
-END = "<!-- projects:end -->"
+BLOCKS = {
+    "badges": ("<!-- badges:start -->", "<!-- badges:end -->"),
+    "projects": ("<!-- projects:start -->", "<!-- projects:end -->"),
+}
 
 
 def load() -> dict:
@@ -35,38 +42,55 @@ def render_table(projects: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def render_block(data: dict) -> str:
-    return f"{START}\n{render_table(data['projects'])}\n{END}"
+def badge(link: dict) -> str:
+    url = (f'https://img.shields.io/badge/{link["label"]}-{link["color"]}'
+           f'?style=flat-square&logo={link["logo"]}&logoColor=white&labelColor=555')
+    return f'[![{link["alt"]}]({url})]({link["url"]})'
 
 
-def replace_block(readme: str, block: str) -> str:
-    start = readme.find(START)
-    end = readme.find(END)
+def render_badges(links: list[dict]) -> str:
+    return " ".join(badge(link) for link in links)
+
+
+def render_block(kind: str, body: str) -> str:
+    start, end = BLOCKS[kind]
+    return f"{start}\n{body}\n{end}"
+
+
+def replace_block(readme: str, kind: str, body: str) -> str:
+    start_marker, end_marker = BLOCKS[kind]
+    start = readme.find(start_marker)
+    end = readme.find(end_marker)
     if start < 0 or end < 0 or end < start:
-        raise SystemExit(f"README.md has no {START} … {END} block; add the markers once, by hand")
-    return readme[:start] + block + readme[end + len(END):]
+        raise SystemExit(f"README.md has no {start_marker} … {end_marker} block; add the markers once, by hand")
+    return readme[:start] + render_block(kind, body) + readme[end + len(end_marker):]
+
+
+def render_readme(readme: str, data: dict) -> str:
+    readme = replace_block(readme, "badges", render_badges(data["profile"]["links"]))
+    return replace_block(readme, "projects", render_table(data["projects"]))
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     group = ap.add_mutually_exclusive_group(required=True)
-    group.add_argument("--write", action="store_true", help="rewrite the block in README.md")
+    group.add_argument("--write", action="store_true", help="rewrite the generated blocks in README.md")
     group.add_argument("--check", action="store_true", help="exit 1 when README.md differs from the data")
     args = ap.parse_args()
 
     data = load()
     readme = README.read_text(encoding="utf-8")
-    expected = replace_block(readme, render_block(data))
+    expected = render_readme(readme, data)
 
     if args.check:
         if readme != expected:
             print("FAIL README.md is not what projects.json renders; run python3 scripts/gen_readme.py --write")
             return 1
-        print(f"ok   table {len(data['projects'])} projects, README.md matches projects.json")
+        print(f"ok   data {len(data['profile']['links'])} badges, {len(data['projects'])} projects, README.md matches")
         return 0
 
     README.write_text(expected, encoding="utf-8", newline="\n")
-    print(f"wrote {len(data['projects'])} projects into README.md")
+    print(f"wrote {len(data['profile']['links'])} badges and {len(data['projects'])} projects into README.md")
     return 0
 
 

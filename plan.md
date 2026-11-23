@@ -176,7 +176,8 @@ can diverge and a claim change is a text edit.
 - **m3.1.1 Data**
   - [x] Move the project table's data to `projects.json` (name, repo, one-line claim, live URL, claim source) and generate the table; a claim change becomes a data edit. `[F]`
     - verified-here: `python3 scripts/gen_readme.py --check` → `ok   table 9 projects, README.md matches projects.json`; editing project 1's claim in `projects.json` without regenerating → `FAIL README.md is not what projects.json renders`, exit 1. `scripts/check_claims.py` now reads `claim_source` from `projects.json` (the inline table is gone) and the README owns only a `<!-- projects:start -->…<!-- projects:end -->` block. It caught a real drift while being written: FinScrape's README had changed its cost badge from `Cost-$0%2Fmonth` to `Cost-%240%20while%20free%20tiers%20hold`, so the claim now says "Runs at $0/month on four free tiers" sourced from `README.md:8` + `docs/COST.md:3`. `python3 -m unittest discover -s tests` → `Ran 25 tests … OK` (4 new `TableTest` cases).
-  - [ ] Generate the badge row from the same data so a link and its label cannot diverge. `[F]`
+  - [x] Generate the badge row from the same data so a link and its label cannot diverge. `[F]`
+    - verified-here: `python3 scripts/gen_readme.py --check` → `ok   data 4 badges, 9 projects, README.md matches`; renaming the first link's label in `projects.json` without regenerating → `FAIL README.md is not what projects.json renders`, exit 1. Each badge is built from `label`/`url`/`alt`/`color`/`logo` with `style=flat-square`, `logoColor=white` and `labelColor=555` always pinned (`BadgeTest` asserts all three on every badge); the README badge row now sits between `<!-- badges:start -->` and `<!-- badges:end -->`. `python3 -m unittest discover -s tests` → `Ran 28 tests … OK`; markdownlint 0 errors; `check_page.py` and `check_claims.py` clean.
 - **m3.1.2 Checks**
   - [ ] A check that every `live URL` in `projects.json` answers 200 within 10 s, and that every claim has a `source` field. `[F]`
 
@@ -336,8 +337,8 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Generate city assets | `python3 .github/city.py <user> [--year YYYY] [--out DIR]` (stdlib only; 14 tests in `tests/test_city.py`) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links`; live URLs get 120 s and one retry for cold starts) | exists (M1.1, data-driven since M3.1) |
-| **Table is data** | `python3 scripts/gen_readme.py --check` (`--write` to regenerate) | exists (M3.1) |
-| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M3.1: 25 tests) |
+| **Table is data** | `python3 scripts/gen_readme.py --check` (`--write` to regenerate; covers badge row + table) | exists (M3.1) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M3.1: 28 tests) |
 | **Page guards** | `python3 scripts/check_page.py` (size budget; alt/line/viewBox next) | exists (M2.1) |
 | **CI** | `.github/workflows/check.yml` — lint, tests, claims, page guards on push; link check weekly | exists (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
@@ -387,7 +388,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 147 KB + 133 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 9 (3 image, 6 link) | documented | documented | host list |
-| Tests | 25 (`tests/test_city.py`, `tests/test_readme.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
+| Tests | 28 (`tests/test_city.py`, `tests/test_readme.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -456,3 +457,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.4.2 [x] published resume fetched, read and scanned | proof: `check_privacy.py --resume` → 58,916 B, 28,233 chars, 0 problems; contact block is email/LinkedIn/GitHub/Codeforces/CodeChef, no phone | next: m2.4.3
 - 2026-11-23 m2.4.3 [x] `SECURITY.md` with contact, no bounty, response windows | proof: file present, markdownlint 0 errors over README + SECURITY + docs, privacy check clean | W1 complete — next: m3.1.1
 - 2026-11-23 m3.1.1 [x] profile table is rendered from `projects.json`; claims read `claim_source` from it | proof: `gen_readme.py --check` → 9 projects in sync; edited claim without regenerating → exit 1; caught FinScrape's changed cost badge | next: m3.1.2
+- 2026-11-23 m3.1.2 [x] badge row rendered from the same data | proof: `gen_readme.py --check` → 4 badges + 9 projects in sync; renamed label → exit 1; 28 tests OK | next: m3.1.3

@@ -6,7 +6,9 @@
 
 Software engineer · backends, AI systems, mobile apps
 
+<!-- badges:start -->
 [![Portfolio — yash-portfolio-nine-navy.vercel.app](https://img.shields.io/badge/Portfolio-3d5bd9?style=flat-square&logo=vercel&logoColor=white&labelColor=555)](https://yash-portfolio-nine-navy.vercel.app) [![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi](https://img.shields.io/badge/LinkedIn-2a8f8a?style=flat-square&logo=linkedin&logoColor=white&labelColor=555)](https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293) [![Resume — PDF on the portfolio site](https://img.shields.io/badge/Resume-5b5fc7?style=flat-square&logo=readthedocs&logoColor=white&labelColor=555)](https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf) [![Email — yashvaibhav.job@gmail.com](https://img.shields.io/badge/Email-237a94?style=flat-square&logo=gmail&logoColor=white&labelColor=555)](mailto:yashvaibhav.job@gmail.com)
+<!-- badges:end -->
 
 </div>
 
