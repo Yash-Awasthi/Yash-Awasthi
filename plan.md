@@ -108,7 +108,8 @@ rate limit, an auth failure or a partial response, today's behaviour decides
 whether the committed image is stale, empty, or mangled.
 **Done when:** a failed fetch leaves the previous asset untouched and the job goes red.
 
-- [ ] Treat any non-200, `errors` payload or empty calendar as a failure: exit non-zero, write nothing. `[C]`
+- [x] Treat any non-200, `errors` payload or empty calendar as a failure: exit non-zero, write nothing. `[C]`
+  - verified-here: `python3 -m unittest discover -s tests` → `Ran 7 tests … OK` (6 of them error against the old `fetch`: `FAILED (errors=6)` with the change stashed); end to end `GITHUB_TOKEN=not-a-real-token python3 .github/city.py Yash-Awasthi` → `city.py: GraphQL HTTP 401 Unauthorized (assets left untouched)`, exit 1, `sha1sum -c` → both SVGs `OK`.
 - [ ] Write to a temp path and `os.replace` both files only after both render successfully, so a crash cannot leave one theme updated and the other stale. `[C]`
 - [ ] Log the contribution total and the date range rendered, so a silently empty year is visible in the job log. `[C]`
 - [ ] Add `--year` and `--out` flags so the script can be run locally without touching `assets/`. `[C]`
@@ -316,7 +317,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Generate city assets | `python .github/city.py` (stdlib only: `json`, `math`, `os`, `sys`, `urllib.request`; 267 lines) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
-| **Any test** | — | **missing** (M2.1) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M1.4: 7 fetch/parse tests) |
 | **Determinism check** | — | **missing** (M2.2) |
 | **Link check** | — | **missing** (M1.2) |
 | **Claim audit** | — | **missing** (M1.1) |
@@ -364,7 +365,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 6 | documented | documented | host list |
-| Tests | 0 | ≥1 (determinism) | + link check | file list |
+| Tests | 7 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -413,3 +414,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.3.2 [x] commit step refuses to push when the branch moved | proof: scratch-repo rehearsal of the step → CASE1 exit 0, CASE2 guard fires (HEAD~1 ≠ origin/master), CASE3 push ok | next: m1.3.3
 - 2026-11-23 m1.3.3 [x] least-privilege default, write only on the generating job | proof: `yaml.safe_load` → workflow `contents: read`, job `generate` `contents: write` | next: m1.3.4
 - 2026-11-23 m1.3.4 [x] `concurrency: contrib-city` added (timeout was already 10) | proof: `yaml.safe_load` → concurrency + timeout-minutes 10 | next: m1.4.1
+- 2026-11-23 m1.4.1 [x] bad fetch (HTTP error, non-200, `errors`, empty calendar) fails instead of rendering | proof: `python3 -m unittest discover -s tests` → 7 OK (6 fail on the old code); live 401 → exit 1, SVGs unchanged | next: m1.4.2
