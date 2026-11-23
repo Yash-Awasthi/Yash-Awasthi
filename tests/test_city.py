@@ -88,5 +88,47 @@ class FetchTest(unittest.TestCase):
         self.assertEqual(weeks, [[("2026-11-01", 3)]])
 
 
+class WriteTest(unittest.TestCase):
+    WEEKS = [[("2026-11-0%d" % (d + 1), d) for d in range(7)]]
+
+    def setUp(self):
+        import tempfile
+        self.dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.dir, ignore_errors=True)
+
+    def test_both_themes_are_written(self):
+        written = city.write_assets(self.WEEKS, self.dir)
+        names = sorted(p.name for p in Path(self.dir).iterdir())
+        self.assertEqual(names, ["city-dark.svg", "city-light.svg"])
+        self.assertEqual(len(written), 2)
+
+    def test_a_render_crash_leaves_the_previous_assets_untouched(self):
+        city.write_assets(self.WEEKS, self.dir)
+        before = {p.name: p.read_bytes() for p in Path(self.dir).iterdir()}
+        real_render, calls = city.render, []
+
+        def render_then_fail(weeks, theme):
+            calls.append(theme)
+            if len(calls) == 2:
+                raise RuntimeError("theme 2 exploded")
+            return real_render(weeks, theme)
+
+        city.render = render_then_fail
+        try:
+            with self.assertRaises(RuntimeError):
+                city.write_assets(self.WEEKS, self.dir)
+        finally:
+            city.render = real_render
+        after = {p.name: p.read_bytes() for p in Path(self.dir).iterdir()}
+        self.assertEqual(before, after, "a failed render must not replace either theme")
+
+    def test_no_temp_files_are_left_behind(self):
+        city.write_assets(self.WEEKS, self.dir)
+        self.assertFalse([p for p in Path(self.dir).iterdir() if p.name.startswith(".city-")])
+
+
 if __name__ == "__main__":
     unittest.main()
