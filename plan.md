@@ -70,7 +70,8 @@ under a minute, and a mismatch fails a check.
   - verified-here: `grep -nE 'KeyRouter|Ping' README.md` → KeyRouter row now says "OpenAI- or Anthropic-style" and expiring `sk-gw-` keys (KeyRouter/README.md:3,5); Ping row now says gesture-keyed PAKE on P-256 + AES-256-GCM over BLE (Ping/README.md:45,152,156), replacing the narrower "ECDH" wording. The other 7 rows matched their repository README as written.
 - [x] Nexus row: replace "17 providers" with the number the Nexus README or code supports, or drop the count. `[C]`
   - verified-here: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39; the README row now reads "39 providers behind one streaming API". The plan's earlier "9 distinct providers" figure was a partial grep and is corrected in §0.
-- [ ] FinScrape row: confirm the LoRA/ModernBERT claim in FinScrape's tree; if unverified, remove it. `[C]`
+- [x] FinScrape row: confirm the LoRA/ModernBERT claim in FinScrape's tree; if unverified, remove it. `[C]`
+  - verified-here: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match anywhere in the tree; `FinScrape/docs/BACKFILL.md:82` says "No LoRA was published". Row now says "Laya (a small fine-tuned classifier), the LLM and keywords" (`FinScrape/README.md:33`) and keeps `$0/month` (`FinScrape/README.md:8`).
 - [ ] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
 - [ ] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
 
@@ -381,10 +382,11 @@ claim that cannot be sourced is deleted, not softened.
 | `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | v4 / write / `0 0 * * *` | verified-here |
 | Nine distinct providers named in Nexus | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` | 39 | verified-here |
 | "17 providers" | `README.md:20` | was stale; row now says 39 | verified-here |
-| "LoRA-tuned ModernBERT" | `README.md:21`; absent from `FinScrape/README.md` | unsupported phrasing | needs-verify |
+| "LoRA-tuned ModernBERT" | `grep -rniE "modernbert" --exclude-dir=.venv FinScrape`; absent from `FinScrape/README.md` | no match in tree; row now says "Laya (a small fine-tuned classifier)" | verified-here |
 | Alt text on badges | inspected `<img>` tags | badges carry no `alt` | verified-here |
 
 ## 13. Journal
 
 - 2026-11-23 m1.1.1 [x] project rows rewritten to repo-backed sentences (KeyRouter provider style, Ping PAKE/AES) | proof: `grep -nE 'KeyRouter|Ping' README.md` → both rows now quote their own README | next: m1.1.2
 - 2026-11-23 m1.1.2 [x] Nexus "17 providers" → 39, the count of `DRIVER_FACTORIES` | proof: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 | next: m1.1.3
+- 2026-11-23 m1.1.3 [x] FinScrape "LoRA-tuned ModernBERT" removed; row quotes FinScrape's own README | proof: `grep -rniE "modernbert" --exclude-dir=.venv FinScrape` → no match; `grep -n "fine-tuned classifier" FinScrape/README.md` → :33 | next: m1.1.4
