@@ -6,7 +6,7 @@
 
 Software engineer · backends, AI systems, mobile apps
 
-[![Portfolio — yash-portfolio-nine-navy.vercel.app](https://img.shields.io/badge/Portfolio-3d5bd9?style=flat-square&logo=vercel&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app) [![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi](https://img.shields.io/badge/LinkedIn-2a8f8a?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293) [![Resume — PDF on the portfolio site](https://img.shields.io/badge/Resume-5b5fc7?style=flat-square&logo=readthedocs&logoColor=white)](https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf) [![Email — yashvaibhav.job@gmail.com](https://img.shields.io/badge/Email-237a94?style=flat-square&logo=gmail&logoColor=white)](mailto:yashvaibhav.job@gmail.com)
+[![Portfolio — yash-portfolio-nine-navy.vercel.app](https://img.shields.io/badge/Portfolio-3d5bd9?style=flat-square&logo=vercel&logoColor=white&labelColor=555)](https://yash-portfolio-nine-navy.vercel.app) [![LinkedIn — linkedin.com/in/yash-vaibhav-awasthi](https://img.shields.io/badge/LinkedIn-2a8f8a?style=flat-square&logo=linkedin&logoColor=white&labelColor=555)](https://www.linkedin.com/in/yash-vaibhav-awasthi-909a62293) [![Resume — PDF on the portfolio site](https://img.shields.io/badge/Resume-5b5fc7?style=flat-square&logo=readthedocs&logoColor=white&labelColor=555)](https://yash-portfolio-nine-navy.vercel.app/Yash-Vaibhav-Awasthi-Resume.pdf) [![Email — yashvaibhav.job@gmail.com](https://img.shields.io/badge/Email-237a94?style=flat-square&logo=gmail&logoColor=white&labelColor=555)](mailto:yashvaibhav.job@gmail.com)
 
 </div>
 
@@ -36,7 +36,7 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 **Stack:** TypeScript · Python · Kotlin · C++ · React · Next.js · Node.js · FastAPI · PostgreSQL · Redis · AWS · Cloudflare · Docker · Three.js
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14" alt=""/>
+  <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14&theme=light" alt=""/>
 </p>
 
 ## Certifications

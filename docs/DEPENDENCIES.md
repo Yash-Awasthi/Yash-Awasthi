@@ -34,6 +34,18 @@ does.
    silently restyle the page.
 4. A host whose terms forbid hotlinking gets replaced, not documented.
 
+## Pinned parameters
+
+Every appearance-affecting parameter is spelled out in the URL, so an upstream
+default change cannot restyle the page silently:
+
+| Host | Pinned |
+|---|---|
+| `capsule-render.vercel.app` | `type`, `color` (3 stops), `height=200`, `fontSize=44`, `fontColor=ffffff`, `fontAlignY=36`, `descSize=18`, `descAlignY=58`, `descColor=eaf0f1` |
+| `img.shields.io` | `style=flat-square` × 4, `logo`, `logoColor=white`, `labelColor=555` |
+| `skillicons.dev` | `perline=14`, `theme=light` (the theme default is what would otherwise drift) |
+| `raw.githubusercontent.com` | exact branch (`master`) and file name |
+
 ## Counting the hosts
 
 ```bash

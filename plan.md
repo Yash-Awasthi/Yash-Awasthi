@@ -147,7 +147,8 @@ whether the committed image is stale, empty, or mangled.
 
 - [x] List the six external hosts with what breaks if each goes down, in a short `docs/DEPENDENCIES.md`. `[P]`
   - verified-here: `python3 scripts/check_page.py` → `ok   hosts 10 hosts, 23 URLs, all documented`. Plan corrected: the page reaches **10 hosts (23 URLs)** — 4 image hosts (`capsule-render.vercel.app`, `img.shields.io`, `skillicons.dev`, `raw.githubusercontent.com`) and 6 link hosts — not six. The doc gives each host what it serves and what breaks, plus a rule that `check_page.py` fails when README gains an undocumented host; pointing the icons at `icons.example.org` → `FAIL icons.example.org is used by README.md but not listed in docs/DEPENDENCIES.md`, exit 1.
-- [ ] Pin the image URLs' parameters (`theme`, `perline`, sizes) so an upstream default change cannot silently alter the page. `[P]`
+- [x] Pin the image URLs' parameters (`theme`, `perline`, sizes) so an upstream default change cannot silently alter the page. `[P]`
+  - verified-here: `grep -o 'https://img.shields.io/badge/[^)]*' README.md` → all 4 badges end `&labelColor=555`; `grep -o 'perline=14[^"]*' README.md` → `perline=14&theme=light`; each of the 5 image URLs still answers 200 (`curl -s -o /dev/null -w '%{http_code}'`), and `docs/DEPENDENCIES.md` now has a *Pinned parameters* table listing every appearance-affecting parameter per host, including capsule-render's `height`/`fontSize`/`descSize`.
 - [ ] Replace anything with a self-hosted equivalent where cost is zero (e.g. generate the header locally as a static SVG). `[P]`
 - [ ] Check the third-party hosts' terms allow hotlinking from a profile page; record the finding. `[P]`
 
@@ -441,3 +442,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.2.3 [x] golden hash of the fixture render | proof: `unittest discover` → 19 OK; fixture day +5 → GoldenTest fails; `UPDATE_GOLDEN=1` regenerates | next: m2.2.4
 - 2026-11-23 m2.2.4 [x] generated SVGs proven inert (`unsafe_refs`) | proof: `check_page.py` → `ok inert`; injected `<image href=…>` → exit 1; `unittest discover` → 21 OK | next: m2.3.1
 - 2026-11-23 m2.3.1 [x] `docs/DEPENDENCIES.md` lists all 10 hosts and their failure modes; CI fails on an undocumented host | proof: `check_page.py` → `ok hosts 10 hosts, 23 URLs`; injected `icons.example.org` → exit 1 | next: m2.3.2
+- 2026-11-23 m2.3.2 [x] image URLs pin their appearance (`theme=light`, `labelColor=555`) and the doc tabulates them | proof: `grep -o 'img.shields.io/badge/[^)]*'` → 4× `labelColor=555`; 5 image URLs → 200 | next: m2.3.3
