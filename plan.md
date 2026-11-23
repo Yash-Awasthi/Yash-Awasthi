@@ -41,9 +41,9 @@ reproducible automation), `data-ml` §8 (measured numbers only),
 | Workflow actions | `actions/checkout@v4` (tag, not SHA), `contents: write`, cron + manual | — | `contrib-city.yml` |
 | Bot commits | daily commit to `assets/` when the diff is non-empty | — | `contrib-city.yml:24-27` |
 | External images | capsule-render, shields.io ×4, skillicons.dev, raw.githubusercontent | 6 third-party hosts | `README.md` |
-| Provider count | profile says "17 providers"; `Nexus/packages/llm/src` names **9 distinct providers** (`anthropic`, `deepseek`, `gemini`, `groq`, `mistral`, `ollama`, `openai`, `openrouter`, `xai`) plus free-tier variants | "17 providers" | `grep -rhoE '"(anthropic\|deepseek\|gemini\|groq\|mistral\|ollama\|openai\|openrouter\|xai)"' Nexus/packages/llm/src \| sort -u` → 9 |
-| FinScrape claim | profile says "LoRA-tuned ModernBERT" | not stated in FinScrape README | `README.md:23`, `FinScrape/README.md` |
-| Alt text | present on header, stack icons, city image; absent on the 4 badge links? | — | `README.md:3-5` |
+| Provider count | profile says "17 providers"; `Nexus/apps/api/src/lib/provider-keys.ts` `DRIVER_FACTORIES` names **39 providers** a key can be added for (`packages/llm/src/drivers/index.ts` defines 43 driver classes, 4 of them local/self-hosted entry points) | "17 providers" | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 |
+| FinScrape claim | profile says "LoRA-tuned ModernBERT" | ModernBERT appears nowhere in FinScrape's tree; `docs/BACKFILL.md:82` says "No LoRA was published"; the classifier is Laya (`scripts/laya_train/train.py`, base `convaiinnovations/laya`) | `README.md:23`, `FinScrape/README.md` |
+| Alt text | present on header, stack icons, city image, and on all 4 badge links (`![Portfolio](…)` etc. — the badge alt is the label) | — | `README.md:3-5` |
 
 Invariants:
 
@@ -68,7 +68,8 @@ under a minute, and a mismatch fails a check.
 
 - [x] Rewrite each project row to one verifiable sentence, quoting the number only where the project's own README states it. `[C]`
   - verified-here: `grep -nE 'KeyRouter|Ping' README.md` → KeyRouter row now says "OpenAI- or Anthropic-style" and expiring `sk-gw-` keys (KeyRouter/README.md:3,5); Ping row now says gesture-keyed PAKE on P-256 + AES-256-GCM over BLE (Ping/README.md:45,152,156), replacing the narrower "ECDH" wording. The other 7 rows matched their repository README as written.
-- [ ] Nexus row: replace "17 providers" with the number the Nexus README or code supports, or drop the count. `[C]`
+- [x] Nexus row: replace "17 providers" with the number the Nexus README or code supports, or drop the count. `[C]`
+  - verified-here: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39; the README row now reads "39 providers behind one streaming API". The plan's earlier "9 distinct providers" figure was a partial grep and is corrected in §0.
 - [ ] FinScrape row: confirm the LoRA/ModernBERT claim in FinScrape's tree; if unverified, remove it. `[C]`
 - [ ] Verify each live link returns 200 and serves the expected product (Nexus, FinScrape, LobIQ, portfolio, resume PDF). `[C]`
 - [ ] Add `scripts/check_claims.py`: for each row, the expected snippet in the target repo's README; non-zero exit on drift. `[C]`
@@ -378,11 +379,12 @@ claim that cannot be sourced is deleted, not softened.
 | Two SVGs, 272 KB | `ls -l assets` | 143,082 + 129,218 B | verified-here |
 | `city.py` 267 lines, stdlib only | `wc -l .github/city.py`, `grep '^import'` | 267; json, math, os, sys, urllib.request | verified-here |
 | `actions/checkout@v4` by tag, `contents: write`, daily cron | `grep -nE 'uses\|cron\|contents:' .github/workflows/contrib-city.yml` | v4 / write / `0 0 * * *` | verified-here |
-| Nine distinct providers named in Nexus | `grep -rhoE '"(anthropic\|deepseek\|gemini\|groq\|mistral\|ollama\|openai\|openrouter\|xai)"' Nexus/packages/llm/src \| sort -u` | 9 | verified-here |
-| "17 providers" | `README.md:20` | no definition of the number | needs-verify |
+| Nine distinct providers named in Nexus | `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` | 39 | verified-here |
+| "17 providers" | `README.md:20` | was stale; row now says 39 | verified-here |
 | "LoRA-tuned ModernBERT" | `README.md:21`; absent from `FinScrape/README.md` | unsupported phrasing | needs-verify |
 | Alt text on badges | inspected `<img>` tags | badges carry no `alt` | verified-here |
 
 ## 13. Journal
 
 - 2026-11-23 m1.1.1 [x] project rows rewritten to repo-backed sentences (KeyRouter provider style, Ping PAKE/AES) | proof: `grep -nE 'KeyRouter|Ping' README.md` → both rows now quote their own README | next: m1.1.2
+- 2026-11-23 m1.1.2 [x] Nexus "17 providers" → 39, the count of `DRIVER_FACTORIES` | proof: `awk '/^const DRIVER_FACTORIES/,/^};/' Nexus/apps/api/src/lib/provider-keys.ts \| grep -cE '^  [a-z0-9_]+:'` → 39 | next: m1.1.3
