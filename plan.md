@@ -86,7 +86,9 @@ under a minute, and a mismatch fails a check.
 - [x] `skillicons.dev` and `shields.io` are single points of failure; state the fallback (a text list) and use it in `alt`. `[C]`
   - verified-here: `sed -n '/### Stack/,/<picture>/p' README.md` → a visible `**Stack:** TypeScript · Python · … · Three.js` line (14 names, same order as the `?i=` list) now precedes the icon strip, which is marked decorative with `alt=""`.
   - deviation: the stack list is adjacent visible text rather than stuffed into the image `alt`, so a screen reader announces the stack once instead of twice. Badges keep destination-bearing alt (m1.2.1); their label text is still readable with images blocked because the link text is the badge. Host-down behaviour is recorded in m2.3.1.
-- [ ] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
+- [x] The city `<picture>` points at `master` on `raw.githubusercontent`; confirm the default branch name and add the matching repo-relative path. `[C]`
+  - verified-here: `curl -s https://api.github.com/repos/Yash-Awasthi/Yash-Awasthi | grep default_branch` → `master`; `curl -sL https://github.com/Yash-Awasthi | grep -oE 'srcset="[^"]*city-dark[^"]*"'` → `https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/city-dark.svg` (the branch in the README is the one GitHub resolves).
+  - deviation: no repo-relative path added — a profile README resolves relative URLs against `github.com/<user>/`, and `curl -o /dev/null -w '%{http_code}' https://github.com/Yash-Awasthi/assets/city-light.svg` → **404**, while the raw URL → 200. The absolute `raw.githubusercontent.com/.../master/...` form stays, so a default-branch rename is caught by the m1.1 link check and m2.1 CI, not by a silent 404.
 
 ### M1.3 Pin the automation
 
@@ -402,3 +404,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m1.2.1 [x] badge alt text names the destination | proof: `grep -oE '!\[[^]]*\]' README.md` → 4 alts with host/mailbox | next: m1.2.2
 - 2026-11-23 m1.2.2 [x] name and tagline are real text, banner decorative | proof: `head -8 README.md` → `# Yash Vaibhav Awasthi` + tagline; `wc -l < README.md` → 45 | next: m1.2.3
 - 2026-11-23 m1.2.3 [x] stack has a visible text fallback; icon strip decorative (`alt=""`) | proof: `sed -n '/### Stack/,/<picture>/p' README.md` → `**Stack:** …` line + `alt=""`; `wc -l` → 47 | deviation: text list instead of repeating it in alt | next: m1.2.4
+- 2026-11-23 m1.2.4 [x] default branch confirmed `master`; city `<picture>` URL verified as the one GitHub serves | proof: `curl -s api.github.com/repos/Yash-Awasthi/Yash-Awasthi \| grep default_branch` → master; relative path would 404 | deviation: absolute raw URL kept | next: m1.3.1
