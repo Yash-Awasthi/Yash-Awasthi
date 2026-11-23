@@ -190,5 +190,28 @@ class DeterminismTest(unittest.TestCase):
         self.assertEqual(len(digest[0]), 64)
 
 
+FIXTURE = ROOT / "tests" / "fixtures" / "calendar.json"
+
+
+class FixtureTest(unittest.TestCase):
+    """The generator must render from a committed payload, without the network."""
+
+    def setUp(self):
+        self.payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
+
+    def test_fixture_parses_into_weeks(self):
+        weeks = city.parse_calendar(self.payload)
+        self.assertEqual(len(weeks), 53)
+        self.assertEqual(weeks[0][0][0], "2025-11-23")
+        self.assertGreater(sum(n for w in weeks for _, n in w), 0)
+
+    def test_both_themes_render_from_the_fixture(self):
+        weeks = city.parse_calendar(self.payload)
+        for theme in city.THEMES:
+            svg = city.render(weeks, theme)
+            self.assertTrue(svg.startswith("<svg"))
+            self.assertTrue(svg.rstrip().endswith("</svg>"))
+
+
 if __name__ == "__main__":
     unittest.main()
