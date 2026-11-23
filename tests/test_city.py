@@ -229,5 +229,21 @@ class GoldenTest(unittest.TestCase):
                          "rendered output changed; rerun with UPDATE_GOLDEN=1 only if that is intended")
 
 
+class SafetyTest(unittest.TestCase):
+    """The asset is generated, but it must still be inert on its own."""
+
+    def test_fixture_output_holds_nothing_active(self):
+        weeks = city.parse_calendar(json.loads(FIXTURE.read_text(encoding="utf-8")))
+        for theme in city.THEMES:
+            self.assertEqual(city.unsafe_refs(city.render(weeks, theme)), [], theme)
+
+    def test_the_scanner_catches_what_it_claims_to(self):
+        self.assertTrue(city.unsafe_refs('<svg><script>alert(1)</script></svg>'))
+        self.assertTrue(city.unsafe_refs('<svg><image href="https://x/y.png"/></svg>'))
+        self.assertTrue(city.unsafe_refs('<svg><foreignObject></foreignObject></svg>'))
+        self.assertTrue(city.unsafe_refs('<svg><use href="https://x/y.svg#a"/></svg>'))
+        self.assertEqual(city.unsafe_refs('<svg><rect fill="url(#sky)"/></svg>'), [])
+
+
 if __name__ == "__main__":
     unittest.main()

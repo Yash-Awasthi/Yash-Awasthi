@@ -93,8 +93,29 @@ def check_theme_geometry() -> list[str]:
     return problems
 
 
+def load_city():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("city", ROOT / ".github" / "city.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def check_asset_safety() -> list[str]:
+    """The generated SVGs must be inert: no script, no foreign object, no external href."""
+    city = load_city()
+    problems = []
+    for svg in sorted(ASSETS.glob("*.svg")):
+        problems += [f"{svg.name} {p}" for p in city.unsafe_refs(svg.read_text(encoding="utf-8"))]
+    if not problems:
+        print("ok   inert  no script, no external href, no <image>")
+    return problems
+
+
 def main() -> int:
-    problems = check_asset_size() + check_readme_lines() + check_images_and_links() + check_theme_geometry()
+    problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
+                + check_theme_geometry() + check_asset_safety())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")

@@ -140,7 +140,8 @@ whether the committed image is stale, empty, or mangled.
   - verified-here: `tests/fixtures/calendar.json` (17,812 B, 53 weeks from 2025-11-23, two fully quiet weeks so the river branch is exercised); `python3 -m unittest discover -s tests` → `Ran 18 tests … OK` including `FixtureTest` (`parse_calendar` → 53 weeks, both themes render to well-formed `<svg>…</svg>`). No network involved.
 - [x] Golden-hash the fixture render; a visual change needs an intentional update. `[P]`
   - verified-here: `python3 -m unittest discover -s tests` → `Ran 19 tests … OK`; `tests/fixtures/golden.json` holds `dark dd89347d…` / `light 2f3c274e…` for the fixture render. Bumping one day's count in the fixture by 5 → `GoldenTest` `FAILED (failures=1)`; restored → `OK`. `UPDATE_GOLDEN=1` rewrites the file, so an intentional change is one visible commit.
-- [ ] Assert the SVG contains no `<script>`, no external `href`, and no `<image>` — GitHub sanitises, but a generated asset must not rely on that. `[P]`
+- [x] Assert the SVG contains no `<script>`, no external `href`, and no `<image>` — GitHub sanitises, but a generated asset must not rely on that. `[P]`
+  - verified-here: `python3 scripts/check_page.py` → `ok   inert  no script, no external href, no <image>`, exit 0; injecting `<image href="https://example.com/x.png"/>` into `city-dark.svg` → `FAIL city-dark.svg contains <image` + `FAIL city-dark.svg external href …`, exit 1. `python3 -m unittest discover -s tests` → `Ran 21 tests … OK` with `SafetyTest` scanning the fixture render and proving the scanner catches `<script>`, `<image>`, `<foreignObject>` and `href="https://…"` while allowing `url(#sky)`.
 
 ### M2.3 Third-party dependency policy
 
@@ -327,7 +328,7 @@ M4.x before M1.1 (adding surfaces on top of unverified claims widens the problem
 | Generate city assets | `python3 .github/city.py <user> [--year YYYY] [--out DIR]` (stdlib only; 14 tests in `tests/test_city.py`) | exists |
 | Daily refresh | `.github/workflows/contrib-city.yml` (`cron: "0 0 * * *"`, `contents: write`, `actions/checkout` pinned by SHA to v4.4.0) | exists; action pinned |
 | **Claim audit** | `python3 scripts/check_claims.py` (add `--links` to fetch every live URL) | exists (M1.1) |
-| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M2.2: 19 tests) |
+| **Any test** | `python3 -m unittest discover -s tests` (stdlib only; offline) | exists (M2.2: 21 tests) |
 | **Page guards** | `python3 scripts/check_page.py` (size budget; alt/line/viewBox next) | exists (M2.1) |
 | **CI** | `.github/workflows/check.yml` — lint, tests, claims, page guards on push; link check weekly | exists (M2.1) |
 | **Determinism check** | — | **missing** (M2.2) |
@@ -377,7 +378,7 @@ claim that cannot be sourced is deleted, not softened.
 | Provider count claim | "17" vs 9 named in Nexus | exact | exact | claim audit |
 | SVG size | 143 KB + 129 KB | same | < 100 KB each | `ls -l assets` |
 | Third-party hosts | 6 | documented | documented | host list |
-| Tests | 19 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
+| Tests | 21 (`tests/test_city.py`) | ≥1 (determinism) | + link check | `python3 -m unittest discover -s tests` |
 | Actions pinned by SHA | 1 of 1 | 1 | 1 | workflow |
 
 ---
@@ -437,3 +438,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m2.2.1 [x] rendering is deterministic inside and across processes | proof: `unittest discover` → 16 OK; real run under two hash seeds → identical md5s | next: m2.2.2
 - 2026-11-23 m2.2.2 [x] committed 53-week calendar fixture renders without network | proof: `unittest discover` → 18 OK, `FixtureTest` parses 53 weeks and renders both themes | next: m2.2.3
 - 2026-11-23 m2.2.3 [x] golden hash of the fixture render | proof: `unittest discover` → 19 OK; fixture day +5 → GoldenTest fails; `UPDATE_GOLDEN=1` regenerates | next: m2.2.4
+- 2026-11-23 m2.2.4 [x] generated SVGs proven inert (`unsafe_refs`) | proof: `check_page.py` → `ok inert`; injected `<image href=…>` → exit 1; `unittest discover` → 21 OK | next: m2.3.1
