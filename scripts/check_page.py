@@ -7,6 +7,7 @@ No network, no dependencies. Exit 1 with one FAIL line per problem.
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -120,6 +121,35 @@ PLACEHOLDERS = ("coming soon", "todo", "tbd", "lorem ipsum", "placeholder", "exa
                 "your-name", "yourname")
 
 
+def contrast_on_white(hex_colour: str) -> float:
+    """WCAG 2.1 relative contrast of white text on `hex_colour`."""
+    def channel(c: int) -> float:
+        c = c / 255
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = (channel(int(hex_colour[i:i + 2], 16)) for i in (1, 3, 5))
+    luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    return (1.05) / (luminance + 0.05)
+
+
+BADGE_MIN_CONTRAST = 4.5  # WCAG AA for normal text
+
+
+def check_badge_contrast() -> list[str]:
+    """White badge text must stay readable on every badge colour (M5.1)."""
+    data = json.loads((ROOT / "projects.json").read_text(encoding="utf-8"))
+    problems, seen = [], []
+    for link in data["profile"]["links"]:
+        ratio = contrast_on_white("#" + link["color"])
+        seen.append(f"{link['label']} {ratio:.2f}:1")
+        if ratio < BADGE_MIN_CONTRAST:
+            problems.append(f"badge {link['label']} #{link['color']} is {ratio:.2f}:1 on white text, "
+                            f"under {BADGE_MIN_CONTRAST}:1")
+    if not problems:
+        print(f"ok   a11y  {len(seen)} badge colours, contrast {' / '.join(seen)}")
+    return problems
+
+
 def check_no_placeholders() -> list[str]:
     """Sections exist because the content does, never to fill a gap (M4.1.2)."""
     text = README.read_text(encoding="utf-8").lower()
@@ -183,7 +213,7 @@ def check_hosts_documented() -> list[str]:
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
                 + check_theme_geometry() + check_asset_safety() + check_accessible_names()
-                + check_no_placeholders() + check_hosts_documented())
+                + check_no_placeholders() + check_badge_contrast() + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")
