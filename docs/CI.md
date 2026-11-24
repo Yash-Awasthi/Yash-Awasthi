@@ -7,7 +7,7 @@ change what CI checks, and a floating `python3` or `node` is exactly that risk.
 
 | Tool | Pinned to | Where |
 |:--|:--|:--|
-| Python | `3.14.8` | `.github/workflows/check.yml`, `.github/workflows/contrib-city.yml` (`actions/setup-python`) |
+| Python | `3.14.8` | `.github/workflows/check.yml`, `.github/workflows/contrib-city.yml`, `.github/workflows/audit.yml` (`actions/setup-python`) |
 | Node | `24.22.3` | `.github/workflows/check.yml` (`actions/setup-node`) |
 | markdownlint-cli2 | `0.16.0` | `npx --yes markdownlint-cli2@0.16.0` in the *Markdown lint* step |
 
@@ -35,6 +35,7 @@ curl -s https://api.github.com/repos/actions/setup-python/git/ref/tags/v7.1.0
 |:--|:--|:--|
 | `contrib-city.yml` | `30 2 * * *` | The previous UTC day's contribution count is final hours before this; a midnight run races the day boundary. |
 | `check.yml` | `0 6 * * 1` | The network-heavy checks (URLs, live demos, the published PDF) run weekly, not on every push. |
+| `audit.yml` | `0 7 1 */3 *` | The [claim audit](AUDIT.md) is a quarterly read: number, live link, licence, last commit date. Quarterly, because a project does not go stale overnight and a weekly report becomes noise. |
 
 `contrib-city.yml` also takes a manual run with an optional `year` input, which the
 job passes on as `--year`, so a past year can be re-rendered without editing the

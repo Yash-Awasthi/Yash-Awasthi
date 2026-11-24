@@ -59,6 +59,15 @@ def count_entries(text: str, name: str) -> int:
     return len(re.findall(r"^  [a-z0-9_]+:", text[start:end], re.MULTILINE))
 
 
+def line_holds(text: str, c: dict) -> bool:
+    """Is the pinned line still the line that backs the claim?"""
+    lines = text.splitlines()
+    if not 1 <= c["line"] <= len(lines):
+        return False
+    line = lines[c["line"] - 1]
+    return any(tok in line for tok in c.get("any", [])) or f"const {c.get('count')}" in line
+
+
 def check_project(p: dict) -> list[str]:
     name = p["name"]
     if not p.get("claim"):
@@ -72,6 +81,10 @@ def check_project(p: dict) -> list[str]:
         if text is None:
             problems.append(f"{name}: cannot read {target}/{c['file']}")
             continue
+        if c.get("line") is None:
+            problems.append(f"{name}: {c['file']} has no pinned line; run python3 scripts/pin_claims.py --write")
+        elif not line_holds(text, c):
+            problems.append(f"{name}: {c['file']}:{c['line']} no longer holds the claim")
         if "count" in c:
             claimed = re.search(r"(\d+) providers", p["claim"])
             actual = count_entries(text, c["count"])
@@ -129,6 +142,8 @@ def check_source(p: dict) -> list[str]:
             problems.append(f"{name}: a claim_source entry has no file")
         elif not (c.get("any") or c.get("count")):
             problems.append(f"{name}: claim_source {c['file']} has neither any[] nor count")
+        elif not isinstance(c.get("line"), int) or c["line"] < 1:
+            problems.append(f"{name}: claim_source {c['file']} pins no line")
     return problems
 
 

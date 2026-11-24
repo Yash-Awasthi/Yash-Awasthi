@@ -43,20 +43,23 @@
       "claim_source": [
         {
           "file": "apps/api/src/lib/provider-keys.ts",
-          "count": "DRIVER_FACTORIES"
+          "count": "DRIVER_FACTORIES",
+          "line": 70
         },
         {
           "file": "README.md",
           "any": [
             "Council deliberation"
-          ]
+          ],
+          "line": 127
         },
         {
           "file": "docs/FEATURES.md",
           "any": [
             "pgvector",
             "BM25"
-          ]
+          ],
+          "line": 19
         }
       ],
       "cold_start": true,
@@ -72,19 +75,22 @@
           "file": "README.md",
           "any": [
             "Laya (a small fine-tuned classifier)"
-          ]
+          ],
+          "line": 33
         },
         {
           "file": "README.md",
           "any": [
             "Cost-%240%20while%20free%20tiers%20hold"
-          ]
+          ],
+          "line": 8
         },
         {
           "file": "docs/COST.md",
           "any": [
             "The live stack costs **$0/month** on four free services"
-          ]
+          ],
+          "line": 3
         }
       ]
     },
@@ -97,7 +103,8 @@
           "file": "README.md",
           "any": [
             "personal baseline"
-          ]
+          ],
+          "line": 71
         },
         {
           "file": "backend/app/services/daily_decision.py",
@@ -106,7 +113,8 @@
             "REDUCE",
             "RECOVER",
             "REST"
-          ]
+          ],
+          "line": 15
         }
       ]
     },
@@ -119,13 +127,15 @@
           "file": "README.md",
           "any": [
             "60 fps"
-          ]
+          ],
+          "line": 46
         },
         {
           "file": "README.md",
           "any": [
             "certificate pinning"
-          ]
+          ],
+          "line": 696
         }
       ]
     },
@@ -138,13 +148,15 @@
           "file": "README.md",
           "any": [
             "sk-gw-"
-          ]
+          ],
+          "line": 3
         },
         {
           "file": "README.md",
           "any": [
             "Anthropic"
-          ]
+          ],
+          "line": 5
         }
       ]
     },
@@ -157,13 +169,15 @@
           "file": "README.md",
           "any": [
             "thirty sequential challenges"
-          ]
+          ],
+          "line": 5
         },
         {
           "file": "README.md",
           "any": [
             "traced back to their owner"
-          ]
+          ],
+          "line": 7
         }
       ]
     },
@@ -178,7 +192,8 @@
             "PAKE",
             "AES-256-GCM",
             "BLE"
-          ]
+          ],
+          "line": 14
         }
       ]
     },
@@ -194,7 +209,8 @@
             "C++23",
             "TotalView-ITCH",
             "Polymarket"
-          ]
+          ],
+          "line": 8
         }
       ]
     },
@@ -208,13 +224,15 @@
           "any": [
             "binutils",
             "GCC"
-          ]
+          ],
+          "line": 16
         },
         {
           "file": "docs/recognizer.md",
           "any": [
             "GIMPLE"
-          ]
+          ],
+          "line": 11
         }
       ]
     }
@@ -246,7 +264,8 @@
           "any": [
             "An offline Android app that helps a police officer",
             "SQLCipher"
-          ]
+          ],
+          "line": 3
         }
       ]
     },
@@ -260,7 +279,8 @@
           "any": [
             "Every AI model, coding agent, free tier, skill and benchmark worth knowing",
             "99_models"
-          ]
+          ],
+          "line": 5
         }
       ]
     }

@@ -284,9 +284,13 @@ screen, not the whole file.
 
 ### M5.3 Claim audit depth
 
-- [ ] For each of the nine projects, record the exact file and line that supports the profile sentence; store it in `projects.json` as `claim_source`. `[D]`
-- [ ] Re-audit quarterly with a checklist: number, live link, licence, last commit date. `[D]`
-- [ ] Remove any project that has not been touched in a year and has no live demo, or move it to the archive section with the date. `[D]`
+- [x] For each of the nine projects, record the exact file and line that supports the profile sentence; store it in `projects.json` as `claim_source`. `[D]`
+  - verified-here: `python3 scripts/pin_claims.py --write` → `20 claim(s) pinned, 0 problem(s)`; every one of the 9 projects and both archived ones now has `file` + `line` per claim, e.g. `Nexus` → `apps/api/src/lib/provider-keys.ts:70`, `docs/FEATURES.md:19`; `FinScrape` → `README.md:33`, `README.md:8`, `docs/COST.md:3`. `check_claims.py` now refuses an entry without a line (`pins no line`) and refuses a line that no longer holds the claim (`FinScrape: README.md:1 no longer holds the claim`); `pin_claims.py --check` re-derives every line from the code and prints `20 claim(s) verified`. CI runs both.
+- [x] Re-audit quarterly with a checklist: number, live link, licence, last commit date. `[D]`
+  - verified-here: `docs/AUDIT.md` states the four checks, the order, and what each column means; `scripts/audit_claims.py` prints the table (project, pushed, age, licence, live) from the GitHub API and `--links` adds the HTTP status. First real pass, run now: 11 projects audited, 0 stale, 5 notes. `.github/workflows/audit.yml` runs `pin_claims.py --check`, `check_claims.py --links` and `audit_claims.py --links --fail-on-stale` at `0 7 1 */3 *` and on demand; `check.yml` gained the pinned-line step and still runs the claim check on every push.
+- [x] Remove any project that has not been touched in a year and has no live demo, or move it to the archive section with the date. `[D]`
+  - verified-here: measured ages on 2026-11-24 — Nexus 1, FinScrape 1, PocketDesk 1, KeyRouter 23, AdapFit 23, LobIQ 25, CaseFiles 33, Ping 33, RISC-VInjection 33, sign-setu 11, ToolkitArchive 33 days. The oldest is 33 days against a 365-day rule, so **no project qualifies** and nothing is removed or archived today; `audit_claims.py --fail-on-stale` → `0 stale`, exit 0. The rule is now executable rather than a promise: the quarterly workflow fails on the first project that does qualify.
+  - needs-verify: five repositories carry no licence (AdapFit, CaseFiles, RISC-VInjection, sign-setu, ToolkitArchive) so nobody else may reuse them; adding a licence happens in those repositories, not this one. Recorded in `docs/AUDIT.md`.
 
 ---
 
@@ -506,4 +510,7 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m5.2.1 [x] legend line states the encoding, `PAD_B` 56 → 76 | proof: `ok image legend in 2 themes`, renamed legend → exit 1, viewBox 946×369 | next: m5.2.2
 - 2026-11-23 m5.2.2 [x] `citykit/stats.py` + `assets/city-stats.json` + `<!-- city:start/end -->` caption (total, streak, busiest month); `<desc>` carries the same sentence | proof: caption matches title total, edited caption → exit 1 | next: m5.2.3
 - 2026-11-23 m5.2.3 [x] deuteranopia simulation of the six levels: adjacent ΔE ≥ 14.7, ramp ends 67–78 | proof: `ColourBlindTest` guards it | next: m5.2.4
+- 2026-11-23 m5.3.1 [x] every claim_source pinned to a file **and** line (20 of them), `pin_claims.py --write/--check`, `check_claims.py` refuses an unpinned or moved line | proof: `20 claim(s) verified`, wrong line → `README.md:1 no longer holds the claim`, missing line → `pins no line` | next: m5.3.2
+- 2026-11-23 m5.3.2 [x] `docs/AUDIT.md` checklist + `scripts/audit_claims.py` (number, live link, licence, last commit) + quarterly `audit.yml` | proof: 11 projects audited, 0 stale, 5 licence notes | next: m5.3.3
+- 2026-11-23 m5.3.3 [x] stale rule executable: no live demo and >365 days → fail; measured today the oldest project is 33 days, so nothing was removed | proof: `0 stale`, exit 0 | needs-verify: 5 repos have no licence | next: Phase 6
 - 2026-11-23 m5.2.4 [x] `@media (prefers-reduced-motion:reduce)` stops rise/flow/twinkle/drive/blink/drift and restores `.b`/`.f` visibility | proof: computed opacity 1 vs 0, `animation-name: none` vs `rise` | next: M5.3.1

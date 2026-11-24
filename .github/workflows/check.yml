@@ -37,8 +37,11 @@ jobs:
       - name: Unit tests
         run: python3 -m unittest discover -s tests -v
 
-      - name: Claims match their repositories
+      - name: Claims match their repositories, on the lines they cite
         run: python3 scripts/check_claims.py
+
+      - name: Every claim still sits on its pinned line
+        run: python3 scripts/pin_claims.py --check
 
       - name: README table matches projects.json
         run: python3 scripts/gen_readme.py --check
