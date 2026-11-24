@@ -22,10 +22,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 PROJECTS = ROOT / "projects.json"
+NOW = ROOT / "now.json"
 BLOCKS = {
     "badges": ("<!-- badges:start -->", "<!-- badges:end -->"),
+    "now": ("<!-- now:start -->", "<!-- now:end -->"),
     "projects": ("<!-- projects:start -->", "<!-- projects:end -->"),
 }
+NOW_DESCRIPTION_CHARS = 120
 
 
 def load() -> dict:
@@ -52,6 +55,21 @@ def render_badges(links: list[dict]) -> str:
     return " ".join(badge(link) for link in links)
 
 
+def render_now(now: dict) -> str:
+    """"Now" is whatever the API says was pushed last; never a hand-typed claim."""
+    line = f'**Now:** [**{now["repo"]}**]({now["url"]})'
+    description = now.get("description", "").strip()
+    prefix = f'{now["repo"]}: '
+    if description.lower().startswith(prefix.lower()):  # the repo usually repeats its own name
+        description = description[len(prefix):]
+    if description:
+        head = description.split(".")[0].strip()
+        if len(head) > NOW_DESCRIPTION_CHARS:
+            head = head[:NOW_DESCRIPTION_CHARS].rsplit(" ", 1)[0] + "…"
+        line += f" — {head}."
+    return line + f' Last push {now["pushed_at"]}.'
+
+
 def render_block(kind: str, body: str) -> str:
     start, end = BLOCKS[kind]
     return f"{start}\n{body}\n{end}"
@@ -66,8 +84,9 @@ def replace_block(readme: str, kind: str, body: str) -> str:
     return readme[:start] + render_block(kind, body) + readme[end + len(end_marker):]
 
 
-def render_readme(readme: str, data: dict) -> str:
+def render_readme(readme: str, data: dict, now: dict) -> str:
     readme = replace_block(readme, "badges", render_badges(data["profile"]["links"]))
+    readme = replace_block(readme, "now", render_now(now))
     return replace_block(readme, "projects", render_table(data["projects"]))
 
 
@@ -79,14 +98,16 @@ def main() -> int:
     args = ap.parse_args()
 
     data = load()
+    now = json.loads(NOW.read_text(encoding="utf-8"))
     readme = README.read_text(encoding="utf-8")
-    expected = render_readme(readme, data)
+    expected = render_readme(readme, data, now)
 
     if args.check:
         if readme != expected:
             print("FAIL README.md is not what projects.json renders; run python3 scripts/gen_readme.py --write")
             return 1
-        print(f"ok   data {len(data['profile']['links'])} badges, {len(data['projects'])} projects, README.md matches")
+        print(f"ok   data {len(data['profile']['links'])} badges, {len(data['projects'])} projects, "
+              f"now={now['repo']}, README.md matches")
         return 0
 
     README.write_text(expected, encoding="utf-8", newline="\n")

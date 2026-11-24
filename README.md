@@ -14,6 +14,10 @@ Software engineer · backends, AI systems, mobile apps
 
 B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working when things fail: backends that settle payments exactly once, streams that resume where the network dropped them, and models scored against what actually happened.
 
+<!-- now:start -->
+**Now:** [**FinScrape**](https://github.com/Yash-Awasthi/FinScrape) — see what moves markets before it's news. Last push 2026-11-23.
+<!-- now:end -->
+
 ## Experience
 
 - **Cloord Solutions**, App development intern, Jul - Sep 2026. Multi-tenant school platform for 1,000+ parents: Next.js API, web portal and 4 Expo apps on AWS.

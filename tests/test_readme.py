@@ -40,7 +40,8 @@ class TableTest(unittest.TestCase):
 
     def test_readme_is_in_sync_with_the_data(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertEqual(readme, gen.render_readme(readme, self.data))
+        now = json.loads((ROOT / "now.json").read_text(encoding="utf-8"))
+        self.assertEqual(readme, gen.render_readme(readme, self.data, now))
 
     def test_a_missing_marker_block_is_an_error_not_a_rewrite(self):
         with self.assertRaises(SystemExit):

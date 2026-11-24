@@ -41,11 +41,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # The page keeps itself current: the "Now" line and the table come from data,
+      # never from a hand edit. A --year run leaves both alone.
+      - name: Refresh the "Now" line
+        if: inputs.year == ''
+        run: |
+          python3 scripts/gen_now.py --write
+          python3 scripts/gen_readme.py --write
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets
+          git add assets README.md now.json
           if git diff --cached --quiet; then
             echo "assets unchanged; nothing to commit"
             exit 0
