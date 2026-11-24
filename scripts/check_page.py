@@ -193,6 +193,32 @@ def check_accessible_names() -> list[str]:
     return problems
 
 
+def check_city_encoder() -> list[str]:
+    """The drawing says what its geometry means, and it stops moving when asked (M5.2)."""
+    problems, notes = [], []
+    caption = re.search(r"<!-- city:start -->\n(.*?)\n<!-- city:end -->",
+                        README.read_text(encoding="utf-8"), re.S)
+    if not caption:
+        problems.append("README.md has no <!-- city:start --> … <!-- city:end --> caption")
+    for svg in sorted(ASSETS.glob("city-*.svg")):
+        text = svg.read_text(encoding="utf-8")
+        if "Each tower is one day" not in text:
+            problems.append(f"{svg.name} has no legend stating what a tower's height means")
+        if "prefers-reduced-motion:reduce" not in text:
+            problems.append(f"{svg.name} animates without a prefers-reduced-motion rule")
+        if caption:
+            title = re.search(r'<title id="ct"[^>]*>([^<]*)</title>', text)
+            stated = re.search(r"([\d,]+) contributions", caption.group(1))
+            if title and stated and stated.group(1) not in title.group(1):
+                problems.append(f"{svg.name} title says {title.group(1)!r} but the caption under it "
+                                f"says {stated.group(1)} contributions")
+            notes.append(svg.name)
+    if not problems and caption:
+        print(f"ok   image legend in {len(notes)} themes, reduced-motion rule present, "
+              f"caption matches the title total")
+    return problems
+
+
 def check_hosts_documented() -> list[str]:
     """A new external host is a new dependency; docs/DEPENDENCIES.md must name it."""
     from urllib.parse import urlparse
@@ -213,7 +239,8 @@ def check_hosts_documented() -> list[str]:
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
                 + check_theme_geometry() + check_asset_safety() + check_accessible_names()
-                + check_no_placeholders() + check_badge_contrast() + check_hosts_documented())
+                + check_no_placeholders() + check_badge_contrast() + check_city_encoder()
+                + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")

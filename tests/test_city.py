@@ -106,8 +106,8 @@ class WriteTest(unittest.TestCase):
     def test_both_themes_are_written(self):
         written = city.write_assets(self.WEEKS, self.dir)
         names = sorted(p.name for p in Path(self.dir).iterdir())
-        self.assertEqual(names, ["city-dark.svg", "city-light.svg"])
-        self.assertEqual(len(written), 2)
+        self.assertEqual(names, ["city-dark.svg", "city-light.svg", "city-stats.json"])
+        self.assertEqual(len(written), 3)  # two SVGs plus the facts the caption is rendered from
 
     def test_a_render_crash_leaves_the_previous_assets_untouched(self):
         city.write_assets(self.WEEKS, self.dir)
@@ -280,3 +280,109 @@ class AccessibleNameTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class LegendTest(unittest.TestCase):
+    """The drawing has to say what its geometry means, and to stop when asked (M5.2)."""
+
+    def test_both_themes_state_what_a_tower_means(self):
+        for theme in ("light", "dark"):
+            svg = city.render([[("2026-11-01", 3), ("2026-11-02", 0)]], theme)
+            self.assertIn("Each tower is one day", svg)
+            self.assertIn("each river a run of quiet weeks", svg)
+
+    def test_the_legend_sits_inside_the_viewbox(self):
+        svg = city.render([[("2026-11-01", 3)]], "light")
+        height = float(re.search(r'viewBox="0 0 [\d.]+ ([\d.]+)"', svg).group(1))
+        legend_y = float(re.search(r'<text x="28" y="([\d.]+)"[^>]*>Each tower', svg).group(1))
+        self.assertLess(legend_y, height)
+        self.assertGreater(legend_y, height - 40)
+
+    def test_animation_stops_for_reduced_motion(self):
+        svg = city.render([[("2026-11-01", 3)]], "dark")
+        self.assertIn("@media (prefers-reduced-motion:reduce)", svg)
+        # Buildings start hidden and rise; the override must also restore them, or they stay invisible.
+        reduced = svg.split("@media (prefers-reduced-motion:reduce)", 1)[1].split("</style>", 1)[0]
+        self.assertIn(".b,.f{opacity:1!important;transform:none!important}", reduced)
+
+    def test_the_description_carries_the_same_facts_as_the_caption(self):
+        weeks = [[("2026-11-01", 3), ("2026-11-02", 0), ("2026-11-03", 5)]]
+        stats = city.stats(weeks)
+        self.assertEqual(stats["total"], 8)
+        self.assertEqual(stats["streak"], 1)
+        self.assertIn(city.caption(stats), city.render(weeks, "light"))
+
+
+class StatsTest(unittest.TestCase):
+    def test_a_streak_counts_consecutive_active_days(self):
+        weeks = [[("2026-11-01", 1), ("2026-11-02", 2), ("2026-11-03", 0),
+                  ("2026-11-04", 4), ("2026-11-05", 5), ("2026-11-06", 6)]]
+        self.assertEqual(city.stats(weeks)["streak"], 3)
+        self.assertEqual(city.stats(weeks)["streak_end"], "2026-11-06")
+
+    def test_the_busiest_month_is_the_tallest_total(self):
+        weeks = [[("2026-10-30", 40), ("2026-10-31", 5), ("2026-11-01", 7)]]
+        stats = city.stats(weeks)
+        self.assertEqual(stats["best_month"], "2026-10")
+        self.assertEqual(stats["best_month_count"], 45)
+
+    def test_the_caption_names_the_month_not_its_number(self):
+        weeks = [[("2026-05-01", 3)]]
+        self.assertIn("May 2026", city.caption(city.stats(weeks)))
+
+    def test_writing_the_assets_also_writes_the_facts(self):
+        import tempfile
+        weeks = [[("2026-11-01", 3)]]
+        with tempfile.TemporaryDirectory() as d:
+            city.write_assets(weeks, d)
+            facts = json.loads((Path(d) / "city-stats.json").read_text(encoding="utf-8"))
+        self.assertEqual(facts["total"], 3)
+        self.assertIn("3 contributions", facts["caption"])
+
+
+class ColourBlindTest(unittest.TestCase):
+    """Six levels of green must stay tellable apart without green cones (M5.2)."""
+
+    @staticmethod
+    def _lms(rgb):
+        def lin(c):
+            c /= 255
+            return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+        r, g, b = (lin(x) for x in rgb)
+        return (0.31399022 * r + 0.63951294 * g + 0.04649755 * b,
+                0.15537241 * r + 0.75789446 * g + 0.08670142 * b,
+                0.01775239 * r + 0.10944209 * g + 0.87256922 * b)
+
+    @classmethod
+    def deuteranope(cls, rgb):
+        L, M, S = cls._lms(rgb)
+        L2 = 2.02344 * M - 2.52581 * S
+        r = 5.47221206 * L2 - 4.6419601 * M + 0.16963708 * S
+        g = -1.1252419 * L2 + 2.29317094 * M - 0.1678952 * S
+        b = 0.02980165 * L2 - 0.19318073 * M + 1.16364789 * S
+        return [max(0.0, min(1.0, v)) for v in (r, g, b)]
+
+    @classmethod
+    def delta_e(cls, a, b):
+        import math
+
+        def lab(v):
+            r, g, bl = (v[0], v[1], v[2])
+            def f(t):
+                return t ** (1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116
+            X = 0.4124564 * r + 0.3575761 * g + 0.1804375 * bl
+            Y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * bl
+            Z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * bl
+            fx, fy, fz = f(X / 0.95047), f(Y), f(Z / 1.08883)
+            return (116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz))
+        return math.dist(lab(a), lab(b))
+
+    def test_adjacent_levels_stay_apart_without_red_green_vision(self):
+        from citykit.theme import THEMES
+        for scheme, theme in THEMES.items():
+            levels = [[int(c[i:i + 2], 16) for i in (1, 3, 5)] for c in theme["levels"]]
+            sim = [self.deuteranope(v) for v in levels]
+            for i in range(len(sim) - 1):
+                with self.subTest(theme=scheme, pair=(theme["levels"][i], theme["levels"][i + 1])):
+                    self.assertGreater(self.delta_e(sim[i], sim[i + 1]), 10,
+                                       "levels become indistinguishable for deuteranopes")
+            self.assertGreater(self.delta_e(sim[0], sim[-1]), 40)

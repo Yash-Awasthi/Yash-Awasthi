@@ -19,6 +19,11 @@ def load(name: str):
 now_mod = load("gen_now")
 readme = load("gen_readme")
 
+
+def city_stats():
+    """The facts block the README's city caption is rendered from."""
+    return json.loads((ROOT / "assets" / "city-stats.json").read_text(encoding="utf-8"))
+
 REPOS = [
     {"name": "Yash-Awasthi", "html_url": "https://github.com/Yash-Awasthi/Yash-Awasthi",
      "description": "GitHub Profile README", "pushed_at": "2026-11-24T06:00:00Z", "fork": False},
@@ -71,7 +76,7 @@ class RenderTest(unittest.TestCase):
         data = readme.load()
         now = json.loads((ROOT / "now.json").read_text(encoding="utf-8"))
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertEqual(text, readme.render_readme(text, data, now))
+        self.assertEqual(text, readme.render_readme(text, data, now, city_stats()))
 
 
 if __name__ == "__main__":

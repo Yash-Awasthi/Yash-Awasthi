@@ -273,10 +273,14 @@ screen, not the whole file.
 
 ### M5.2 The city as a data graphic
 
-- [ ] Every building height maps to a stated quantity (contributions per day) and the legend says so; today the mapping is implicit. `[D]`
-- [ ] Add a text alternative with the same information: total contributions, longest streak, busiest month, rendered as one line under the image. `[D]`
-- [ ] Colour-blind check on the six levels: the ramp must be distinguishable in the most common deficiency, or a pattern/label added. `[D]`
-- [ ] Reduced-motion: if any animation exists in the SVG, gate it behind `prefers-reduced-motion`. `[D]`
+- [x] Every building height maps to a stated quantity (contributions per day) and the legend says so; today the mapping is implicit. `[D]`
+  - verified-here: both SVGs now end with `Each tower is one day, its height the contributions that day; each river a run of quiet weeks.` (`PAD_B` 56 → 76 leaves it its own band; viewBox `0 0 946 369`). Read back from the rendered file: the legend sits at y=351 inside a 369 px box, below the road and below the four `N wk quiet` river labels — checked by eye on `.tmp-shots/city-light.png`, nothing overlaps. `scripts/check_page.py` → `ok   image legend in 2 themes, reduced-motion rule present, caption matches the title total`; renaming the sentence → `FAIL city-light.svg has no legend stating what a tower's height means`.
+- [x] Add a text alternative with the same information: total contributions, longest streak, busiest month, rendered as one line under the image. `[D]`
+  - verified-here: `scripts/citykit/stats.py` computes total, longest streak (and its end date), busiest month from the same weeks the drawing uses; `write_assets()` now also writes `assets/city-stats.json`, and `gen_readme.py` renders `<!-- city:start/end -->` from it. Live line under the image: `3,573 contributions on 82 active days, 2025-11-23 to 2026-11-24 · longest streak 14 days to 2026-10-19 · busiest month October 2026 (1,819)`. The SVG `<desc>` carries the same sentence, so the alt text and the caption cannot disagree — editing the caption to `3,574` → `FAIL city-*.svg title says '2025-2026: 3,573 contributions' but the caption under it says 3,574 contributions`.
+- [x] Colour-blind check on the six levels: the ramp must be distinguishable in the most common deficiency, or a pattern/label added. `[D]`
+  - verified-here: the six levels were simulated through a Brettel/Viénot deuteranopia matrix and compared in CIELAB. Adjacent pairs keep ΔE 14.7 / 50.3 / 16.4 / 15.2 / 15.3 (light) and 20.3 / 17.2 / 15.3 / 50.6 / 17.9 (dark), whole-ramp 78.0 / 67.2 — all far above the ~10 "clearly different" threshold, because the ramp is monotonic in lightness and lightness survives the simulation. No pattern or extra label is needed: height already encodes the value, and the legend says so. Guarded by `ColourBlindTest` (threshold 10 per adjacent pair, 40 across the ramp) so a future palette cannot quietly collapse it.
+- [x] Reduced-motion: if any animation exists in the SVG, gate it behind `prefers-reduced-motion`. `[D]`
+  - verified-here (Chromium computing the styles, `reduced_motion="reduce"` vs `no-preference`, sampled 50 ms in): reduce → `.b` `opacity 1`, `transform: none`, `animation-name: none`, car `none`; no-preference → `opacity 0`, `matrix(1,0,0,0.02,0,0)`, `rise`, car `drive`. The override also restores `opacity:1` and `transform:none` for `.b`/`.f`, because those classes start hidden — without that they would stay invisible for a reader who asked for less motion. Removing the media query → `FAIL city-light.svg animates without a prefers-reduced-motion rule`.
 
 ### M5.3 Claim audit depth
 
@@ -499,3 +503,7 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m5.1.2 [x] fold measured; banner 200 → 120; `<picture>` approach reverted | proof: 768 and 1440 show name+sentence+badges above the fold (401–426, 470–495); 360 sentence at 642 under GitHub's 506 px header | deviation: 360×640 cannot fit all three | next: m5.1.3
 - 2026-11-23 m5.1.3 | m5.1.4 [x] one h1 + four h2, table 278/278 px at 360 with no overflow, cells wrap | proof: `^#` grep, live table box, row pairs share height | next: m5.1.5
 - 2026-11-23 m5.1.5 [x] badge contrast ≥4.5:1 enforced in `check_page.py`; LinkedIn 3.89 → 5.84, Resume violet → leaf green | proof: `ok a11y 4 badge colours`, injected `#2a8f8a` → exit 1 | next: M5.2.1
+- 2026-11-23 m5.2.1 [x] legend line states the encoding, `PAD_B` 56 → 76 | proof: `ok image legend in 2 themes`, renamed legend → exit 1, viewBox 946×369 | next: m5.2.2
+- 2026-11-23 m5.2.2 [x] `citykit/stats.py` + `assets/city-stats.json` + `<!-- city:start/end -->` caption (total, streak, busiest month); `<desc>` carries the same sentence | proof: caption matches title total, edited caption → exit 1 | next: m5.2.3
+- 2026-11-23 m5.2.3 [x] deuteranopia simulation of the six levels: adjacent ΔE ≥ 14.7, ramp ends 67–78 | proof: `ColourBlindTest` guards it | next: m5.2.4
+- 2026-11-23 m5.2.4 [x] `@media (prefers-reduced-motion:reduce)` stops rise/flow/twinkle/drive/blink/drift and restores `.b`/`.f` visibility | proof: computed opacity 1 vs 0, `animation-name: none` vs `rise` | next: M5.3.1

@@ -50,7 +50,8 @@ class TableTest(unittest.TestCase):
     def test_readme_is_in_sync_with_the_data(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         now = json.loads((ROOT / "now.json").read_text(encoding="utf-8"))
-        self.assertEqual(readme, gen.render_readme(readme, self.data, now))
+        city = json.loads((ROOT / "assets" / "city-stats.json").read_text(encoding="utf-8"))
+        self.assertEqual(readme, gen.render_readme(readme, self.data, now, city))
 
     def test_a_missing_marker_block_is_an_error_not_a_rewrite(self):
         with self.assertRaises(SystemExit):
@@ -98,6 +99,21 @@ class BadgeTest(unittest.TestCase):
                   "color": "000000", "logo": "github"}]
         self.assertIn("https://a.example", gen.render_badges(links))
         self.assertIn("badge/A-000000", gen.render_badges(links))
+
+
+class CityCaptionTest(unittest.TestCase):
+    """The one line under the city image restates what the drawing encodes (M5.2)."""
+
+    CITY = {"caption": "3,573 contributions on 82 active days, 2025-11-23 to 2026-11-24"}
+
+    def test_the_caption_is_rendered_under_the_image(self):
+        readme = "# x\n<!-- city:start -->\n<!-- city:end -->\n"
+        self.assertIn(self.CITY["caption"], gen.replace_block(readme, "city", gen.render_city(self.CITY)))
+
+    def test_a_caption_drift_is_caught(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        stale = dict(self.CITY, caption=self.CITY["caption"].replace("3,573", "3,574"))
+        self.assertNotEqual(readme, gen.replace_block(readme, "city", gen.render_city(stale)))
 
 
 if __name__ == "__main__":

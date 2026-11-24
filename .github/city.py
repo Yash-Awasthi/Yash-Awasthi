@@ -13,11 +13,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from citykit import (THEMES, FetchError, fetch, filter_year, layout,  # noqa: E402
-                     parse_calendar, render, summary, unsafe_refs, write_assets)
+from citykit import (THEMES, FetchError, caption, fetch, filter_year, layout,  # noqa: E402
+                     parse_calendar, render, stats, summary, unsafe_refs, write_assets)
 
-__all__ = ["THEMES", "FetchError", "fetch", "filter_year", "layout", "parse_calendar",
-           "render", "summary", "unsafe_refs", "write_assets"]
+__all__ = ["THEMES", "FetchError", "caption", "fetch", "filter_year", "layout", "parse_calendar",
+           "render", "stats", "summary", "unsafe_refs", "write_assets"]
 
 
 def main() -> int:

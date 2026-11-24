@@ -69,3 +69,7 @@ Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · 
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/city-dark.svg"/>
   <img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/city-light.svg" alt="Contribution history as a 3D city" width="100%"/>
 </picture>
+
+<!-- city:start -->
+3,573 contributions on 82 active days, 2025-11-23 to 2026-11-24 · longest streak 14 days to 2026-10-19 · busiest month October 2026 (1,819)
+<!-- city:end -->

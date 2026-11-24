@@ -5,7 +5,10 @@ import os
 import tempfile
 from pathlib import Path
 
+import json
+
 from .draw import render
+from .stats import caption, stats
 from .theme import THEMES
 
 
@@ -19,6 +22,8 @@ def summary(weeks):
 def write_assets(weeks, out_dir="assets"):
     """Render both themes first, then swap both files in, so neither theme can go stale."""
     rendered = {theme: render(weeks, theme) for theme in THEMES}
+    facts = stats(weeks)
+    facts["caption"] = caption(facts)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     staged = []
@@ -28,6 +33,10 @@ def write_assets(weeks, out_dir="assets"):
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 f.write(svg)
             staged.append((tmp, out / f"city-{theme}.svg"))
+        fd, tmp = tempfile.mkstemp(dir=out, prefix=".city-stats-", suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            f.write(json.dumps(facts, indent=2, ensure_ascii=False) + "\n")
+        staged.append((tmp, out / "city-stats.json"))
         for tmp, final in staged:
             os.replace(tmp, final)
     finally:

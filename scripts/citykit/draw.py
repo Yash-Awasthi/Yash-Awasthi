@@ -7,6 +7,7 @@ import zlib
 from datetime import date
 
 from .layout import BAR, COL, DEPTH, DX, DY, MAX_H, PAD_B, PAD_L, PAD_R, PAD_T, RIVER, ROWS, layout, nf
+from .stats import caption, stats as city_stats
 from .theme import THEMES, grad, mix
 
 
@@ -120,14 +121,15 @@ def render(weeks, theme):
     accent = t["levels"][3]
     days = [d for w in weeks for d, _ in w]
     total = sum(n for w in weeks for _, n in w)
+    fact = caption(city_stats(weeks))
     out = [
         f'<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ct cd" '
         f'viewBox="0 0 {width:.0f} {height:.0f}" '
         f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">',
         f'<title id="ct">{days[0][:4]}-{days[-1][:4]}: {total:,} contributions</title>',
-        f'<desc id="cd">An isometric city of GitHub contributions, one tower per '
-        f'active day and one river per quiet stretch, {days[0]} to {days[-1]}, {len(weeks)} weeks, '
-        f'{total:,} contributions in total.</desc>',
+        f'<desc id="cd">An isometric city of GitHub contributions: one tower per day, its '
+        f'height the contributions of that day, and one river per run of quiet weeks, {days[0]} to '
+        f'{days[-1]}, {len(weeks)} weeks. {fact}</desc>',
         "<defs>",
         grad("sky", *t["sky"]), grad("gnd", *t["ground"]), grad("wat", *t["water"]),
         f'<radialGradient id="glow" cx=".75" cy=".85" r=".55"><stop offset="0" stop-color="{accent}" stop-opacity=".2"/>'
@@ -142,7 +144,9 @@ def render(weeks, theme):
         ".c{animation:drive linear infinite}@keyframes drive{from{transform:translateX(0)}to{transform:translateX(var(--d))}}"
         ".a{animation:blink 1.6s steps(1) infinite}@keyframes blink{50%{opacity:.15}}"
         ".s{animation:drift linear infinite alternate}@keyframes drift{to{transform:translateX(60px)}}"
-        f".k{{stroke:{t['trunk']};stroke-width:1.6}}</style>",
+        f".k{{stroke:{t['trunk']};stroke-width:1.6}}"
+        "@media (prefers-reduced-motion:reduce){.b,.f,.t,.c,.a,.s,.v{animation:none!important}"
+        ".b,.f{opacity:1!important;transform:none!important}}</style>",
         '<rect width="100%" height="100%" rx="16" fill="url(#sky)"/>',
         '<rect width="100%" height="100%" rx="16" fill="url(#glow)"/>',
         sky_scene(theme, width, base_y - MAX_H * 0.55),
@@ -217,6 +221,8 @@ def render(weeks, theme):
                              f'<circle class="a" style="animation-delay:{towers.index(n) * .5}s" cx="{ax:.1f}" cy="{ay - 17:.1f}" r="2" fill="#ff4d4d"/>')
             parts.append("</g>")
             out.append("".join(parts))
+    out.append(f'<text x="{PAD_L}" y="{height - 18:.0f}" font-size="11" fill="{t["muted"]}">'
+               f'Each tower is one day, its height the contributions that day; each river a run of quiet weeks.</text>')
     out.append("</svg>")
     # Every ".0" is redundant in SVG numbers: dropping it keeps the geometry byte-identical.
     return re.sub(r"(?<=[0-9])\.0(?![0-9])", "", "\n".join(out))

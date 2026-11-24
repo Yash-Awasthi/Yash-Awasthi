@@ -23,12 +23,14 @@ ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 PROJECTS = ROOT / "projects.json"
 NOW = ROOT / "now.json"
+CITY_STATS = ROOT / "assets" / "city-stats.json"
 BLOCKS = {
     "badges": ("<!-- badges:start -->", "<!-- badges:end -->"),
     "now": ("<!-- now:start -->", "<!-- now:end -->"),
     "stack": ("<!-- stack:start -->", "<!-- stack:end -->"),
     "archive": ("<!-- archive:start -->", "<!-- archive:end -->"),
     "projects": ("<!-- projects:start -->", "<!-- projects:end -->"),
+    "city": ("<!-- city:start -->", "<!-- city:end -->"),
 }
 NOW_DESCRIPTION_CHARS = 120
 
@@ -74,6 +76,11 @@ def render_now(now: dict) -> str:
     return line + f' Last push {now["pushed_at"]}.'
 
 
+def render_city(city: dict) -> str:
+    """One line under the city image: the facts the towers and rivers already carry."""
+    return city["caption"]
+
+
 def render_stack(stack: list[str]) -> str:
     return "**Stack:** " + " · ".join(stack)
 
@@ -106,11 +113,12 @@ def replace_block(readme: str, kind: str, body: str) -> str:
     return readme[:start] + render_block(kind, body) + readme[end + len(end_marker):]
 
 
-def render_readme(readme: str, data: dict, now: dict) -> str:
+def render_readme(readme: str, data: dict, now: dict, city: dict) -> str:
     readme = replace_block(readme, "badges", render_badges(data["profile"]["links"]))
     readme = replace_block(readme, "now", render_now(now))
     readme = replace_block(readme, "projects", render_table(data["projects"]))
     readme = replace_block(readme, "archive", render_archive(data.get("archive", [])))
+    readme = replace_block(readme, "city", render_city(city))
     return replace_block(readme, "stack", render_stack(data["stack"]))
 
 
@@ -123,8 +131,9 @@ def main() -> int:
 
     data = load()
     now = json.loads(NOW.read_text(encoding="utf-8"))
+    city = json.loads(CITY_STATS.read_text(encoding="utf-8"))
     readme = README.read_text(encoding="utf-8")
-    expected = render_readme(readme, data, now)
+    expected = render_readme(readme, data, now, city)
 
     if args.check:
         if readme != expected:

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 
 COL, BAR, DX, DY, DEPTH, MAX_H, RIVER = 22, 13, 10.0, 9.0, 0.6, 190, 62
-PAD_L, PAD_T, PAD_B, PAD_R = 28, 40, 56, 28
+PAD_L, PAD_T, PAD_B, PAD_R = 28, 40, 76, 28  # PAD_B leaves one line for the legend under the road
 ROWS = 7
 
 
