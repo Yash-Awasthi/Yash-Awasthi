@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 946 349" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ct cd" viewBox="0 0 946 349" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<title id="ct">2025-2026: 3,511 contributions</title>
+<desc id="cd">An isometric city of GitHub contributions, one tower per active day and one river per quiet stretch, 2025-11-23 to 2026-11-24, 53 weeks, 3,511 contributions in total.</desc>
 <defs>
 <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f9f7"/><stop offset="1" stop-color="#e2ebe6"/></linearGradient>
 <linearGradient id="gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4ebe7"/><stop offset="1" stop-color="#d0dbd5"/></linearGradient>

@@ -230,9 +230,16 @@ def render(weeks, theme):
 
     g0, g1 = PAD_L - 10, PAD_L + span + 10
     accent = t["levels"][3]
+    days = [d for w in weeks for d, _ in w]
+    total = sum(n for w in weeks for _, n in w)
     out = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ct cd" '
+        f'viewBox="0 0 {width:.0f} {height:.0f}" '
         f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">',
+        f'<title id="ct">{days[0][:4]}-{days[-1][:4]}: {total:,} contributions</title>',
+        f'<desc id="cd">An isometric city of GitHub contributions, one tower per '
+        f'active day and one river per quiet stretch, {days[0]} to {days[-1]}, {len(weeks)} weeks, '
+        f'{total:,} contributions in total.</desc>',
         "<defs>",
         grad("sky", *t["sky"]), grad("gnd", *t["ground"]), grad("wat", *t["water"]),
         f'<radialGradient id="glow" cx=".75" cy=".85" r=".55"><stop offset="0" stop-color="{accent}" stop-opacity=".2"/>'

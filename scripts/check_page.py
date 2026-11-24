@@ -116,6 +116,39 @@ def check_asset_safety() -> list[str]:
     return problems
 
 
+def check_accessible_names() -> list[str]:
+    """A screen reader should hear the year and the total, not "image" (M3.2.2)."""
+    problems, totals = [], {}
+    for svg in sorted(ASSETS.glob("city-*.svg")):
+        text = svg.read_text(encoding="utf-8")
+        # The city also carries a <title> per building, so ask for the SVG-level one by id.
+        title = re.search(r'<title id="ct"[^>]*>([^<]*)</title>', text) or re.search(r'<title[^>]*>([^<]*)</title>', text)
+        desc = re.search(r'<desc id="cd"[^>]*>([^<]*)</desc>', text) or re.search(r'<desc[^>]*>([^<]*)</desc>', text)
+        if not title:
+            problems.append(f"{svg.name} has no <title>")
+        if not desc:
+            problems.append(f"{svg.name} has no <desc>")
+        if not title or not desc:
+            continue
+        total = re.search(r"([\d,]+) contributions", title.group(1) + " " + desc.group(1))
+        if not total:
+            problems.append(f"{svg.name} <title>/<desc> states no contribution total")
+            continue
+        totals[svg.name] = total.group(1)
+        if not re.search(r"\d{4}", title.group(1)):
+            problems.append(f"{svg.name} <title> states no year")
+        bounds = re.search(r"\d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}", desc.group(1))
+        if not bounds:
+            problems.append(f"{svg.name} <desc> states no date range")
+        if not re.search(r'aria-labelledby="ct cd"', text):
+            problems.append(f"{svg.name} does not point aria-labelledby at its title and desc")
+    if len(set(totals.values())) > 1:
+        problems.append(f"themes disagree on the total: {totals}")
+    if not problems:
+        print(f"ok   a11y  {', '.join(f'{k} {v}' for k, v in totals.items())} with title, desc, dates")
+    return problems
+
+
 def check_hosts_documented() -> list[str]:
     """A new external host is a new dependency; docs/DEPENDENCIES.md must name it."""
     from urllib.parse import urlparse
@@ -135,7 +168,8 @@ def check_hosts_documented() -> list[str]:
 
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
-                + check_theme_geometry() + check_asset_safety() + check_hosts_documented())
+                + check_theme_geometry() + check_asset_safety() + check_accessible_names()
+                + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")

@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import re
 import unittest
 import urllib.error
 from pathlib import Path
@@ -243,6 +244,35 @@ class SafetyTest(unittest.TestCase):
         self.assertTrue(city.unsafe_refs('<svg><foreignObject></foreignObject></svg>'))
         self.assertTrue(city.unsafe_refs('<svg><use href="https://x/y.svg#a"/></svg>'))
         self.assertEqual(city.unsafe_refs('<svg><rect fill="url(#sky)"/></svg>'), [])
+
+
+class AccessibleNameTest(unittest.TestCase):
+    """A screen reader must hear the year and the total, not "image" (M3.2.2)."""
+
+    def setUp(self):
+        self.weeks = city.parse_calendar(json.loads(FIXTURE.read_text(encoding="utf-8")))
+        self.total = sum(n for w in self.weeks for _, n in w)
+
+    def test_each_theme_states_year_dates_and_total(self):
+        for theme in city.THEMES:
+            svg = city.render(self.weeks, theme)
+            title = re.search(r"<title[^>]*>([^<]*)</title>", svg).group(1)
+            desc = re.search(r"<desc[^>]*>([^<]*)</desc>", svg).group(1)
+            self.assertIn(f"{self.total:,} contributions", title)
+            first = self.weeks[0][0][0]
+            last = self.weeks[-1][-1][0]
+            self.assertIn(f"{first} to {last}", desc)
+
+    def test_both_themes_declare_the_same_total(self):
+        totals = {theme: re.search(r"([\d,]+) contributions", city.render(self.weeks, theme)).group(1)
+                  for theme in city.THEMES}
+        self.assertEqual(len(set(totals.values())), 1, totals)
+
+    def test_the_svg_points_at_its_own_title_and_desc(self):
+        svg = city.render(self.weeks, "dark")
+        self.assertIn('aria-labelledby="ct cd"', svg)
+        self.assertIn('id="ct"', svg)
+        self.assertIn('id="cd"', svg)
 
 
 if __name__ == "__main__":
