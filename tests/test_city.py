@@ -24,6 +24,9 @@ def load_city():
 
 
 city = load_city()
+# The generator is a package (scripts/citykit) behind a thin CLI; patch the real call site.
+source = importlib.import_module("citykit.source")
+assets = importlib.import_module("citykit.assets")
 
 
 def payload(days):
@@ -51,12 +54,12 @@ class FakeUrlopen:
 
 class FetchTest(unittest.TestCase):
     def run_fetch(self, **kw):
-        real = city.urllib.request.urlopen
-        city.urllib.request.urlopen = FakeUrlopen(**kw)
+        real = source.urllib.request.urlopen
+        source.urllib.request.urlopen = FakeUrlopen(**kw)
         try:
             return city.fetch("someone", "token")
         finally:
-            city.urllib.request.urlopen = real
+            source.urllib.request.urlopen = real
 
     def test_http_error_becomes_fetch_error(self):
         err = urllib.error.HTTPError("u", 401, "Unauthorized", {}, None)
@@ -109,7 +112,7 @@ class WriteTest(unittest.TestCase):
     def test_a_render_crash_leaves_the_previous_assets_untouched(self):
         city.write_assets(self.WEEKS, self.dir)
         before = {p.name: p.read_bytes() for p in Path(self.dir).iterdir()}
-        real_render, calls = city.render, []
+        real_render, calls = assets.render, []
 
         def render_then_fail(weeks, theme):
             calls.append(theme)
@@ -117,12 +120,12 @@ class WriteTest(unittest.TestCase):
                 raise RuntimeError("theme 2 exploded")
             return real_render(weeks, theme)
 
-        city.render = render_then_fail
+        assets.render = render_then_fail
         try:
             with self.assertRaises(RuntimeError):
                 city.write_assets(self.WEEKS, self.dir)
         finally:
-            city.render = real_render
+            assets.render = real_render
         after = {p.name: p.read_bytes() for p in Path(self.dir).iterdir()}
         self.assertEqual(before, after, "a failed render must not replace either theme")
 

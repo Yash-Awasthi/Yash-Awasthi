@@ -13,9 +13,10 @@ Do not open a public issue for a security report.
 
 ## What is in scope
 
-- `.github/city.py` — anything that could make it write outside its output
-  directory, follow a redirect to an unexpected host, or render untrusted strings
-  into the SVG.
+- `.github/city.py` and `scripts/citykit/` — the generator behind it (source,
+  layout, theme, draw, assets). Anything that could make it write outside its
+  output directory, follow a redirect to an unexpected host, or render untrusted
+  strings into the SVG.
 - `.github/workflows/*.yml` — anything that could run untrusted code with
   `contents: write`, or push to `master` without the checks passing.
 - `scripts/*.py` — the CI checks themselves; a check that silently passes is a bug.
