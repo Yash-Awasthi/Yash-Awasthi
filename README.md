@@ -28,7 +28,7 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 <!-- projects:start -->
 | Project | What it does |
 |:--|:--|
-| [**Nexus**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent LLM orchestration: 39 providers behind one streaming API, council deliberation, pgvector + BM25 memory. [Live](https://nexus-iosc.onrender.com) |
+| [**Nexus**](https://github.com/Yash-Awasthi/Nexus) | Multi-agent LLM orchestration: 39 providers behind one streaming API, council deliberation, pgvector + BM25 memory. [Live (cold start)](https://nexus-iosc.onrender.com) |
 | [**FinScrape**](https://github.com/Yash-Awasthi/FinScrape) | Maps world news to sectors and tickers through Laya (a small fine-tuned classifier), the LLM and keywords, then scores every call against the market move that followed. Runs at $0/month on four free tiers. [Live](https://winfin.pages.dev) |
 | [**AdapFit**](https://github.com/Yash-Awasthi/AdapFit) | FastAPI + React Native recovery engine: train, reduce, recover or rest, from each user's own baseline. |
 | [**PocketDesk**](https://github.com/Yash-Awasthi/PocketDesk) | Drive Claude Code and other CLI agents on your PC from your phone; 60 fps desktop over pinned TLS. |

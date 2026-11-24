@@ -30,6 +30,15 @@ class TableTest(unittest.TestCase):
         for p in self.data["projects"]:
             self.assertIn(f"[**{p['name']}**]({p['repo']})", table)
 
+    def test_a_cold_start_is_named_in_the_link(self):
+        table = gen.render_table([
+            {"name": "A", "repo": "https://github.com/o/A", "claim": "x", "live": "https://a.example",
+             "cold_start": True},
+            {"name": "B", "repo": "https://github.com/o/B", "claim": "y", "live": "https://b.example"},
+        ])
+        self.assertIn("[Live (cold start)](https://a.example)", table)
+        self.assertIn("[Live](https://b.example)", table)
+
     def test_a_live_url_becomes_a_link(self):
         table = gen.render_table([
             {"name": "X", "repo": "https://github.com/o/X", "claim": "does things", "live": "https://x.example"},

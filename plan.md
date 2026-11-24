@@ -237,7 +237,8 @@ the data changes.
 **Done when:** every demo link is verified and its cold-start state is visible.
 
 - **m4.2.1 Demo links**
-  - [ ] Add per-project demo links that are checked automatically, and mark any that are cold-starting (Render free tier) with a note. `[W]`
+  - [x] Add per-project demo links that are checked automatically, and mark any that are cold-starting (Render free tier) with a note. `[W]`
+    - verified-here: three projects carry a `live` URL and every one is checked on the weekly CI run — `python3 scripts/check_claims.py --links` → `ok   live  Nexus 200 in 1.0s`, `FinScrape 200 in 0.5s`, `LobIQ 200 in 0.8s`, `9 projects, 0 problem(s)`; `python3 scripts/check_links.py` covers the same rows through README (`0 problem(s)`). The Render demo is marked where the reader sees it: `gen_readme.py` renders `[Live (cold start)](…)` for a project with `cold_start: true` and plain `[Live](…)` otherwise — README now holds `1 Live (cold start)` and `2 [Live]`, and `TableTest.test_a_cold_start_is_named_in_the_link` locks both spellings. `python3 -m unittest discover -s tests` → `Ran 46 tests … OK`; markdownlint 0 errors; `check_page.py` 0 problems.
 - **m4.2.2 Growth**
   - [ ] Add an "archive" section for older projects, collapsed, so the main table stays short as the portfolio grows. `[W]`
   - [ ] Add a machine-readable `profile.json` (projects, links, stack) so the table, badges and a future personal site all read one source. `[W]`
@@ -479,3 +480,4 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m3.3.2 [x] cron 00:00 → 02:30 UTC and `workflow_dispatch.year` → `--year` | proof: `--year 2026` → 3,556 contributions, 48 weeks, exit 0, differs from full run | needs-verify: when GitHub finalises a day | next: M4.1.1 (W2 done)
 - 2026-11-23 m4.1.1 [x] generated `Now` line from the most recently pushed public repo (`now.json` + `scripts/gen_now.py`) | proof: `--write` → FinScrape pushed 2026-11-23; stale 84 days → exit 1; edited repo without re-render → exit 1; 45 tests OK | next: m4.1.2
 - 2026-11-23 m4.1.2 [x] no writing section, because there is no writing; placeholder guard added | proof: `/blog`, `/writing`, `/notes`, `/posts` all serve the SPA shell, `portfolio/content` holds only `cv.base.json`; injected "coming soon" → exit 1 | next: m4.2.1
+- 2026-11-23 m4.2.1 [x] demo links checked weekly, Render demo labelled cold start in the table | proof: `--links` 3 demos 200 (1.0/0.5/0.8 s), `check_links.py` 0 problems, README `1 Live (cold start)` + `2 [Live]`, 46 tests OK | next: m4.2.2

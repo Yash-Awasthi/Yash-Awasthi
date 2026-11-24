@@ -40,7 +40,9 @@ def render_table(projects: list[dict]) -> str:
     for p in projects:
         cell = p["claim"]
         if p.get("live"):
-            cell += f' [Live]({p["live"]})'
+            # A sleeping free tier is visible to the reader, not a surprise click.
+            label = "Live (cold start)" if p.get("cold_start") else "Live"
+            cell += f' [{label}]({p["live"]})'
         lines.append(f'| [**{p["name"]}**]({p["repo"]}) | {cell} |')
     return "\n".join(lines)
 
