@@ -114,7 +114,7 @@ class WriteTest(unittest.TestCase):
         before = {p.name: p.read_bytes() for p in Path(self.dir).iterdir()}
         real_render, calls = assets.render, []
 
-        def render_then_fail(weeks, theme):
+        def render_then_fail(weeks, theme, *rest):
             calls.append(theme)
             if len(calls) == 2:
                 raise RuntimeError("theme 2 exploded")
@@ -386,3 +386,27 @@ class ColourBlindTest(unittest.TestCase):
                     self.assertGreater(self.delta_e(sim[i], sim[i + 1]), 10,
                                        "levels become indistinguishable for deuteranopes")
             self.assertGreater(self.delta_e(sim[0], sim[-1]), 40)
+
+class ProvenanceTest(unittest.TestCase):
+    """A stale image has to identify its own generator, data range and commit (M6.1.2)."""
+
+    WEEKS = [[("2026-11-01", 3), ("2026-11-02", 0)]]
+
+    def test_the_comment_names_version_data_and_commit(self):
+        svg = city.render(self.WEEKS, "light", "citykit 1.0.0 · data 2026-11-01..2026-11-02 · commit abc1234")
+        self.assertIn("<!-- citykit 1.0.0 · data 2026-11-01..2026-11-02 · commit abc1234 -->", svg)
+
+    def test_the_version_number_survives_the_numeric_cleanup(self):
+        svg = city.render(self.WEEKS, "light", "citykit 1.0.0 · data 2026-11-01..2026-11-02 · commit abc1234")
+        self.assertIn("citykit 1.0.0", svg)
+        self.assertNotIn("citykit 1 ·", svg)
+
+    def test_without_provenance_there_is_no_comment(self):
+        self.assertNotIn("citykit", city.render(self.WEEKS, "light"))
+
+    def test_the_committed_assets_carry_provenance(self):
+        for svg in sorted((ROOT / "assets").glob("city-*.svg")):
+            self.assertIn("<!-- citykit ", svg.read_text(encoding="utf-8"), svg.name)
+
+    def test_the_cli_reports_the_commit(self):
+        self.assertRegex(city.commit_sha(), r"^([0-9a-f]{7}|unknown)$")

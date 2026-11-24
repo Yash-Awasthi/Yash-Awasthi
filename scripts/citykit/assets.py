@@ -19,9 +19,9 @@ def summary(weeks):
     return f"{total} contributions, {min(days)} to {max(days)}, {len(weeks)} weeks"
 
 
-def write_assets(weeks, out_dir="assets"):
+def write_assets(weeks, out_dir="assets", provenance=""):
     """Render both themes first, then swap both files in, so neither theme can go stale."""
-    rendered = {theme: render(weeks, theme) for theme in THEMES}
+    rendered = {theme: render(weeks, theme, provenance) for theme in THEMES}
     facts = stats(weeks)
     facts["caption"] = caption(facts)
     out = Path(out_dir)

@@ -13,11 +13,27 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from citykit import (THEMES, FetchError, caption, fetch, filter_year, layout,  # noqa: E402
-                     parse_calendar, render, stats, summary, unsafe_refs, write_assets)
+from citykit import (THEMES, FetchError, __version__, caption, fetch,  # noqa: E402
+                     filter_year, layout, parse_calendar, render, stats, summary,
+                     unsafe_refs, write_assets)
 
 __all__ = ["THEMES", "FetchError", "caption", "fetch", "filter_year", "layout", "parse_calendar",
            "render", "stats", "summary", "unsafe_refs", "write_assets"]
+
+
+def commit_sha() -> str:
+    """The commit that produced the current assets, so a stale SVG can be identified."""
+    env = os.environ.get("GITHUB_SHA", "").strip()
+    if env:
+        return env[:7]
+    try:
+        import subprocess
+
+        out = subprocess.run(["git", "rev-parse", "--short=7", "HEAD"], capture_output=True,
+                             text=True, check=True, cwd=Path(__file__).resolve().parents[1])
+        return out.stdout.strip() or "unknown"
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
 
 
 def main() -> int:
@@ -39,8 +55,11 @@ def main() -> int:
     except FetchError as e:
         print(f"city.py: {e} (assets left untouched)", file=sys.stderr)
         return 1
+    days = sorted(d for w in weeks for d, _ in w)
+    provenance = f"citykit {__version__} · data {days[0]}..{days[-1]} · commit {commit_sha()}"
     print(f"city.py: {summary(weeks)}")
-    write_assets(weeks, args.out)
+    print(f"city.py: {provenance}")
+    write_assets(weeks, args.out, provenance)
     return 0
 
 

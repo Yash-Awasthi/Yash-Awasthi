@@ -102,7 +102,7 @@ def verge(t, x0, x1, y):
             f'<path d="{"".join(d)}" stroke="{t["tuft"]}" stroke-width=".8" stroke-linecap="round" fill="none"/>')
 
 
-def render(weeks, theme):
+def render(weeks, theme, provenance=""):
     t = THEMES[theme]
     peak = max(1, max(n for w in weeks for _, n in w))
     items, span = layout(weeks)
@@ -225,4 +225,8 @@ def render(weeks, theme):
                f'Each tower is one day, its height the contributions that day; each river a run of quiet weeks.</text>')
     out.append("</svg>")
     # Every ".0" is redundant in SVG numbers: dropping it keeps the geometry byte-identical.
-    return re.sub(r"(?<=[0-9])\.0(?![0-9])", "", "\n".join(out))
+    svg = re.sub(r"(?<=[0-9])\.0(?![0-9])", "", "\n".join(out))
+    if provenance:  # added after the numeric cleanup, which would otherwise eat the version number
+        head = svg.index(">") + 1
+        svg = svg[:head] + "\n<!-- " + provenance + " -->" + svg[head:]
+    return svg

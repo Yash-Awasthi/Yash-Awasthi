@@ -219,6 +219,30 @@ def check_city_encoder() -> list[str]:
     return problems
 
 
+PROVENANCE = re.compile(r"<!-- citykit (\d+\.\d+\.\d+) · data (\d{4}-\d{2}-\d{2})\.\.(\d{4}-\d{2}-\d{2}) "
+                          r"· commit ([0-9a-f]{7}|unknown) -->")
+
+
+def check_provenance() -> list[str]:
+    """A stale image must name the generator, its data range and the commit (M6.1.2)."""
+    problems, found = [], {}
+    for svg in sorted(ASSETS.glob("city-*.svg")):
+        match = PROVENANCE.search(svg.read_text(encoding="utf-8"))
+        if not match:
+            problems.append(f"{svg.name} carries no `citykit <version> · data <first>..<last> · commit <sha>` comment")
+            continue
+        version, first, last, commit = match.groups()
+        found[svg.name] = f"v{version} {first}..{last} at {commit}"
+        title = re.search(r'<title id="ct"[^>]*>([^<]*)</title>', svg.read_text(encoding="utf-8"))
+        if title and first[:4] not in title.group(1):
+            problems.append(f"{svg.name} provenance says data starts {first} but the title says {title.group(1)!r}")
+    if len(set(v.split(' at ')[0] for v in found.values())) > 1:
+        problems.append(f"the two themes disagree on their data range: {found}")
+    if not problems:
+        print(f"ok   prov  {', '.join(f'{k} {v}' for k, v in found.items())}")
+    return problems
+
+
 def check_hosts_documented() -> list[str]:
     """A new external host is a new dependency; docs/DEPENDENCIES.md must name it."""
     from urllib.parse import urlparse
@@ -239,7 +263,7 @@ def check_hosts_documented() -> list[str]:
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
                 + check_theme_geometry() + check_asset_safety() + check_accessible_names()
-                + check_no_placeholders() + check_badge_contrast() + check_city_encoder()
+                + check_no_placeholders() + check_badge_contrast() + check_city_encoder() + check_provenance()
                 + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
