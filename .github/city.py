@@ -103,6 +103,12 @@ def layout(weeks):
     return items, x
 
 
+def nf(v):
+    """A compact number: one decimal, no trailing ".0" (identical geometry, fewer bytes)."""
+    s = f"{v:.1f}"
+    return s[:-2] if s.endswith(".0") else s
+
+
 def rgb(c):
     return [int(c[i:i + 2], 16) for i in (1, 3, 5)]
 
@@ -119,11 +125,16 @@ def grad(gid, c0, c1):
 def sky_scene(theme, width, horizon):
     out = []
     if theme == "dark":
+        buckets = {}
         for i in range(70):
             h = zlib.crc32(b"star%d" % i)
             x, y = h % int(width), 8 + (h >> 12) % int(horizon - 8)
-            out.append(f'<circle class="t" style="animation-delay:{h % 50 / 10}s" cx="{x}" cy="{y}" '
-                       f'r="{.5 + (h >> 24) % 3 * .35:.2f}" fill="#fff" opacity=".8"/>')
+            r = .5 + (h >> 24) % 3 * .35
+            buckets.setdefault(h % 50 // 10, []).append(f'<circle cx="{x}" cy="{y}" r="{r:.2f}"/>')
+        out.append('<g fill="#fff" opacity=".8">')
+        for tenth, stars in sorted(buckets.items()):  # ten groups, not seventy, share the twinkle delay
+            out.append(f'<g class="t" style="animation-delay:{tenth}s">{"".join(stars)}</g>')
+        out.append("</g>")
         out.append('<circle cx="90" cy="46" r="15" fill="#fdf3c7" opacity=".95"/>'
                    '<circle cx="97" cy="41" r="13" fill="#0b1324"/>')
     else:
@@ -171,31 +182,35 @@ def road(theme, x0, x1, y):
 
 
 def flora(bx, by, dx, dy, seed, fog, t):
-    """A tree or hedge standing on an empty day cell."""
+    """A tree or hedge standing on an empty day cell. Its trunk shares one CSS class."""
     leaf = mix(t["leaf"], t["fog"], fog)
     dark, light = mix(leaf, "#000000", .3), mix(leaf, "#ffffff", .25)
     cx = bx + BAR / 2 + dx / 2
     if seed % 3:
         r = 4 + seed % 3
-        return (f'<line x1="{cx}" y1="{by - dy / 2}" x2="{cx}" y2="{by - dy / 2 - 6}" stroke="{t["trunk"]}" stroke-width="1.6"/>'
-                f'<circle cx="{cx}" cy="{by - dy / 2 - 6 - r * .6}" r="{r}" fill="{dark}"/>'
-                f'<circle cx="{cx - .8}" cy="{by - dy / 2 - 7 - r * .6}" r="{r * .75}" fill="{leaf}"/>'
-                f'<circle cx="{cx - 1.8}" cy="{by - dy / 2 - 8 - r * .6}" r="{r * .3}" fill="{light}"/>')
-    return (f'<polygon fill="{dark}" points="{bx + BAR},{by} {bx + BAR + dx},{by - dy} {bx + BAR + dx},{by - dy - 5} {bx + BAR},{by - 5}"/>'
-            f'<rect x="{bx}" y="{by - 5}" width="{BAR}" height="5" rx="1.5" fill="{leaf}"/>'
-            f'<polygon fill="{light}" points="{bx},{by - 5} {bx + BAR},{by - 5} {bx + BAR + dx},{by - dy - 5} {bx + dx},{by - dy - 5}"/>')
+        y = by - dy / 2
+        return (f'<line class="k" x1="{nf(cx)}" y1="{nf(y)}" x2="{nf(cx)}" y2="{nf(y - 6)}"/>'
+                f'<circle cx="{nf(cx)}" cy="{nf(y - 6 - r * .6)}" r="{nf(r)}" fill="{dark}"/>'
+                f'<circle cx="{nf(cx - .8)}" cy="{nf(y - 7 - r * .6)}" r="{nf(r * .75)}" fill="{leaf}"/>'
+                f'<circle cx="{nf(cx - 1.8)}" cy="{nf(y - 8 - r * .6)}" r="{nf(r * .3)}" fill="{light}"/>')
+    return (f'<polygon fill="{dark}" points="{nf(bx + BAR)},{nf(by)} {nf(bx + BAR + dx)},{nf(by - dy)} '
+            f'{nf(bx + BAR + dx)},{nf(by - dy - 5)} {nf(bx + BAR)},{nf(by - 5)}"/>'
+            f'<rect x="{nf(bx)}" y="{nf(by - 5)}" width="{BAR}" height="5" rx="1.5" fill="{leaf}"/>'
+            f'<polygon fill="{light}" points="{nf(bx)},{nf(by - 5)} {nf(bx + BAR)},{nf(by - 5)} '
+            f'{nf(bx + BAR + dx)},{nf(by - dy - 5)} {nf(bx + dx)},{nf(by - dy - 5)}"/>')
 
 
 def verge(t, x0, x1, y):
-    out = [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="6" fill="{t["grass"]}"/>']
+    """Grass strip with tufts; every tuft shares one path and one set of stroke attributes."""
+    d = []
     x = x0 + 2
     while x < x1 - 2:
         h = zlib.crc32(b"tuft%d" % int(x))
         tall = 2 + h % 4
-        out.append(f'<path d="M{x},{y + 1} l-1.2,-{tall} M{x},{y + 1} l0,-{tall + 1} M{x},{y + 1} l1.2,-{tall}" '
-                   f'stroke="{t["tuft"]}" stroke-width=".8" stroke-linecap="round"/>')
+        d.append(f"M{nf(x)},{nf(y + 1)}l-1.2,-{tall}M{nf(x)},{nf(y + 1)}l0,-{tall + 1}M{nf(x)},{nf(y + 1)}l1.2,-{tall}")
         x += 4 + h % 6
-    return "".join(out)
+    return (f'<rect x="{nf(x0)}" y="{nf(y)}" width="{nf(x1 - x0)}" height="6" fill="{t["grass"]}"/>'
+            f'<path d="{"".join(d)}" stroke="{t["tuft"]}" stroke-width=".8" stroke-linecap="round" fill="none"/>')
 
 
 def render(weeks, theme):
@@ -220,10 +235,6 @@ def render(weeks, theme):
         f'font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">',
         "<defs>",
         grad("sky", *t["sky"]), grad("gnd", *t["ground"]), grad("wat", *t["water"]),
-        '<linearGradient id="lit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"/>'
-        '<stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient>',
-        '<linearGradient id="sid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".04"/>'
-        '<stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>',
         f'<radialGradient id="glow" cx=".75" cy=".85" r=".55"><stop offset="0" stop-color="{accent}" stop-opacity=".2"/>'
         f'<stop offset="1" stop-color="{accent}" stop-opacity="0"/></radialGradient>',
         "</defs>",
@@ -235,7 +246,8 @@ def render(weeks, theme):
         ".t{animation:tw 4s ease-in-out infinite}@keyframes tw{50%{opacity:.1}}"
         ".c{animation:drive linear infinite}@keyframes drive{from{transform:translateX(0)}to{transform:translateX(var(--d))}}"
         ".a{animation:blink 1.6s steps(1) infinite}@keyframes blink{50%{opacity:.15}}"
-        ".s{animation:drift linear infinite alternate}@keyframes drift{to{transform:translateX(60px)}}</style>",
+        ".s{animation:drift linear infinite alternate}@keyframes drift{to{transform:translateX(60px)}}"
+        f".k{{stroke:{t['trunk']};stroke-width:1.6}}</style>",
         '<rect width="100%" height="100%" rx="16" fill="url(#sky)"/>',
         '<rect width="100%" height="100%" rx="16" fill="url(#glow)"/>',
         sky_scene(theme, width, base_y - MAX_H * 0.55),
@@ -250,9 +262,9 @@ def render(weeks, theme):
         cx = (x0 + x1) / 2
         out.append(f'<g class="f"><polygon fill="url(#wat)" points="{plane(x0, x1)}"/>'
                    f'<rect x="{x0}" y="{gy}" width="{x1 - x0}" height="6" fill="{t["water"][1]}"/>')
-        for k in (-9, -3, 3, 9):
-            out.append(f'<line class="v" style="animation-delay:{k / 10:.1f}s" x1="{cx + k + bkx}" y1="{gy + bky}" '
-                       f'x2="{cx + k}" y2="{gy}" stroke="{t["wave"]}" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>')
+        waves = "".join(f'<line style="animation-delay:{k / 10:.1f}s" x1="{cx + k + bkx}" y1="{gy + bky}" '
+                        f'x2="{cx + k}" y2="{gy}"/>' for k in (-9, -3, 3, 9))
+        out.append(f'<g class="v" stroke="{t["wave"]}" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round">{waves}</g>')
         out.append(f'<text x="{cx}" y="{gy + 40}" font-size="10" letter-spacing=".4" text-anchor="middle" '
                    f'fill="{t["muted"]}">{val} wk quiet</text></g>')
 
@@ -281,22 +293,29 @@ def render(weeks, theme):
             delay = 0.2 + x / span * 2.4 + r * 0.08
             parts = [
                 f'<g class="b" style="animation-delay:{delay:.2f}s"><title>{n} on {d}</title>',
-                f'<polygon fill="{mix(col, "#000000", .32)}" points="{side}"/><polygon fill="url(#sid)" points="{side}"/>',
+                f'<polygon fill="{mix(col, "#000000", .45)}" points="{side}"/>',
                 f'<rect x="{bx}" y="{top:.1f}" width="{BAR}" height="{h:.1f}" fill="{col}"/>',
-                f'<rect x="{bx}" y="{top:.1f}" width="{BAR}" height="{h:.1f}" fill="url(#lit)"/>',
                 f'<polygon fill="{mix(col, "#ffffff", .38)}" points="{bx},{top:.1f} {bx + BAR},{top:.1f} '
                 f'{bx + BAR + dx},{top - dy:.1f} {bx + dx},{top - dy:.1f}"/>',
             ]
             seed = zlib.crc32(d.encode())
-            wy, k = top + 5, 0
+            wy, k, lit, twinkle = top + 5, 0, [], []
             while wy < by - 6:
                 for wx in (bx + 3, bx + BAR - 5):
                     k += 1
                     on = (seed + k * 2654435761) % 7
-                    if on < 3:
-                        tw = f' class="t" style="animation-delay:{(seed + k) % 40 / 10}s"' if on == 0 and theme == "dark" else ""
-                        parts.append(f'<rect{tw} x="{wx}" y="{wy:.1f}" width="2" height="2.4" fill="{t["win"]}" opacity="{t["win_on"]}"/>')
+                    if on >= 3:
+                        continue
+                    if on == 0 and theme == "dark":
+                        twinkle.append(f"M{round(wx)},{round(wy)}h2v2.4h-2z")  # twinkles blink per building, not per window
+                    else:
+                        lit.append(f"M{round(wx)},{round(wy)}h2v2.4h-2z")  # a 2x2.4 window, one path for all
                 wy += 6
+            if lit:
+                parts.append(f'<path d="{"".join(lit)}" fill="{t["win"]}" opacity="{t["win_on"]}"/>')
+            if twinkle:
+                parts.append(f'<g class="t" style="animation-delay:{(seed >> 3) % 40 / 10}s">'
+                             f'<path d="{"".join(twinkle)}" fill="{t["win"]}" opacity="{t["win_on"]}"/></g>')
             if n in towers and n:
                 ax, ay = bx + BAR / 2 + dx / 2, top - dy / 2
                 parts.append(f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{ax:.1f}" y2="{ay - 16:.1f}" stroke="{mix(col, "#000000", .4)}" stroke-width="1.2"/>'
@@ -304,7 +323,8 @@ def render(weeks, theme):
             parts.append("</g>")
             out.append("".join(parts))
     out.append("</svg>")
-    return "\n".join(out)
+    # Every ".0" is redundant in SVG numbers: dropping it keeps the geometry byte-identical.
+    return re.sub(r"(?<=[0-9])\.0(?![0-9])", "", "\n".join(out))
 
 
 def filter_year(weeks, year):

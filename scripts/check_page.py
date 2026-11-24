@@ -15,8 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 ASSETS = ROOT / "assets"
 
-# Budgets. M3.2 tightens the SVG budget to 100 KB per theme.
-SVG_BUDGET = 200_000
+# Budgets. M3.2 tightened the SVG budget to 100 KiB per theme; both assets sat at
+# 94,237 B and 84,777 B on 2026-11-23, so the slack is real, not accidental.
+SVG_BUDGET = 102_400
 # §12 of plan.md holds the page to 40–60 lines at W1: a profile that turns into
 # a résumé loses the reader. Raising this is a deliberate, reviewed change.
 README_MAX_LINES = 60
