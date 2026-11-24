@@ -1,9 +1,6 @@
 <div align="center">
 
-<picture>
-  <source media="(min-width: 760px)" srcset="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg">
-  <img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg" width="0" height="0" alt=""/>
-</picture>
+<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg" width="100%" height="200" alt=""/>
 
 # Yash Vaibhav Awasthi
 
