@@ -208,9 +208,12 @@ the data changes.
 **Done when:** versions are pinned and the cadence matches the data.
 
 - **m3.3.1 Pinning**
-  - [ ] Node/Python versions for the workflow pinned explicitly (no floating `python3`), with the version in `docs/`. `[F]`
+  - [x] Node/Python versions for the workflow pinned explicitly (no floating `python3`), with the version in `docs/`. `[F]`
+    - verified-here: both workflows now open with `actions/setup-python@6d4fd22b…` pinned to `python-version: "3.14.8"` (the interpreter every local run above used), and `check.yml` adds `actions/setup-node@949feb24…` at `node-version: "24.22.3"` (latest v24 from `https://nodejs.org/dist/index.json`); SHAs resolved from `https://api.github.com/repos/actions/{setup-python,setup-node}/git/ref/tags/v7.1.0`. A parser read of both files lists `actions/checkout`, `actions/setup-python`, `actions/setup-node` as the first three steps of `static`, and `checkout` + `setup-python` in `links` and `generate`. `docs/CI.md` lists Python 3.14.8, Node 24.22.3, markdownlint-cli2 0.16.0, the three action SHAs, the schedules, and the bump procedure; `npx markdownlint-cli2@0.16.0` over README + SECURITY + `docs/*.md` (5 files) → 0 errors.
 - **m3.3.2 Cadence**
-  - [ ] Replace the daily cron with a schedule that matches the data's update rate and add `workflow_dispatch` with a `--year` input. `[F]`
+  - [x] Replace the daily cron with a schedule that matches the data's update rate and add `workflow_dispatch` with a `--year` input. `[F]`
+    - verified-here: `contrib-city.yml` cron moved `0 0 * * *` → `30 2 * * *` (a midnight run races the day boundary the calendar is about to close; the new time also clears the weekly 06:00 check) and `workflow_dispatch` gained a `year` input that is appended as `--year`. The flag it now passes works: `python3 .github/city.py Yash-Awasthi --year 2026 --out /tmp/city26` → `city.py: 3556 contributions, 2026-01-01 to 2026-11-24, 48 weeks`, exit 0, two SVGs written, bytes differ from the full-window run (`md5 bfccd426…` vs `83c0e919…`). Commit noise stays low without a slower cadence: the commit step still exits 0 when `git diff --cached --quiet` (m1.3.2).
+    - needs-verify: GitHub does not publish when a day's count is final, so `02:30 UTC` is a margin rather than a measurement (also recorded in `docs/CI.md`).
 
 ---
 
@@ -470,3 +473,5 @@ claim that cannot be sourced is deleted, not softened.
 - 2026-11-23 m3.2.1 [x] city SVGs cut 44.5%/44.9% (169,964→94,442 B, 154,147→84,982 B) | proof: `check_page.py` 3 assets under 102,400 B; +40 KB filler → exit 1; 90.8/91.5% pixels identical vs old render; 35 tests OK | also: untracked 7 `.pyc`, added `.gitignore` | next: m3.2.2
 - 2026-11-23 m3.2.2 [x] title + desc on both SVGs name year, dates and total | proof: `check_page.py` → `ok a11y city-dark 3,511, city-light 3,511`; title+desc deleted → exit 1; 38 tests OK | next: m3.2.3
 - 2026-11-23 m3.2.3 [x] generator split: CLI 48 lines + `scripts/citykit/` (source, layout, theme, draw, assets, safety) | proof: re-render identical to committed (md5 83c0e919/83ba08e6), live run 3,555 contributions exit 0, bad token exit 1 with assets untouched, 38 tests OK | next: m3.3.1
+- 2026-11-23 m3.3.1 [x] Python 3.14.8, Node 24.22.3 and three action SHAs pinned; `docs/CI.md` | proof: workflow parse lists the pinned steps, markdownlint 5 files 0 errors | next: m3.3.2
+- 2026-11-23 m3.3.2 [x] cron 00:00 → 02:30 UTC and `workflow_dispatch.year` → `--year` | proof: `--year 2026` → 3,556 contributions, 48 weeks, exit 0, differs from full run | needs-verify: when GitHub finalises a day | next: M4.1.1 (W2 done)

@@ -1,9 +1,17 @@
 name: Generate 3D Contribution City
 
 on:
+  # 02:30 UTC: late enough that the previous UTC day's count has settled, early enough
+  # that the banner is current for the European morning. See docs/CI.md.
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "30 2 * * *"
   workflow_dispatch:
+    inputs:
+      year:
+        description: "Render only this calendar year (blank renders the last 52 weeks)"
+        required: false
+        default: ""
+        type: string
 
 # Least privilege by default: jobs that need to write opt in at job level.
 permissions:
@@ -24,7 +32,12 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - run: python3 .github/city.py ${{ github.repository_owner }}
+      # A floating python3 on the runner image is not a toolchain; pin it (docs/CI.md).
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.14.8"
+
+      - run: python3 .github/city.py ${{ github.repository_owner }} ${{ inputs.year && format('--year {0}', inputs.year) || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
