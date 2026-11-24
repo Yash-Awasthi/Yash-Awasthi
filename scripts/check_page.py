@@ -116,6 +116,20 @@ def check_asset_safety() -> list[str]:
     return problems
 
 
+PLACEHOLDERS = ("coming soon", "todo", "tbd", "lorem ipsum", "placeholder", "example.com",
+                "your-name", "yourname")
+
+
+def check_no_placeholders() -> list[str]:
+    """Sections exist because the content does, never to fill a gap (M4.1.2)."""
+    text = README.read_text(encoding="utf-8").lower()
+    problems = [f"README.md contains the placeholder {word!r}" for word in PLACEHOLDERS if word in text]
+    problems += [f"README.md links to a bare {m!r}" for m in re.findall(r"\]\((\#[^)]*|)\)", text)]
+    if not problems:
+        print("ok   text  no placeholders, no empty link targets")
+    return problems
+
+
 def check_accessible_names() -> list[str]:
     """A screen reader should hear the year and the total, not "image" (M3.2.2)."""
     problems, totals = [], {}
@@ -169,7 +183,7 @@ def check_hosts_documented() -> list[str]:
 def main() -> int:
     problems = (check_asset_size() + check_readme_lines() + check_images_and_links()
                 + check_theme_geometry() + check_asset_safety() + check_accessible_names()
-                + check_hosts_documented())
+                + check_no_placeholders() + check_hosts_documented())
     for p in problems:
         print(f"FAIL {p}")
     print(f"{len(problems)} problem(s)")
