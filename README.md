@@ -39,9 +39,23 @@ B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working wh
 | [**RISC-VInjection**](https://github.com/Yash-Awasthi/RISC-VInjection) | Custom RISC-V instruction for transformer attention, with GCC, Binutils and a GIMPLE pass. |
 <!-- projects:end -->
 
+<!-- archive:start -->
+<details>
+<summary>Earlier work (2)</summary>
+
+| Project | What it did |
+|:--|:--|
+| [**sign-setu**](https://github.com/Yash-Awasthi/sign-setu) | Offline Android aid for police talking to a deaf or non-verbal person: a 3D character signs, typed text is played in Indian Sign Language order, sessions sit in an encrypted SQLCipher database. |
+| [**ToolkitArchive**](https://github.com/Yash-Awasthi/ToolkitArchive) | Verified archive of AI models, coding agents, free tiers and benchmarks, with head-to-head charts over 99 models. |
+
+</details>
+<!-- archive:end -->
+
 ## Stack
 
+<!-- stack:start -->
 **Stack:** TypeScript · Python · Kotlin · C++ · React · Next.js · Node.js · FastAPI · PostgreSQL · Redis · AWS · Cloudflare · Docker · Three.js
+<!-- stack:end -->
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=ts,py,kotlin,cpp,react,nextjs,nodejs,fastapi,postgres,redis,aws,cloudflare,docker,threejs&perline=14&theme=dark" alt=""/>

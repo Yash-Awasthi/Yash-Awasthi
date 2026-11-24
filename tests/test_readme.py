@@ -57,6 +57,26 @@ class TableTest(unittest.TestCase):
             gen.replace_block("# no block here\n", "projects", "x")
 
 
+class ArchiveTest(unittest.TestCase):
+    def setUp(self):
+        self.data = gen.load()
+
+    def test_the_archive_is_collapsed_and_counts_itself(self):
+        block = gen.render_archive(self.data["archive"])
+        self.assertTrue(block.startswith("<details>"))
+        self.assertIn(f"<summary>Earlier work ({len(self.data['archive'])})</summary>", block)
+        self.assertTrue(block.endswith("</details>"))
+        for a in self.data["archive"]:
+            self.assertIn(f"[**{a['name']}**]({a['repo']})", block)
+
+    def test_no_archive_renders_nothing_at_all(self):
+        self.assertEqual(gen.render_archive([]), "")
+
+    def test_the_stack_line_comes_from_the_data(self):
+        self.assertEqual(gen.render_stack(["A", "B"]), "**Stack:** A · B")
+        self.assertIn(self.data["stack"][0], gen.render_stack(self.data["stack"]))
+
+
 class BadgeTest(unittest.TestCase):
     def setUp(self):
         self.data = gen.load()

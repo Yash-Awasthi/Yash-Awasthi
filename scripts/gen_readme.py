@@ -26,6 +26,8 @@ NOW = ROOT / "now.json"
 BLOCKS = {
     "badges": ("<!-- badges:start -->", "<!-- badges:end -->"),
     "now": ("<!-- now:start -->", "<!-- now:end -->"),
+    "stack": ("<!-- stack:start -->", "<!-- stack:end -->"),
+    "archive": ("<!-- archive:start -->", "<!-- archive:end -->"),
     "projects": ("<!-- projects:start -->", "<!-- projects:end -->"),
 }
 NOW_DESCRIPTION_CHARS = 120
@@ -72,6 +74,24 @@ def render_now(now: dict) -> str:
     return line + f' Last push {now["pushed_at"]}.'
 
 
+def render_stack(stack: list[str]) -> str:
+    return "**Stack:** " + " · ".join(stack)
+
+
+def render_archive(archive: list[dict]) -> str:
+    """Older work stays one click away, so the main table can stay short."""
+    if not archive:
+        return ""
+    rows = [f'| [**{a["name"]}**]({a["repo"]}) | {a["claim"]} |' for a in archive]
+    body = "\n".join(["| Project | What it did |", "|:--|:--|"] + rows)
+    return (
+        "<details>\n"
+        f"<summary>Earlier work ({len(archive)})</summary>\n\n"
+        f"{body}\n\n"
+        "</details>"
+    )
+
+
 def render_block(kind: str, body: str) -> str:
     start, end = BLOCKS[kind]
     return f"{start}\n{body}\n{end}"
@@ -89,7 +109,9 @@ def replace_block(readme: str, kind: str, body: str) -> str:
 def render_readme(readme: str, data: dict, now: dict) -> str:
     readme = replace_block(readme, "badges", render_badges(data["profile"]["links"]))
     readme = replace_block(readme, "now", render_now(now))
-    return replace_block(readme, "projects", render_table(data["projects"]))
+    readme = replace_block(readme, "projects", render_table(data["projects"]))
+    readme = replace_block(readme, "archive", render_archive(data.get("archive", [])))
+    return replace_block(readme, "stack", render_stack(data["stack"]))
 
 
 def main() -> int:
@@ -109,6 +131,7 @@ def main() -> int:
             print("FAIL README.md is not what projects.json renders; run python3 scripts/gen_readme.py --write")
             return 1
         print(f"ok   data {len(data['profile']['links'])} badges, {len(data['projects'])} projects, "
+              f"{len(data.get('archive', []))} archived, {len(data['stack'])} stack items, "
               f"now={now['repo']}, README.md matches")
         return 0
 

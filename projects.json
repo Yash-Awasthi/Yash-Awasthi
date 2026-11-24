@@ -218,5 +218,51 @@
         }
       ]
     }
+  ],
+  "stack": [
+    "TypeScript",
+    "Python",
+    "Kotlin",
+    "C++",
+    "React",
+    "Next.js",
+    "Node.js",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "AWS",
+    "Cloudflare",
+    "Docker",
+    "Three.js"
+  ],
+  "archive": [
+    {
+      "name": "sign-setu",
+      "repo": "https://github.com/Yash-Awasthi/sign-setu",
+      "claim": "Offline Android aid for police talking to a deaf or non-verbal person: a 3D character signs, typed text is played in Indian Sign Language order, sessions sit in an encrypted SQLCipher database.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "An offline Android app that helps a police officer",
+            "SQLCipher"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ToolkitArchive",
+      "repo": "https://github.com/Yash-Awasthi/ToolkitArchive",
+      "claim": "Verified archive of AI models, coding agents, free tiers and benchmarks, with head-to-head charts over 99 models.",
+      "claim_source": [
+        {
+          "file": "README.md",
+          "any": [
+            "Every AI model, coding agent, free tier, skill and benchmark worth knowing",
+            "99_models"
+          ]
+        }
+      ]
+    }
   ]
 }

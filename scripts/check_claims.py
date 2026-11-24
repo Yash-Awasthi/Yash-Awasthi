@@ -139,7 +139,7 @@ def main() -> int:
 
     data = load()
     problems = []
-    for p in data["projects"]:
+    for p in data["projects"] + data.get("archive", []):
         problems += check_project(p)
         problems += check_source(p)
     for link in data["profile"]["links"]:
@@ -161,7 +161,8 @@ def main() -> int:
 
     for p in problems:
         print(f"FAIL {p}")
-    print(f"{len(data['projects'])} projects, {len(problems)} problem(s)")
+    print(f"{len(data['projects'])} projects, {len(data.get('archive', []))} archived, "
+          f"{len(problems)} problem(s)")
     return 1 if problems else 0
 
 
