@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg" width="100%" height="200" alt=""/>
+<img src="https://raw.githubusercontent.com/Yash-Awasthi/Yash-Awasthi/master/assets/header.svg" width="100%" height="120" alt=""/>
 
 # Yash Vaibhav Awasthi
 
