@@ -1,9 +1,9 @@
 {
   "user": "Yash-Awasthi",
-  "repo": "FinScrape",
-  "url": "https://github.com/Yash-Awasthi/FinScrape",
-  "description": "FinScrape: see what moves markets before it's news. Geopolitics and world news mapped to the tickers they move, with judged first and second-order impact on a live globe and accuracy proof. FastAPI, Postgres and vanilla TypeScript on free tiers.",
-  "language": "Python",
-  "pushed_at": "2026-11-23",
-  "fetched_at": "2026-11-24"
+  "repo": "KeyRouter",
+  "url": "https://github.com/Yash-Awasthi/KeyRouter",
+  "description": "KeyRouter: disposable, expiring API keys for any OpenAI- or Anthropic-compatible provider, served from a Cloudflare Worker with a small admin page.",
+  "language": "JavaScript",
+  "pushed_at": "2026-11-24",
+  "fetched_at": "2026-11-25"
 }

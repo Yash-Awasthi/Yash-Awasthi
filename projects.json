@@ -38,20 +38,20 @@
     {
       "name": "Nexus",
       "repo": "https://github.com/Yash-Awasthi/Nexus",
-      "claim": "Multi-agent LLM orchestration: 39 providers behind one streaming API, council deliberation, pgvector + BM25 memory.",
+      "claim": "Multi-agent LLM orchestration: 40 providers behind one streaming API, council deliberation, pgvector + BM25 memory.",
       "live": "https://nexus-iosc.onrender.com",
       "claim_source": [
         {
           "file": "apps/api/src/lib/provider-keys.ts",
           "count": "DRIVER_FACTORIES",
-          "line": 70
+          "line": 71
         },
         {
           "file": "README.md",
           "any": [
             "Council deliberation"
           ],
-          "line": 127
+          "line": 170
         },
         {
           "file": "docs/FEATURES.md",
@@ -59,7 +59,7 @@
             "pgvector",
             "BM25"
           ],
-          "line": 19
+          "line": 21
         }
       ],
       "cold_start": true,
@@ -107,14 +107,14 @@
           "line": 71
         },
         {
-          "file": "backend/app/services/daily_decision.py",
+          "file": "backend/app/services/fitness/daily_decision.py",
           "any": [
             "TRAIN",
             "REDUCE",
             "RECOVER",
             "REST"
           ],
-          "line": 15
+          "line": 16
         }
       ]
     },
@@ -135,7 +135,7 @@
           "any": [
             "certificate pinning"
           ],
-          "line": 696
+          "line": 710
         }
       ]
     },
@@ -149,14 +149,14 @@
           "any": [
             "sk-gw-"
           ],
-          "line": 3
+          "line": 4
         },
         {
           "file": "README.md",
           "any": [
             "Anthropic"
           ],
-          "line": 5
+          "line": 7
         }
       ]
     },
