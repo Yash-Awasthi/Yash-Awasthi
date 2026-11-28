@@ -15,7 +15,7 @@ Software engineer · backends, AI systems, mobile apps
 B.Tech CSE at **NIT Raipur** (CGPA 9.26). I build software that keeps working when things fail: backends that settle payments exactly once, streams that resume where the network dropped them, and models scored against what actually happened.
 
 <!-- now:start -->
-**Now:** [**KeyRouter**](https://github.com/Yash-Awasthi/KeyRouter) — disposable, expiring API keys for any OpenAI- or Anthropic-compatible provider, served from a Cloudflare Worker with a…. Last push 2026-11-24.
+**Now:** [**FinScrape**](https://github.com/Yash-Awasthi/FinScrape) — see what moves markets before it's news. Last push 2026-11-28.
 <!-- now:end -->
 
 ## Experience
@@ -71,5 +71,5 @@ Oracle Agentic AI Foundations Associate · Redis Associate Software Operator · 
 </picture>
 
 <!-- city:start -->
-3,580 contributions on 82 active days, 2025-11-23 to 2026-11-24 · longest streak 14 days to 2026-10-19 · busiest month October 2026 (1,819)
+2,947 contributions on 74 active days, 2025-11-23 to 2026-11-28 · longest streak 14 days to 2026-10-19 · busiest month October 2026 (1,376)
 <!-- city:end -->
